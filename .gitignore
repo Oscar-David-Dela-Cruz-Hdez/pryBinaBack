@@ -1,0 +1,5 @@
+# Archivo de secretos
+.env
+
+# Carpeta de dependencias (¡Nunca subir esto!)
+node_modules/
