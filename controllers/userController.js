@@ -2,42 +2,43 @@ const Usuario = require("../models/Usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// --- CORRECCIÓN DEFINITIVA AQUÍ ---
-// 1. Apuntar al paquete 'sib-api-v3-sdk' (el que coincide con la sintaxis)
-const SibApiV3Sdk = require('sib-api-v3-sdk');
+const SibApiV3Sdk = require("sib-api-v3-sdk");
 
-
-const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(); // No necesitas el Client ID aquí si solo vas a verificar ID Tokens
-
-// 2. Configurar la API key en el 'defaultClient' (instancia singleton)
-//    (Esto ahora funcionará porque el paquete es el correcto)
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(); 
 let defaultClient = SibApiV3Sdk.ApiClient.instance;
-let apiKey = defaultClient.authentications['api-key'];
-apiKey.apiKey = process.env.BREVO_API_KEY; 
+let apiKey = defaultClient.authentications["api-key"];
+apiKey.apiKey = process.env.BREVO_API_KEY;
 // ------------------------------------
 
-// Registrar un nuevo usuario (Sin cambios)
+// Registrar un nuevo usuario 
 const registerUser = async (req, res) => {
   try {
     const { username, email, telefono } = req.body;
 
     const existingUsername = await Usuario.findOne({ username });
     if (existingUsername) {
-      return res.status(400).json({ error: "El nombre de usuario ya está en uso" });
+      return res
+        .status(400)
+        .json({ error: "El nombre de usuario ya está en uso" });
     }
 
     const existingEmail = await Usuario.findOne({ email });
     if (existingEmail) {
-      return res.status(400).json({ error: "El correo electrónico ya está registrado" });
+      return res
+        .status(400)
+        .json({ error: "El correo electrónico ya está registrado" });
     }
 
     const existingTelefono = await Usuario.findOne({ telefono });
     if (existingTelefono) {
-      return res.status(400).json({ error: "El número de teléfono ya está registrado" });
+      return res
+        .status(400)
+        .json({ error: "El número de teléfono ya está registrado" });
     }
 
-    const { nombre, ap, am, password, preguntaSecreta, respuestaSecreta } = req.body;
+    const { nombre, ap, am, password, preguntaSecreta, respuestaSecreta } =
+      req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const respSecreta = await bcrypt.hash(respuestaSecreta, 10);
 
@@ -50,17 +51,20 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       telefono,
       preguntaSecreta,
-      respuestaSecreta, respSecreta
+      respuestaSecreta,
+      respSecreta,
     });
 
     await nuevoUsuario.save();
-    res.status(201).json({ mensaje: "Usuario registrado con éxito", usuario: nuevoUsuario });
+    res
+      .status(201)
+      .json({ mensaje: "Usuario registrado con éxito", usuario: nuevoUsuario });
   } catch (error) {
     res.status(500).json({ error: "Error al registrar usuario" });
   }
 };
 
-// 'loginUser' ahora es el PASO 1: Envía el código 2FA
+// PASO 1: Login inicial y envío de código 2FA
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -73,37 +77,33 @@ const loginUser = async (req, res) => {
     if (!esValida)
       return res.status(400).json({ error: "Contraseña incorrecta" });
 
-    // Credenciales correctas, generar código 2FA
     const codigo2FA = Math.floor(100000 + Math.random() * 900000).toString();
     const expiracion = Date.now() + 10 * 60 * 1000; // 10 minutos
 
-    // Guardar código en la DB
+
     usuario.loginCode = codigo2FA;
     usuario.loginCodeExpires = expiracion;
     await usuario.save();
 
-    // --- Lógica de Envío de Brevo ---
-    // 3. Crear la instancia (ya está autenticada gracias al 'defaultClient')
-    //    (¡AQUÍ ESTÁ LA CORRECCIÓN!)
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-    
-    // 4. Crear el objeto del email (¡AQUÍ ESTÁ LA CORRECCIÓN!)
+
+
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
-    // 5. Construir el correo
     sendSmtpEmail.to = [{ email: usuario.email, name: usuario.nombre }];
     sendSmtpEmail.sender = {
-      name: "Distribuidora Panamericana", // Tu nombre
-      email: "delacruzhernandezoscardavid@gmail.com" // El email que verificaste en Brevo
+      name: "Distribuidora Panamericana", 
+      email: "delacruzhernandezoscardavid@gmail.com", // El email en Brevo
     };
     sendSmtpEmail.subject = "Tu Código de Inicio de Sesión";
     sendSmtpEmail.htmlContent = `<strong>Hola ${usuario.nombre},<br>Tu código de seguridad es: ${codigo2FA}</strong><br>Expira en 10 minutos.`;
-    
-    // 6. Enviar el correo
+
+
     await apiInstance.sendTransacEmail(sendSmtpEmail);
 
-    res.status(200).json({ mensaje: "Código de seguridad enviado a tu correo" });
-
+    res
+      .status(200)
+      .json({ mensaje: "Código de seguridad enviado a tu correo" });
   } catch (error) {
     console.error("Error en loginUser:", error); // Imprime el error completo
     res.status(500).json({ error: "Error en el servidor al enviar el código" });
@@ -117,14 +117,19 @@ const verifyLoginCode = async (req, res) => {
   try {
     const usuario = await Usuario.findOne({ email });
 
-
     if (!usuario) {
       return res.status(400).json({ error: "Usuario no encontrado" });
     }
 
-    console.log('Comparando códigos 2FA:');
-    console.log('Código de la DB:', usuario.loginCode, '(Tipo:', typeof usuario.loginCode, ')');
-    console.log('Código del Usuario:', code, '(Tipo:', typeof code, ')');
+    console.log("Comparando códigos 2FA:");
+    console.log(
+      "Código de la DB:",
+      usuario.loginCode,
+      "(Tipo:",
+      typeof usuario.loginCode,
+      ")"
+    );
+    console.log("Código del Usuario:", code, "(Tipo:", typeof code, ")");
 
     if (usuario.loginCode !== code) {
       return res.status(400).json({ error: "Código incorrecto" });
@@ -140,12 +145,15 @@ const verifyLoginCode = async (req, res) => {
     await usuario.save();
 
     // Y AHORA SÍ, creamos y enviamos el token
-    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", { expiresIn: "1h" });
+    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
+      expiresIn: "1h",
+    });
     res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
-
   } catch (error) {
     console.error(error.message);
-    res.status(500).json({ error: "Error en el servidor al verificar el código" });
+    res
+      .status(500)
+      .json({ error: "Error en el servidor al verificar el código" });
   }
 };
 
@@ -293,7 +301,7 @@ const getMiPerfil = async (req, res) => {
 const updateMiPerfil = async (req, res) => {
   try {
     const { nombre, ap, am, username, email, telefono } = req.body;
-    const userId = req.user.id; 
+    const userId = req.user.id;
 
     if (username) {
       const existingUsername = await Usuario.findOne({
@@ -314,7 +322,7 @@ const updateMiPerfil = async (req, res) => {
       if (existingEmail) {
         return res.status(400).json({ error: "Ese email ya está en uso" });
       }
-    } 
+    }
 
     const camposAActualizar = {
       nombre,
@@ -323,17 +331,17 @@ const updateMiPerfil = async (req, res) => {
       username,
       email,
       telefono,
-    }; 
+    };
 
     const usuarioActualizado = await Usuario.findByIdAndUpdate(
       userId,
-      { $set: camposAActualizar }, 
-      { new: true, runValidators: true, context: "query" } 
+      { $set: camposAActualizar },
+      { new: true, runValidators: true, context: "query" }
     ).select("-password");
 
     if (!usuarioActualizado) {
       return res.status(404).json({ error: "Usuario no encontrado" });
-    } 
+    }
 
     res.json(usuarioActualizado);
   } catch (error) {
@@ -344,7 +352,6 @@ const updateMiPerfil = async (req, res) => {
   }
 };
 
-
 // --- 2. AÑADIR ESTA NUEVA FUNCIÓN AL FINAL ---
 const googleLogin = async (req, res) => {
   const { idToken } = req.body; // Recibimos el token de Google desde el frontend
@@ -352,11 +359,12 @@ const googleLogin = async (req, res) => {
   try {
     // 1. Verificar el token de Google
     const ticket = await client.verifyIdToken({
-        idToken: idToken,
-        audience: "610797077240-hd26f06tg0k68v7hhtuoi5fdl76a50rf.apps.googleusercontent.com",
+      idToken: idToken,
+      audience:
+        "610797077240-hd26f06tg0k68v7hhtuoi5fdl76a50rf.apps.googleusercontent.com",
     });
     const payload = ticket.getPayload();
-    
+
     if (!payload) {
       return res.status(400).json({ error: "Token de Google inválido" });
     }
@@ -379,17 +387,21 @@ const googleLogin = async (req, res) => {
     }
 
     // 4. Si SÍ existe (Login): Generamos nuestro propio JWT
-    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", { expiresIn: "1h" });
-    
+    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
+      expiresIn: "1h",
+    });
+
     // 5. Devolvemos NUESTRO token (no el de Google)
     res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
-
   } catch (error) {
-    console.error("Error en googleLogin:", error);
-    res.status(500).json({ error: "Error en el servidor durante el inicio de sesión con Google" });
+    console.error("Error en googleLogin:", error.mensaje);
+    res
+      .status(401)
+      .json({
+        error: "token de google invalido o expirado",
+      });
   }
 };
-
 
 // Exportar todas las funciones
 module.exports = {

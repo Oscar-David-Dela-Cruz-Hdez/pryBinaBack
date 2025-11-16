@@ -3,9 +3,6 @@ const cors = require("cors");
 const conectarDB = require("./config/db");
 require("dotenv").config();
 
-// Ya no importamos las otras rutas (Terrario, Mision, Vision, etc.)
-// ¡MUY IMPORTANTE! Eliminamos la importación del archivo incorrecto 'UsuarioRoutes'
-
 const app = express();
 const port = process.env.PORT || 4000;
 

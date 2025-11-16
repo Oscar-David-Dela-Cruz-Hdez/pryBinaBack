@@ -12,7 +12,7 @@ const usuarioSchema = new mongoose.Schema({
   preguntaSecreta: { type: String, required: false },
   respuestaSecreta: { type: String, required: false },
   rol: { type: String, enum: ["usuario", "admin"], default: "usuario" },
-  
+
   // --- CAMPOS NUEVOS AÑADIDOS ---
   loginCode: { type: String },
   loginCodeExpires: { type: Date }
