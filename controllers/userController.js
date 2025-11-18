@@ -384,7 +384,7 @@ const updateMiPerfil = async (req, res) => {
 };
 
 // ---google
-const googleLogin = async (req, res) => {
+/* const googleLogin = async (req, res) => {
   console.log("👉 INICIO LOGIN GOOGLE");
   console.log("📦 Cuerpo completo (req.body):", req.body);
   const { idToken } = req.body;
@@ -428,6 +428,74 @@ const googleLogin = async (req, res) => {
       .json({
         error: "token de google invalido o expirado",
       });
+  }
+}; */
+
+// ---google
+const googleLogin = async (req, res) => {
+  // Logs para depurar (puedes quitarlos después si quieres)
+  console.log("👉 INICIO LOGIN GOOGLE");
+  const { idToken } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: idToken,
+      audience: "610797077240-hd26f06tg0k68v7hhtuoi5fdl76a50rf.apps.googleusercontent.com",
+      clockTolerance: 10 
+    });
+    
+    const payload = ticket.getPayload();
+
+    if (!payload) {
+      return res.status(400).json({ error: "Token de Google inválido" });
+    }
+
+    const { email, name } = payload;
+
+    // Buscamos si ya existe por el correo
+    let usuario = await Usuario.findOne({ email: email });
+
+    if (!usuario) {
+      // --- AQUÍ ESTÁ LA MAGIA PARA ARREGLAR EL ERROR ---
+      
+      // 1. Tomamos la parte del correo antes del @ (ej: "juan.perez" de juan.perez@gmail.com)
+      const baseName = email.split("@")[0]; 
+      
+      // 2. Generamos 4 números aleatorios (ej: 4821)
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      
+      // 3. Creamos un usuario único (ej: "juan.perez4821")
+      const generatedUsername = `${baseName}${randomNum}`;
+
+      // 4. (Opcional) Generamos una contraseña basura para que no falle si tu modelo la requiere
+      // Si tu modelo permite password null, puedes quitar esta línea.
+      const dummyPassword = await bcrypt.hash(Math.random().toString(36), 10);
+
+      usuario = new Usuario({
+        nombre: name,
+        email: email,
+        username: generatedUsername, // ¡Ahora sí es único y Mongo no se quejará!
+        password: dummyPassword,
+        // Rellenamos otros campos para evitar problemas de validación
+        telefono: "", 
+        rol: "usuario"
+      });
+      
+      await usuario.save();
+    }
+
+    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
+      expiresIn: "1h",
+    });
+
+    res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
+
+  } catch (error) {
+    console.error("Error en googleLogin:", error.message);
+    res.status(401).json({
+        error: "Token de Google inválido o expirado",
+        detalle: error.message
+    });
   }
 };
 
