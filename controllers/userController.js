@@ -392,7 +392,7 @@ const googleLogin = async (req, res) => {
       idToken: idToken,
       audience:
         "610797077240-hd26f06tg0k68v7hhtuoi5fdl76a50rf.apps.googleusercontent.com",
-        clockTolerance: 10,
+        clockTolerance: 10
     });
     const payload = ticket.getPayload();
 
