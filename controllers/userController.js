@@ -385,8 +385,10 @@ const updateMiPerfil = async (req, res) => {
 
 // ---google
 const googleLogin = async (req, res) => {
+  console.log("👉 INICIO LOGIN GOOGLE");
+  console.log("📦 Cuerpo completo (req.body):", req.body);
   const { idToken } = req.body;
-
+  console.log("🔑 Token extraído:", idToken);
   try {
     const ticket = await client.verifyIdToken({
       idToken: idToken,
