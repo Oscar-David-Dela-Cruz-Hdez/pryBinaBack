@@ -5,40 +5,87 @@ const jwt = require("jsonwebtoken");
 const SibApiV3Sdk = require("sib-api-v3-sdk");
 
 const { OAuth2Client } = require("google-auth-library");
-const client = new OAuth2Client(); 
+const client = new OAuth2Client();
 let defaultClient = SibApiV3Sdk.ApiClient.instance;
 let apiKey = defaultClient.authentications["api-key"];
 apiKey.apiKey = process.env.BREVO_API_KEY;
-// ------------------------------------
 
-// Registrar un nuevo usuario 
+/**/
+const updatePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.user.id;
+    const usuario = await Usuario.findById(userId);
+
+    if (!usuario) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    if (usuario.password && currentPassword) {
+      const esValida = await bcrypt.compare(currentPassword, usuario.password);
+      if (!esValida) {
+        return res.status(400).json({ error: "Contraseña actual incorrecta" });
+      }
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    usuario.password = hashedPassword;
+    await usuario.save();
+
+    res.status(200).json({ mensaje: "Contraseña actualizada con éxito" });
+  } catch (error) {
+    console.error("Error al actualizar contraseña:", error);
+    res.status(500).json({ error: "Error al actualizar la contraseña" });
+  }
+};
+
+const updateSecret = async (req, res) => {
+  try {
+    const { preguntaSecreta, respuestaSecreta } = req.body;
+    const userId = req.user.id;
+    const usuario = await Usuario.findById(userId);
+
+    if (!usuario) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    // Hashear la respuesta secreta
+    const hashedRespuestaSecreta = await bcrypt.hash(respuestaSecreta, 10);
+    usuario.preguntaSecreta = preguntaSecreta;
+    usuario.respuestaSecreta = hashedRespuestaSecreta;
+    await usuario.save();
+
+    res.status(200).json({ mensaje: "Pregunta y respuesta secreta actualizadas con éxito" });
+  } catch (error) {
+    console.error("Error al actualizar pregunta/respuesta secreta:", error);
+    res.status(500).json({ error: "Error al actualizar la pregunta/respuesta secreta" });
+  }
+};
+
+/**/
+
 const registerUser = async (req, res) => {
   try {
     const { username, email, telefono } = req.body;
-
     const existingUsername = await Usuario.findOne({ username });
     if (existingUsername) {
       return res
         .status(400)
         .json({ error: "El nombre de usuario ya está en uso" });
     }
-
     const existingEmail = await Usuario.findOne({ email });
     if (existingEmail) {
       return res
         .status(400)
         .json({ error: "El correo electrónico ya está registrado" });
     }
-
     const existingTelefono = await Usuario.findOne({ telefono });
     if (existingTelefono) {
       return res
         .status(400)
         .json({ error: "El número de teléfono ya está registrado" });
     }
-
-    const { nombre, ap, am, password, preguntaSecreta, respuestaSecreta } =
-      req.body;
+    const { nombre, ap, am, password, preguntaSecreta, respuestaSecreta } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     const respSecreta = await bcrypt.hash(respuestaSecreta, 10);
 
@@ -51,8 +98,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
       telefono,
       preguntaSecreta,
-      respuestaSecreta,
-      respSecreta,
+      respuestaSecreta: respSecreta,
     });
 
     await nuevoUsuario.save();
@@ -64,7 +110,6 @@ const registerUser = async (req, res) => {
   }
 };
 
-// PASO 1: Login inicial y envío de código 2FA
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
@@ -92,8 +137,8 @@ const loginUser = async (req, res) => {
 
     sendSmtpEmail.to = [{ email: usuario.email, name: usuario.nombre }];
     sendSmtpEmail.sender = {
-      name: "Distribuidora Panamericana", 
-      email: "delacruzhernandezoscardavid@gmail.com", // El email en Brevo
+      name: "Distribuidora Panamericana",
+      email: "delacruzhernandezoscardavid@gmail.com",
     };
     sendSmtpEmail.subject = "Tu Código de Inicio de Sesión";
     sendSmtpEmail.htmlContent = `<strong>Hola ${usuario.nombre},<br>Tu código de seguridad es: ${codigo2FA}</strong><br>Expira en 10 minutos.`;
@@ -105,12 +150,11 @@ const loginUser = async (req, res) => {
       .status(200)
       .json({ mensaje: "Código de seguridad enviado a tu correo" });
   } catch (error) {
-    console.error("Error en loginUser:", error); // Imprime el error completo
+    console.error("Error en loginUser:", error);
     res.status(500).json({ error: "Error en el servidor al enviar el código" });
   }
 };
 
-// PASO 2: Verifica el código 2FA y devuelve el Token
 const verifyLoginCode = async (req, res) => {
   const { email, code } = req.body;
 
@@ -139,12 +183,10 @@ const verifyLoginCode = async (req, res) => {
       return res.status(400).json({ error: "El código ha expirado" });
     }
 
-    // ¡Éxito! Limpiamos el código de la DB
     usuario.loginCode = undefined;
     usuario.loginCodeExpires = undefined;
     await usuario.save();
 
-    // Y AHORA SÍ, creamos y enviamos el token
     const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
       expiresIn: "1h",
     });
@@ -157,17 +199,15 @@ const verifyLoginCode = async (req, res) => {
   }
 };
 
-// Obtener todos los usuarios (solo para administradores)
 const getUsuarios = async (req, res) => {
   try {
-    const usuarios = await Usuario.find({}, { password: 0 }); // Excluir la contraseña
+    const usuarios = await Usuario.find({}, { password: 0 });
     res.json(usuarios);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener los usuarios" });
   }
 };
 
-// Actualizar el rol de un usuario (solo para administradores)
 const updateRol = async (req, res) => {
   try {
     const { id } = req.params;
@@ -189,7 +229,6 @@ const updateRol = async (req, res) => {
   }
 };
 
-// Eliminar un usuario (solo para administradores)
 const deleteUsuario = async (req, res) => {
   try {
     const { id } = req.params;
@@ -200,7 +239,6 @@ const deleteUsuario = async (req, res) => {
   }
 };
 
-// verificarCorreo
 const verificarCorreo = async (req, res) => {
   const { email } = req.body;
 
@@ -223,37 +261,33 @@ const preguntas = {
   "deporte-favorito": "¿Cuál es tu deporte favorito?",
 };
 
-// obtenerPregunta
 const obtenerPregunta = async (req, res) => {
   const { email } = req.body;
-
   try {
     const usuario = await Usuario.findOne({ email });
     if (!usuario) {
       return res.status(404).json({ error: "Correo no encontrado" });
     }
-
     const preguntaCompleta = preguntas[usuario.preguntaSecreta];
     if (!preguntaCompleta) {
       return res.status(400).json({ error: "Pregunta secreta no válida" });
     }
-
-    res.status(200).json({ preguntaSecreta: preguntaCompleta });
+    res.status(200).json({ preguntaSecreta: preguntaCompleta }); // Devuelve la pregunta completa
   } catch (error) {
     res.status(500).json({ error: "Error al obtener la pregunta secreta" });
   }
 };
 
-// verificarRespuesta
 const verificarRespuesta = async (req, res) => {
   const { email, respuesta } = req.body;
-
   try {
     const usuario = await Usuario.findOne({ email });
     if (!usuario) {
       return res.status(404).json({ error: "Correo no encontrado" });
     }
-    if (usuario.respuestaSecreta !== respuesta) {
+    // Comparar la respuesta hasheada
+    const esValida = await bcrypt.compare(respuesta, usuario.respuestaSecreta);
+    if (!esValida) {
       return res.status(400).json({ error: "Respuesta incorrecta" });
     }
     res.status(200).json({ mensaje: "Respuesta correcta" });
@@ -262,7 +296,6 @@ const verificarRespuesta = async (req, res) => {
   }
 };
 
-// cambiarContrasena
 const cambiarContrasena = async (req, res) => {
   const { email, nuevaPassword } = req.body;
 
@@ -280,7 +313,6 @@ const cambiarContrasena = async (req, res) => {
   }
 };
 
-// getMiPerfil
 const getMiPerfil = async (req, res) => {
   try {
     const usuario = await Usuario.findById(req.user.id).select(
@@ -297,7 +329,6 @@ const getMiPerfil = async (req, res) => {
   }
 };
 
-// updateMiPerfil
 const updateMiPerfil = async (req, res) => {
   try {
     const { nombre, ap, am, username, email, telefono } = req.body;
@@ -352,12 +383,11 @@ const updateMiPerfil = async (req, res) => {
   }
 };
 
-// --- 2. AÑADIR ESTA NUEVA FUNCIÓN AL FINAL ---
+// ---google
 const googleLogin = async (req, res) => {
-  const { idToken } = req.body; // Recibimos el token de Google desde el frontend
+  const { idToken } = req.body;
 
   try {
-    // 1. Verificar el token de Google
     const ticket = await client.verifyIdToken({
       idToken: idToken,
       audience:
@@ -371,27 +401,22 @@ const googleLogin = async (req, res) => {
 
     const { email, name } = payload;
 
-    // 2. Buscar si el usuario ya existe en nuestra DB
     let usuario = await Usuario.findOne({ email: email });
 
     if (!usuario) {
-      // 3. Si NO existe (Registro): Creamos un nuevo usuario
-      // Creamos un usuario "incompleto" solo con los datos de Google
+
       usuario = new Usuario({
         nombre: name,
         email: email,
-        // El resto de campos (ap, am, username, telefono, etc.) quedan como null
-        // ya que no son 'required'
+
       });
       await usuario.save();
     }
 
-    // 4. Si SÍ existe (Login): Generamos nuestro propio JWT
     const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
       expiresIn: "1h",
     });
 
-    // 5. Devolvemos NUESTRO token (no el de Google)
     res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
   } catch (error) {
     console.error("Error en googleLogin:", error.mensaje);
@@ -403,12 +428,11 @@ const googleLogin = async (req, res) => {
   }
 };
 
-// Exportar todas las funciones
 module.exports = {
   registerUser,
   loginUser,
   googleLogin,
-  verifyLoginCode, // La nueva función de 2FA
+  verifyLoginCode,
   getUsuarios,
   updateRol,
   deleteUsuario,
@@ -418,4 +442,6 @@ module.exports = {
   cambiarContrasena,
   getMiPerfil,
   updateMiPerfil,
+  updatePassword,
+  updateSecret
 };

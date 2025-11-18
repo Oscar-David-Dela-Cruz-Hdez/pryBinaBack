@@ -12,7 +12,9 @@ const {
   verificarRespuesta,
   cambiarContrasena,
   getMiPerfil,
-  updateMiPerfil
+  updateMiPerfil,
+  updatePassword,
+  updateSecret
 } = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -28,9 +30,13 @@ router.post("/obtener-pregunta", obtenerPregunta);
 router.post("/verificar-respuesta", verificarRespuesta);
 router.post("/cambiar-contrasena", cambiarContrasena);
 
+
+
 // --- Rutas Privadas (requieren token) ---
 router.get("/perfil", authMiddleware(), getMiPerfil);
 router.put("/perfil", authMiddleware(), updateMiPerfil);
+router.put("/update-password", authMiddleware(), updatePassword);
+router.put("/update-secret", authMiddleware(), updateSecret);
 
 // --- Rutas de Administrador (requieren rol 'admin') ---
 router.get("/admin/usuarios", authMiddleware(["admin"]), getUsuarios);

@@ -13,14 +13,11 @@ const usuarioSchema = new mongoose.Schema({
   respuestaSecreta: { type: String, required: false },
   rol: { type: String, enum: ["usuario", "admin"], default: "usuario" },
 
-  // --- CAMPOS NUEVOS AÑADIDOS ---
   loginCode: { type: String },
   loginCodeExpires: { type: Date }
-  // ---------------------------------
 });
 
 usuarioSchema.methods.comparePassword = async function (password) {
-  // Un usuario de Google no tendrá contraseña, así que prevenimos un error
   if (!this.password) return false;
   return bcrypt.compare(password, this.password);
 };
