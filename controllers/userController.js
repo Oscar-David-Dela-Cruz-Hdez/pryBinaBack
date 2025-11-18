@@ -392,6 +392,7 @@ const googleLogin = async (req, res) => {
       idToken: idToken,
       audience:
         "610797077240-hd26f06tg0k68v7hhtuoi5fdl76a50rf.apps.googleusercontent.com",
+        clockTolerance: 10,
     });
     const payload = ticket.getPayload();
 
@@ -419,7 +420,7 @@ const googleLogin = async (req, res) => {
 
     res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
   } catch (error) {
-    console.error("Error en googleLogin:", error.mensaje);
+    console.error("Error en googleLogin:", error.message);
     res
       .status(401)
       .json({
