@@ -467,17 +467,11 @@ const googleLogin = async (req, res) => {
       // 3. Creamos un usuario único (ej: "juan.perez4821")
       const generatedUsername = `${baseName}${randomNum}`;
 
-      // 4. (Opcional) Generamos una contraseña basura para que no falle si tu modelo la requiere
-      // Si tu modelo permite password null, puedes quitar esta línea.
-      const dummyPassword = await bcrypt.hash(Math.random().toString(36), 10);
-
       usuario = new Usuario({
         nombre: name,
         email: email,
         username: generatedUsername, // ¡Ahora sí es único y Mongo no se quejará!
-        password: dummyPassword,
         // Rellenamos otros campos para evitar problemas de validación
-        telefono: "", 
         rol: "usuario"
       });
       
