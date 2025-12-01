@@ -388,6 +388,7 @@ const verifyLoginCode = async (req, res) => {
 
     // Generar un nuevo token usando RS256
     const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, req.privateKey, {
+      expiresIn: "1h",
       algorithm: 'RS256'
     });
 
