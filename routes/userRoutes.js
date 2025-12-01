@@ -2,7 +2,7 @@ const express = require("express");
 const {
   registerUser,
   loginUser,
-  verifyLoginCode, 
+  verifyLoginCode,
   googleLogin,
   getUsuarios,
   updateRol,
@@ -14,7 +14,10 @@ const {
   getMiPerfil,
   updateMiPerfil,
   updatePassword,
-  updateSecret
+  updateSecret,
+  checkUsername,
+  checkEmail,
+  checkPhone,
 } = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -22,14 +25,16 @@ const router = express.Router();
 
 // --- Rutas Públicas ---
 router.post("/register", registerUser);
-router.post("/login", loginUser); 
-router.post("/verify-2fa", verifyLoginCode); 
+router.post("/login", loginUser);
+router.post("/verify-2fa", verifyLoginCode);
 router.post("/google-login", googleLogin);
 router.post("/verificar-correo", verificarCorreo);
 router.post("/obtener-pregunta", obtenerPregunta);
 router.post("/verificar-respuesta", verificarRespuesta);
 router.post("/cambiar-contrasena", cambiarContrasena);
-
+router.post("/check-username", checkUsername);
+router.post("/check-email", checkEmail);
+router.post("/check-phone", checkPhone);
 
 
 // --- Rutas Privadas (requieren token) ---

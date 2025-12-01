@@ -10,7 +10,6 @@ let defaultClient = SibApiV3Sdk.ApiClient.instance;
 let apiKey = defaultClient.authentications["api-key"];
 apiKey.apiKey = process.env.BREVO_API_KEY;
 
-/**/
 const updatePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
@@ -109,8 +108,8 @@ const registerUser = async (req, res) => {
     res.status(500).json({ error: "Error al registrar usuario" });
   }
 };
-
-const loginUser = async (req, res) => {
+//esta sirve, codigo 1
+/* const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -153,9 +152,140 @@ const loginUser = async (req, res) => {
     console.error("Error en loginUser:", error);
     res.status(500).json({ error: "Error en el servidor al enviar el código" });
   }
+}; */
+
+//codigo 2, nuevo
+/* const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  const ip = req.ip;
+  const key = `${email}:${ip}`;
+
+  if (!req.loginAttempts[key]) {
+    req.loginAttempts[key] = { attempts: 0, lastAttempt: Date.now(), blockedUntil: 0 };
+  }
+
+  // Verificar si la cuenta está bloqueada
+  if (req.loginAttempts[key].blockedUntil > Date.now()) {
+    const remainingTime = Math.ceil((req.loginAttempts[key].blockedUntil - Date.now()) / 60000);
+    return res.status(429).json({ error: `Demasiados intentos fallidos. Por favor, intenta de nuevo en ${remainingTime} minutos.` });
+  }
+
+  try {
+    const usuario = await Usuario.findOne({ email });
+    if (!usuario) {
+      req.loginAttempts[key].attempts += 1;
+      if (req.loginAttempts[key].attempts >= 3) {
+        req.loginAttempts[key].blockedUntil = Date.now() + 30 * 60 * 1000; // Bloquear por 30 minutos
+      }
+      req.loginAttempts[key].lastAttempt = Date.now();
+      return res.status(400).json({ error: "Usuario no encontrado" });
+    }
+
+    const esValida = await bcrypt.compare(password, usuario.password);
+    if (!esValida) {
+      req.loginAttempts[key].attempts += 1;
+      if (req.loginAttempts[key].attempts >= 3) {
+        req.loginAttempts[key].blockedUntil = Date.now() + 30 * 60 * 1000; // Bloquear por 30 minutos
+      }
+      req.loginAttempts[key].lastAttempt = Date.now();
+      return res.status(400).json({ error: "Contraseña incorrecta" });
+    }
+
+    // Si las credenciales son correctas, reiniciar los intentos fallidos
+    req.loginAttempts[key].attempts = 0;
+    req.loginAttempts[key].blockedUntil = 0;
+
+    const codigo2FA = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiracion = Date.now() + 10 * 60 * 1000; // 10 minutos
+    usuario.loginCode = codigo2FA;
+    usuario.loginCodeExpires = expiracion;
+    await usuario.save();
+
+    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    sendSmtpEmail.to = [{ email: usuario.email, name: usuario.nombre }];
+    sendSmtpEmail.sender = {
+      name: "Distribuidora Panamericana",
+      email: "delacruzhernandezoscardavid@gmail.com",
+    };
+    sendSmtpEmail.subject = "Tu Código de Inicio de Sesión";
+    sendSmtpEmail.htmlContent = `<strong>Hola ${usuario.nombre},<br>Tu código de seguridad es: ${codigo2FA}</strong><br>Expira en 10 minutos.`;
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    res.status(200).json({ mensaje: "Código de seguridad enviado a tu correo" });
+  } catch (error) {
+    console.error("Error en loginUser:", error);
+    res.status(500).json({ error: "Error en el servidor al enviar el código" });
+  }
+}; */
+
+//codigo 3, experimenta
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  const ip = req.ip;
+  const key = `${email}:${ip}`;
+
+  if (!req.loginAttempts[key]) {
+    req.loginAttempts[key] = { attempts: 0, lastAttempt: Date.now(), blockedUntil: 0 };
+  }
+
+  if (req.loginAttempts[key].blockedUntil > Date.now()) {
+    const remainingTime = Math.ceil((req.loginAttempts[key].blockedUntil - Date.now()) / 60000);
+    return res.status(429).json({ error: `Demasiados intentos fallidos. Por favor, intenta de nuevo en ${remainingTime} minutos.` });
+  }
+
+  try {
+    const usuario = await Usuario.findOne({ email });
+    if (!usuario) {
+      req.loginAttempts[key].attempts += 1;
+      if (req.loginAttempts[key].attempts >= 3) {
+        req.loginAttempts[key].blockedUntil = Date.now() + 30 * 60 * 1000;
+      }
+      req.loginAttempts[key].lastAttempt = Date.now();
+      return res.status(400).json({ error: "Usuario no encontrado" });
+    }
+
+    const esValida = await bcrypt.compare(password, usuario.password);
+    if (!esValida) {
+      req.loginAttempts[key].attempts += 1;
+      if (req.loginAttempts[key].attempts >= 3) {
+        req.loginAttempts[key].blockedUntil = Date.now() + 30 * 60 * 1000;
+      }
+      req.loginAttempts[key].lastAttempt = Date.now();
+      return res.status(400).json({ error: "Contraseña incorrecta" });
+    }
+
+    // Si las credenciales son correctas, reiniciar los intentos fallidos
+    req.loginAttempts[key].attempts = 0;
+    req.loginAttempts[key].blockedUntil = 0;
+
+    // Invalidar tokens activos anteriores
+    usuario.activeTokens = [];
+
+    const codigo2FA = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiracion = Date.now() + 10 * 60 * 1000;
+    usuario.loginCode = codigo2FA;
+    usuario.loginCodeExpires = expiracion;
+    await usuario.save();
+
+    let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+    let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
+    sendSmtpEmail.to = [{ email: usuario.email, name: usuario.nombre }];
+    sendSmtpEmail.sender = {
+      name: "Distribuidora Panamericana",
+      email: "delacruzhernandezoscardavid@gmail.com",
+    };
+    sendSmtpEmail.subject = "Tu Código de Inicio de Sesión";
+    sendSmtpEmail.htmlContent = `<strong>Hola ${usuario.nombre},<br>Tu código de seguridad es: ${codigo2FA}</strong><br>Expira en 10 minutos.`;
+    await apiInstance.sendTransacEmail(sendSmtpEmail);
+    res.status(200).json({ mensaje: "Código de seguridad enviado a tu correo" });
+  } catch (error) {
+    console.error("Error en loginUser:", error);
+    res.status(500).json({ error: "Error en el servidor al enviar el código" });
+  }
 };
 
-const verifyLoginCode = async (req, res) => {
+//codigo 1
+/* const verifyLoginCode = async (req, res) => {
   const { email, code } = req.body;
 
   try {
@@ -197,7 +327,90 @@ const verifyLoginCode = async (req, res) => {
       .status(500)
       .json({ error: "Error en el servidor al verificar el código" });
   }
+}; */
+
+//codigo 2, sirve
+/* const verifyLoginCode = async (req, res) => {
+  const { email, code } = req.body;
+  try {
+    const usuario = await Usuario.findOne({ email });
+    if (!usuario) {
+      return res.status(400).json({ error: "Usuario no encontrado" });
+    }
+
+    if (usuario.loginCode !== code) {
+      return res.status(400).json({ error: "Código incorrecto" });
+    }
+
+    if (Date.now() > usuario.loginCodeExpires) {
+      return res.status(400).json({ error: "El código ha expirado" });
+    }
+
+    // Generar un nuevo token
+    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
+      expiresIn: "1h",
+    });
+
+    // Asegurarse de que activeTokens esté inicializado
+    if (!usuario.activeTokens) {
+      usuario.activeTokens = [];
+    }
+
+    // Almacenar el nuevo token en el array de tokens activos
+    usuario.activeTokens.push(token);
+    await usuario.save();
+
+    usuario.loginCode = undefined;
+    usuario.loginCodeExpires = undefined;
+    await usuario.save();
+
+    res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Error en el servidor al verificar el código" });
+  }
+}; */
+
+//codigo 3, experimental
+const verifyLoginCode = async (req, res) => {
+  const { email, code } = req.body;
+  try {
+    const usuario = await Usuario.findOne({ email });
+    if (!usuario) {
+      return res.status(400).json({ error: "Usuario no encontrado" });
+    }
+    if (usuario.loginCode !== code) {
+      return res.status(400).json({ error: "Código incorrecto" });
+    }
+    if (Date.now() > usuario.loginCodeExpires) {
+      return res.status(400).json({ error: "El código ha expirado" });
+    }
+
+    // Generar un nuevo token usando RS256
+    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, req.privateKey, {
+      algorithm: 'RS256'
+    });
+
+    if (!usuario.activeTokens) {
+      usuario.activeTokens = [];
+    }
+
+    usuario.activeTokens.push(token);
+    await usuario.save();
+
+    usuario.loginCode = undefined;
+    usuario.loginCodeExpires = undefined;
+    await usuario.save();
+
+    res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json({ error: "Error en el servidor al verificar el código" });
+  }
 };
+
+
+
 
 const getUsuarios = async (req, res) => {
   try {
@@ -239,7 +452,7 @@ const deleteUsuario = async (req, res) => {
   }
 };
 
-const verificarCorreo = async (req, res) => {
+/* const verificarCorreo = async (req, res) => {
   const { email } = req.body;
 
   try {
@@ -251,7 +464,47 @@ const verificarCorreo = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error al verificar el correo" });
   }
+}; */
+
+//opcion 2
+/* const verificarCorreo = async (req, res) => {
+  const { email } = req.body;
+  try {
+    // se modifica para cumplir con este punto: Intentar recuperación con correo inexistente. El sistema no debe revelar si el usuario existe.
+    res.status(200).json({ mensaje: "Se ha enviado un mensaje de recuperación." });
+  } catch (error) {
+    res.status(500).json({ error: "Error al procesar la solicitud" });
+  }
+}; */
+
+//opcion 3
+
+//const recoveryAttempts = {};
+const verificarCorreo = async (req, res) => {
+  const { email } = req.body;
+  const ip = req.ip;
+  const key = `${email}:${ip}`;
+
+  if (!req.recoveryAttempts[key]) {
+    req.recoveryAttempts[key] = { attempts: 0, lastAttempt: Date.now() };
+  }
+
+  req.recoveryAttempts[key].attempts += 1;
+
+  if (req.recoveryAttempts[key].attempts > 3 && (Date.now() - req.recoveryAttempts[key].lastAttempt) < 3600000) {
+    return res.status(429).json({ error: "Demasiados intentos de recuperación. Por favor, intenta de nuevo más tarde." });
+  }
+
+  if ((Date.now() - req.recoveryAttempts[key].lastAttempt) > 3600000) {
+    req.recoveryAttempts[key].attempts = 1;
+  }
+
+  req.recoveryAttempts[key].lastAttempt = Date.now();
+
+  res.status(200).json({ mensaje: "Si el correo está registrado, se ha enviado un mensaje de recuperación." });
 };
+
+
 
 const preguntas = {
   "personaje-favorito": "¿Cuál es tu personaje favorito?",
@@ -261,7 +514,8 @@ const preguntas = {
   "deporte-favorito": "¿Cuál es tu deporte favorito?",
 };
 
-const obtenerPregunta = async (req, res) => {
+//opcion 1
+/* const obtenerPregunta = async (req, res) => {
   const { email } = req.body;
   try {
     const usuario = await Usuario.findOne({ email });
@@ -277,6 +531,49 @@ const obtenerPregunta = async (req, res) => {
     res.status(500).json({ error: "Error al obtener la pregunta secreta" });
   }
 };
+ */
+//opcion 2
+const obtenerPregunta = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const ip = req.ip;
+    const key = `${email}:${ip}`;
+
+    if (!req.recoveryAttempts[key]) {
+      req.recoveryAttempts[key] = { attempts: 0, lastAttempt: Date.now() };
+    }
+
+    req.recoveryAttempts[key].attempts += 1;
+
+    if (req.recoveryAttempts[key].attempts > 3 && (Date.now() - req.recoveryAttempts[key].lastAttempt) < 3600000) {
+      return res.status(429).json({ error: "Demasiados intentos de recuperación. Por favor, intenta de nuevo más tarde." });
+    }
+
+    if ((Date.now() - req.recoveryAttempts[key].lastAttempt) > 3600000) {
+      req.recoveryAttempts[key].attempts = 1;
+    }
+
+    req.recoveryAttempts[key].lastAttempt = Date.now();
+
+    const usuario = await Usuario.findOne({ email });
+    if (!usuario) {
+      return res.status(404).json({ error: "Si el correo está registrado, se ha enviado un mensaje de recuperación." });
+    }
+
+    const preguntaCompleta = preguntas[usuario.preguntaSecreta];
+    if (!preguntaCompleta) {
+      return res.status(400).json({ error: "Pregunta secreta no válida" });
+    }
+
+    res.status(200).json({ preguntaSecreta: preguntaCompleta });
+  } catch (error) {
+    console.error("Error al obtener pregunta:", error);
+    res.status(500).json({ error: "No se pudo obtener la pregunta secreta." });
+  }
+};
+
+
+
 
 const verificarRespuesta = async (req, res) => {
   const { email, respuesta } = req.body;
@@ -384,56 +681,7 @@ const updateMiPerfil = async (req, res) => {
 };
 
 // ---google
-/* const googleLogin = async (req, res) => {
-  console.log("👉 INICIO LOGIN GOOGLE");
-  console.log("📦 Cuerpo completo (req.body):", req.body);
-  const { idToken } = req.body;
-  console.log("🔑 Token extraído:", idToken);
-  try {
-    const ticket = await client.verifyIdToken({
-      idToken: idToken,
-      audience:
-        "610797077240-hd26f06tg0k68v7hhtuoi5fdl76a50rf.apps.googleusercontent.com",
-        clockTolerance: 10
-    });
-    const payload = ticket.getPayload();
-
-    if (!payload) {
-      return res.status(400).json({ error: "Token de Google inválido" });
-    }
-
-    const { email, name } = payload;
-
-    let usuario = await Usuario.findOne({ email: email });
-
-    if (!usuario) {
-
-      usuario = new Usuario({
-        nombre: name,
-        email: email,
-
-      });
-      await usuario.save();
-    }
-
-    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
-      expiresIn: "1h",
-    });
-
-    res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
-  } catch (error) {
-    console.error("Error en googleLogin:", error.message);
-    res
-      .status(401)
-      .json({
-        error: "token de google invalido o expirado",
-      });
-  }
-}; */
-
-// ---google
 const googleLogin = async (req, res) => {
-  // Logs para depurar (puedes quitarlos después si quieres)
   console.log("👉 INICIO LOGIN GOOGLE");
   const { idToken } = req.body;
 
@@ -441,9 +689,9 @@ const googleLogin = async (req, res) => {
     const ticket = await client.verifyIdToken({
       idToken: idToken,
       audience: "610797077240-hd26f06tg0k68v7hhtuoi5fdl76a50rf.apps.googleusercontent.com",
-      clockTolerance: 10 
+      clockTolerance: 10
     });
-    
+
     const payload = ticket.getPayload();
 
     if (!payload) {
@@ -452,29 +700,23 @@ const googleLogin = async (req, res) => {
 
     const { email, name } = payload;
 
-    // Buscamos si ya existe por el correo
     let usuario = await Usuario.findOne({ email: email });
 
     if (!usuario) {
-      // --- AQUÍ ESTÁ LA MAGIA PARA ARREGLAR EL ERROR ---
-      
-      // 1. Tomamos la parte del correo antes del @ (ej: "juan.perez" de juan.perez@gmail.com)
-      const baseName = email.split("@")[0]; 
-      
-      // 2. Generamos 4 números aleatorios (ej: 4821)
+
+      const baseName = email.split("@")[0];
+
       const randomNum = Math.floor(1000 + Math.random() * 9000);
-      
-      // 3. Creamos un usuario único (ej: "juan.perez4821")
+
       const generatedUsername = `${baseName}${randomNum}`;
 
       usuario = new Usuario({
         nombre: name,
         email: email,
-        username: generatedUsername, // ¡Ahora sí es único y Mongo no se quejará!
-        // Rellenamos otros campos para evitar problemas de validación
+        username: generatedUsername,
         rol: "usuario"
       });
-      
+
       await usuario.save();
     }
 
@@ -487,9 +729,41 @@ const googleLogin = async (req, res) => {
   } catch (error) {
     console.error("Error en googleLogin:", error.message);
     res.status(401).json({
-        error: "Token de Google inválido o expirado",
-        detalle: error.message
+      error: "Token de Google inválido o expirado",
+      detalle: error.message
     });
+  }
+};
+
+///se agrego para las verificaciones en el formulario de registro, no muevas aqui liz
+
+const checkUsername = async (req, res) => {
+  const { username } = req.body;
+  try {
+    const existingUsername = await Usuario.findOne({ username });
+    res.status(200).json({ available: !existingUsername });
+  } catch (error) {
+    res.status(500).json({ error: "Error al verificar el nombre de usuario" });
+  }
+};
+
+const checkEmail = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const existingEmail = await Usuario.findOne({ email });
+    res.status(200).json({ available: !existingEmail });
+  } catch (error) {
+    res.status(500).json({ error: "Error al verificar el correo electrónico" });
+  }
+};
+
+const checkPhone = async (req, res) => {
+  const { telefono } = req.body;
+  try {
+    const existingTelefono = await Usuario.findOne({ telefono });
+    res.status(200).json({ available: !existingTelefono });
+  } catch (error) {
+    res.status(500).json({ error: "Error al verificar el teléfono" });
   }
 };
 
@@ -508,5 +782,8 @@ module.exports = {
   getMiPerfil,
   updateMiPerfil,
   updatePassword,
-  updateSecret
+  updateSecret,
+  checkUsername,
+  checkEmail,
+  checkPhone
 };
