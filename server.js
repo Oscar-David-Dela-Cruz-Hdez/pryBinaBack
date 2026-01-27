@@ -15,7 +15,6 @@ const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
 console.log("Private Key:", privateKey);
 console.log("Public Key:", publicKey);
 
-
 const loginAttempts = {};
 app.use(express.json());
 app.use(cors());

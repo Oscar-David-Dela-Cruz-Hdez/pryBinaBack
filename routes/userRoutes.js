@@ -49,4 +49,3 @@ router.put("/admin/usuarios/:id/rol", authMiddleware(["admin"]), updateRol);
 router.delete("/admin/usuarios/:id", authMiddleware(["admin"]), deleteUsuario);
 
 module.exports = router;
-
