@@ -13,10 +13,7 @@ let apiKey = defaultClient.authentications["api-key"];
 apiKey.apiKey = process.env.BREVO_API_KEY;
 
 // --- FUNCIONES DE AYUDA ---
-// Versión mejorada de limpiarDato:
-// 1. Si es null/undefined devuelve undefined (para que Mongoose use sus defaults o valide).
-// 2. Convierte a String para evitar errores con números (ej. teléfono).
-// 3. Si es una cadena vacía, devuelve undefined para evitar problemas con índices únicos.
+// Limpia el dato. Si es inválido o vacío, devuelve undefined.
 const limpiarDato = (dato) => {
   if (dato === undefined || dato === null) return undefined;
   const strDato = String(dato).trim(); // Convertir a string y quitar espacios
@@ -34,7 +31,6 @@ const updatePassword = async (req, res) => {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
 
-    // Si el usuario tiene contraseña (no es de Google) validamos la actual
     if (usuario.password && currentPassword) {
       const esValida = await bcrypt.compare(currentPassword, usuario.password);
       if (!esValida) {
@@ -79,21 +75,24 @@ const registerUser = async (req, res) => {
   try {
     const { username, email, telefono, nombre, ap, am, password, preguntaSecreta, respuestaSecreta } = req.body;
     
-    // Validaciones previas de existencia
-    // Nota: Usamos limpiarDato aquí también por seguridad en la consulta
+    // Sanitizamos
     const safeUsername = limpiarDato(username);
     const safeEmail = limpiarDato(email);
     const safePhone = limpiarDato(telefono);
+    const safeNombre = limpiarDato(nombre);
 
+    // Validaciones obligatorias antes de consultar
+    if (!safeEmail) return res.status(400).json({ error: "El correo es obligatorio" });
+    if (!safeNombre) return res.status(400).json({ error: "El nombre es obligatorio" });
+
+    // Validar duplicados
     if (safeUsername) {
         const existingUsername = await Usuario.findOne({ username: safeUsername });
         if (existingUsername) return res.status(400).json({ error: "El nombre de usuario ya está en uso" });
     }
     
-    if (safeEmail) {
-        const existingEmail = await Usuario.findOne({ email: safeEmail });
-        if (existingEmail) return res.status(400).json({ error: "El correo electrónico ya está registrado" });
-    }
+    const existingEmail = await Usuario.findOne({ email: safeEmail });
+    if (existingEmail) return res.status(400).json({ error: "El correo electrónico ya está registrado" });
     
     if (safePhone) {
         const existingTelefono = await Usuario.findOne({ telefono: safePhone });
@@ -103,12 +102,11 @@ const registerUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const respSecreta = await bcrypt.hash(respuestaSecreta, 10);
 
-    // Creamos el objeto usuario. Si limpiarDato devuelve undefined, Mongoose lo ignora (o valida si es required).
     const nuevoUsuario = new Usuario({
-      nombre: limpiarDato(nombre),
+      nombre: safeNombre,
       ap: limpiarDato(ap),
       am: limpiarDato(am),
-      username: safeUsername, // Si es undefined, no se guarda y no choca con el índice unique sparse
+      username: safeUsername,
       email: safeEmail,
       password: hashedPassword,
       telefono: safePhone,
@@ -119,7 +117,7 @@ const registerUser = async (req, res) => {
     await nuevoUsuario.save();
     res.status(201).json({ mensaje: "Usuario registrado con éxito", usuario: nuevoUsuario });
   } catch (error) {
-    console.error("Error en registerUser:", error); // Ver el error real en consola
+    console.error("Error en registerUser:", error);
     res.status(500).json({ error: "Error al registrar usuario: " + (error.message || "") });
   }
 };
@@ -139,10 +137,15 @@ const loginUser = async (req, res) => {
   }
 
   try {
-    // Buscar usuario por email (limpiamos el email entrante por si acaso)
-    const usuario = await Usuario.findOne({ email: limpiarDato(email) });
+    const safeEmail = limpiarDato(email);
     
-    // Validar usuario y contraseña
+    // SEGURIDAD CRÍTICA: Si no hay email válido, no buscamos en la BD (evita findOne({}))
+    if (!safeEmail) {
+        return res.status(400).json({ error: "Credenciales incorrectas" });
+    }
+
+    const usuario = await Usuario.findOne({ email: safeEmail });
+    
     let esValida = false;
     if (usuario) {
         esValida = await bcrypt.compare(password, usuario.password);
@@ -157,21 +160,17 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ error: "Credenciales incorrectas" });
     }
 
-    // Resetear intentos
     req.loginAttempts[key].attempts = 0;
     req.loginAttempts[key].blockedUntil = 0;
 
-    // Generar código 2FA
     const codigo2FA = Math.floor(100000 + Math.random() * 900000).toString();
     usuario.loginCode = codigo2FA;
     usuario.loginCodeExpires = Date.now() + 10 * 60 * 1000;
     
-    // Asegurar que el array exista antes de guardar (aunque se llena en verify)
     if (!usuario.activeTokens) usuario.activeTokens = [];
     
     await usuario.save();
 
-    // Enviar correo
     let apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
     let sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
     sendSmtpEmail.to = [{ email: usuario.email, name: usuario.nombre }];
@@ -191,12 +190,14 @@ const loginUser = async (req, res) => {
 const verifyLoginCode = async (req, res) => {
   const { email, code } = req.body;
   try {
-    const usuario = await Usuario.findOne({ email: limpiarDato(email) });
+    const safeEmail = limpiarDato(email);
+    if (!safeEmail) return res.status(400).json({ error: "Usuario no encontrado" });
+
+    const usuario = await Usuario.findOne({ email: safeEmail });
     if (!usuario) return res.status(400).json({ error: "Usuario no encontrado" });
     if (usuario.loginCode !== code) return res.status(400).json({ error: "Código incorrecto" });
     if (Date.now() > usuario.loginCodeExpires) return res.status(400).json({ error: "El código ha expirado" });
 
-    // Generar token con RS256
     const token = jwt.sign(
       { id: usuario._id, rol: usuario.rol },
       req.privateKey,
@@ -307,6 +308,7 @@ const cambiarContrasena = async (req, res) => {
 
 const getMiPerfil = async (req, res) => {
   try {
+    // Aquí NO sanitizamos nada al leer, solo devolvemos los datos
     const usuario = await Usuario.findById(req.user.id).select("-password -respuestaSecreta");
     if (!usuario) return res.status(404).json({ error: "Usuario no encontrado" });
     res.json(usuario);
@@ -316,17 +318,16 @@ const getMiPerfil = async (req, res) => {
   }
 };
 
-// ACTUALIZACIÓN DE PERFIL CORREGIDA
+// --- ACTUALIZACIÓN DE PERFIL CORREGIDA ---
 const updateMiPerfil = async (req, res) => {
   try {
     const { nombre, ap, am, username, email, telefono } = req.body;
     const userId = req.user.id;
 
-    // Sanitizamos los datos antes de usarlos
     const safeUsername = limpiarDato(username);
     const safeEmail = limpiarDato(email);
 
-    // Validar duplicados si se están actualizando
+    // Validar duplicados (solo si los campos vienen y no están vacíos)
     if (safeUsername) {
       const existing = await Usuario.findOne({ username: safeUsername, _id: { $ne: userId } });
       if (existing) return res.status(400).json({ error: "Ese usuario ya existe" });
@@ -336,24 +337,34 @@ const updateMiPerfil = async (req, res) => {
       if (existing) return res.status(400).json({ error: "Ese email ya está en uso" });
     }
 
-    // Construir objeto dinámicamente
-    // Solo agregamos la propiedad si el dato NO es undefined tras limpiarlo.
-    // Esto evita sobreescribir datos existentes con "" o null si el usuario no los mandó.
+    // Construcción Dinámica:
+    // Solo agregamos campos si el valor limpio NO es undefined.
+    // Esto significa que si mandas una cadena vacía "", NO se actualiza el campo (conserva el valor viejo).
     const camposAActualizar = {};
     
-    // Verificamos si el campo venía en el body original (req.body.nombre !== undefined)
-    // Y luego usamos el dato limpio.
-    if (nombre !== undefined) camposAActualizar.nombre = limpiarDato(nombre);
-    if (ap !== undefined) camposAActualizar.ap = limpiarDato(ap);
-    if (am !== undefined) camposAActualizar.am = limpiarDato(am);
-    if (username !== undefined) camposAActualizar.username = safeUsername;
-    if (email !== undefined) camposAActualizar.email = safeEmail;
-    if (telefono !== undefined) camposAActualizar.telefono = limpiarDato(telefono);
-
-    // Nota: Si limpiarDato devuelve undefined (porque el usuario mandó ""), 
-    // Mongoose podría intentar guardar undefined o borrar el campo.
-    // Con $set y camposAActualizar, si el valor es undefined, la clave suele eliminarse del objeto JS antes de enviar a Mongo
-    // o Mongo lo ignora. Esto es bueno para campos opcionales.
+    if (nombre !== undefined) {
+        const val = limpiarDato(nombre);
+        if (val !== undefined) camposAActualizar.nombre = val;
+    }
+    if (ap !== undefined) {
+        const val = limpiarDato(ap);
+        if (val !== undefined) camposAActualizar.ap = val;
+    }
+    if (am !== undefined) {
+        const val = limpiarDato(am);
+        if (val !== undefined) camposAActualizar.am = val;
+    }
+    if (username !== undefined) {
+        // Para username/email, usamos la variable safe calculada antes
+        if (safeUsername !== undefined) camposAActualizar.username = safeUsername;
+    }
+    if (email !== undefined) {
+        if (safeEmail !== undefined) camposAActualizar.email = safeEmail;
+    }
+    if (telefono !== undefined) {
+        const val = limpiarDato(telefono);
+        if (val !== undefined) camposAActualizar.telefono = val;
+    }
 
     const usuarioActualizado = await Usuario.findByIdAndUpdate(
       userId,
@@ -403,7 +414,6 @@ const googleLogin = async (req, res) => {
         { expiresIn: "1h", algorithm: "RS256" }
     );
     
-    // IMPORTANTE: Guardar el token en activeTokens
     if (!usuario.activeTokens) usuario.activeTokens = [];
     usuario.activeTokens.push(token);
     await usuario.save();
@@ -416,15 +426,21 @@ const googleLogin = async (req, res) => {
 };
 
 const checkUsername = async (req, res) => {
-  const existing = await Usuario.findOne({ username: limpiarDato(req.body.username) });
+  const safe = limpiarDato(req.body.username);
+  if (!safe) return res.json({ available: true }); // Si está vacío, técnicamente "está libre" (o inválido)
+  const existing = await Usuario.findOne({ username: safe });
   res.json({ available: !existing });
 };
 const checkEmail = async (req, res) => {
-  const existing = await Usuario.findOne({ email: limpiarDato(req.body.email) });
+  const safe = limpiarDato(req.body.email);
+  if (!safe) return res.json({ available: true });
+  const existing = await Usuario.findOne({ email: safe });
   res.json({ available: !existing });
 };
 const checkPhone = async (req, res) => {
-  const existing = await Usuario.findOne({ telefono: limpiarDato(req.body.telefono) });
+  const safe = limpiarDato(req.body.telefono);
+  if (!safe) return res.json({ available: true });
+  const existing = await Usuario.findOne({ telefono: safe });
   res.json({ available: !existing });
 };
 
