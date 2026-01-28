@@ -484,7 +484,7 @@ const updateMiPerfil = async (req, res) => {
 };
 
 // ---google
-const googleLogin = async (req, res) => {
+/* const googleLogin = async (req, res) => {
   console.log("👉 INICIO LOGIN GOOGLE");
   const { idToken } = req.body;
 
@@ -526,17 +526,6 @@ const googleLogin = async (req, res) => {
     const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
       expiresIn: "1h",
     });
-/*     const token = jwt.sign(
-      { 
-        id: usuario._id, rol: usuario.rol 
-      },
-      req.privateKey,
-      {
-        expiresIn: "1h",
-        algorithm: "RS256",
-      }
-); */
-
 
     res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
   } catch (error) {
@@ -546,8 +535,76 @@ const googleLogin = async (req, res) => {
       detalle: error.message,
     });
   }
-};
+}; */
+// userController.js
 
+const googleLogin = async (req, res) => {
+  console.log("👉 INICIO LOGIN GOOGLE");
+  const { idToken } = req.body;
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: idToken,
+      audience: "610797077240-hd26f06tg0k68v7hhtuoi5fdl76a50rf.apps.googleusercontent.com",
+      clockTolerance: 10,
+    });
+
+    const payload = ticket.getPayload();
+
+    if (!payload) {
+      return res.status(400).json({ error: "Token de Google inválido" });
+    }
+
+    const { email, name } = payload;
+
+    let usuario = await Usuario.findOne({ email: email });
+
+    if (!usuario) {
+      const baseName = email.split("@")[0];
+      const randomNum = Math.floor(1000 + Math.random() * 9000);
+      const generatedUsername = `${baseName}${randomNum}`;
+
+      usuario = new Usuario({
+        nombre: name,
+        email: email,
+        username: generatedUsername,
+        rol: "usuario",
+        activeTokens: [] // Inicializamos el array
+      });
+
+      await usuario.save();
+    }
+
+    // CORRECCIÓN 1: Usar la Private Key y el algoritmo RS256
+    // Esto es vital para que authMiddleware pueda verificarlo con la Public Key
+    const token = jwt.sign(
+      { id: usuario._id, rol: usuario.rol },
+      req.privateKey, 
+      {
+        expiresIn: "1h",
+        algorithm: "RS256",
+      }
+    );
+
+    // CORRECCIÓN 2: Guardar el token en activeTokens
+    // El middleware revisa si el token existe en la DB. Si no está, deniega el acceso.
+    if (!usuario.activeTokens) {
+      usuario.activeTokens = [];
+    }
+    
+    usuario.activeTokens.push(token);
+    await usuario.save();
+
+    res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
+
+  } catch (error) {
+    console.error("Error en googleLogin:", error.message);
+    res.status(401).json({
+      error: "Token de Google inválido o expirado",
+      detalle: error.message,
+    });
+  }
+};
 ///se agrego para las verificaciones en el formulario de registro, no muevas aqui liz
 
 const checkUsername = async (req, res) => {
