@@ -17,7 +17,14 @@ console.log("Public Key:", publicKey);
 
 const loginAttempts = {};
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+  origin: /* 'http://localhost:4200',  */'https://pry-bina-front.vercel.app/', // Cambia esto al dominio de tu frontend en producción
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 conectarDB();
 
 app.use("/api/usuarios", (req, res, next) => {
