@@ -36,7 +36,13 @@ const loginAttempts = {};
 
 app.use(express.json());
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://pry-bina-front.vercel.app/', // o 'http://localhost:4200' si es local
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 
 conectarDB();
 
