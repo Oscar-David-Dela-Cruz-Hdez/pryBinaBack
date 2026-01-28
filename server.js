@@ -37,7 +37,7 @@ const loginAttempts = {};
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'https://pry-bina-front.vercel.app/', // o 'http://localhost:4200' si es local
+  origin: 'https://pry-bina-front.vercel.app', // o 'http://localhost:4200' si es local
   credentials: true,
   optionsSuccessStatus: 200
 };
