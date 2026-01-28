@@ -523,10 +523,10 @@ const googleLogin = async (req, res) => {
       await usuario.save();
     }
 
-    /* const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
+    const token = jwt.sign({ id: usuario._id, rol: usuario.rol }, "secreto", {
       expiresIn: "1h",
-    }); */
-    const token = jwt.sign(
+    });
+/*     const token = jwt.sign(
       { 
         id: usuario._id, rol: usuario.rol 
       },
@@ -535,7 +535,7 @@ const googleLogin = async (req, res) => {
         expiresIn: "1h",
         algorithm: "RS256",
       }
-);
+); */
 
 
     res.json({ token, rol: usuario.rol, nombre: usuario.nombre });
