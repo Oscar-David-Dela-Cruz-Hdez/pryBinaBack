@@ -14,8 +14,8 @@ const usuarioSchema = new mongoose.Schema({
   rol: { type: String, enum: ["usuario", "admin"], default: "usuario" },
   loginCode: { type: String },
   loginCodeExpires: { type: Date },
-  //para tokens de sesion
-  activeTokens: [{ type: String, default: [] }]
+  // CORRECCIÓN CRÍTICA: Definición explícita de arreglo de strings
+  activeTokens: { type: [String], default: [] }
 });
 
 usuarioSchema.methods.comparePassword = async function (password) {
@@ -26,6 +26,7 @@ usuarioSchema.methods.comparePassword = async function (password) {
 usuarioSchema.set("toJSON", {
   transform: function (doc, ret) {
     delete ret.password;
+    delete ret.activeTokens; // Por seguridad, no devolvemos los tokens en el JSON
     return ret;
   },
 });
