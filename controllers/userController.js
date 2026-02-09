@@ -1,4 +1,4 @@
-/* Corrección Definitiva: Google Login unificado con RS256 y corrección de Perfil */
+/*Login con RS256 y corrección de Perfil */
 const filterXSS = require('xss');
 
 const Usuario = require("../models/Usuario");
@@ -12,7 +12,6 @@ let defaultClient = SibApiV3Sdk.ApiClient.instance;
 let apiKey = defaultClient.authentications["api-key"];
 apiKey.apiKey = process.env.BREVO_API_KEY;
 
-// --- FUNCIÓN DE AYUDA PARA XSS ---
 // Evita que se guarden datos vacíos o que el código truene si algo falta
 const limpiarDato = (dato) => {
   if (dato === undefined || dato === null) return undefined;

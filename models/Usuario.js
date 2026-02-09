@@ -14,7 +14,6 @@ const usuarioSchema = new mongoose.Schema({
   rol: { type: String, enum: ["usuario", "admin"], default: "usuario" },
   loginCode: { type: String },
   loginCodeExpires: { type: Date },
-  // CORRECCIÓN CRÍTICA: Definición explícita de arreglo de strings
   activeTokens: { type: [String], default: [] }
 });
 

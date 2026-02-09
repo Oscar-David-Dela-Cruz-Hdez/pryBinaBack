@@ -28,6 +28,31 @@ app.use("/api/usuarios", (req, res, next) => {
   next();
 }, require("./routes/userRoutes"));
 
+app.use("/api/info", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/infoRoutes"));
+
+app.use("/api/metodos-pago", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/metodoPagoRoutes"));
+
+app.use("/api/proveedores", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/proveedorRoutes"));
+
+app.use("/api/ofertas", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/ofertaRoutes"));
+
+app.use("/api/metodos-envio", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/metodoEnvioRoutes"));
+
 app.listen(port, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
 });
