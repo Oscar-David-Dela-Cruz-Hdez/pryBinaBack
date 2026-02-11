@@ -53,6 +53,16 @@ app.use("/api/metodos-envio", (req, res, next) => {
   next();
 }, require("./routes/metodoEnvioRoutes"));
 
+app.use("/api/categorias", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/categoriaRoutes"));
+
+app.use("/api/productos", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/productoRoutes"));
+
 app.listen(port, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
 });
