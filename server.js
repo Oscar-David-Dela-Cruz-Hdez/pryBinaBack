@@ -63,6 +63,11 @@ app.use("/api/productos", (req, res, next) => {
   next();
 }, require("./routes/productoRoutes"));
 
+app.use("/api/pedidos", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/pedidoRoutes"));
+
 app.listen(port, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
 });

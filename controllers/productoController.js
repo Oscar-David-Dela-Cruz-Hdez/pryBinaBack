@@ -4,7 +4,9 @@ const Producto = require('../models/Producto');
 const getProductos = async (req, res) => {
   try {
     // Podríamos añadir filtros aquí si vienen en query params
-    const productos = await Producto.find().populate('categoria', 'nombre');
+    const productos = await Producto.find()
+      .populate('categoria', 'nombre')
+      .populate('proveedor', 'nombre');
     res.json(productos);
   } catch (error) {
     console.error(error);
@@ -16,7 +18,9 @@ const getProductos = async (req, res) => {
 const getProductoById = async (req, res) => {
   try {
     const { id } = req.params;
-    const producto = await Producto.findById(id).populate('categoria', 'nombre');
+    const producto = await Producto.findById(id)
+      .populate('categoria', 'nombre')
+      .populate('proveedor', 'nombre');
     if (!producto) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
@@ -30,8 +34,8 @@ const getProductoById = async (req, res) => {
 // Crear un nuevo producto
 const createProducto = async (req, res) => {
   try {
-    const { nombre, descripcion, precio, stock, categoria, imagenUrl } = req.body;
-    
+    const { nombre, descripcion, precio, stock, categoria, proveedor, sku, imagenUrl, activo } = req.body;
+
     if (!nombre || !precio) {
       return res.status(400).json({ error: "Nombre y precio son obligatorios" });
     }
@@ -42,7 +46,10 @@ const createProducto = async (req, res) => {
       precio,
       stock,
       categoria,
-      imagenUrl
+      proveedor,
+      sku,
+      imagenUrl,
+      activo
     });
 
     await nuevoProducto.save();
@@ -57,11 +64,11 @@ const createProducto = async (req, res) => {
 const updateProducto = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, descripcion, precio, stock, categoria, imagenUrl } = req.body;
+    const { nombre, descripcion, precio, stock, categoria, proveedor, sku, imagenUrl, activo } = req.body;
 
     const producto = await Producto.findByIdAndUpdate(
       id,
-      { nombre, descripcion, precio, stock, categoria, imagenUrl },
+      { nombre, descripcion, precio, stock, categoria, proveedor, sku, imagenUrl, activo },
       { new: true } // Devuelve el objeto actualizado
     );
 

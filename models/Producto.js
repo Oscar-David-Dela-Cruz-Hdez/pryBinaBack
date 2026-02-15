@@ -23,6 +23,19 @@ const productoSchema = new mongoose.Schema({
     ref: 'Categoria',
     required: false
   },
+  proveedor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Proveedor',
+    required: false
+  },
+  sku: {
+    type: String,
+    required: false
+  },
+  activo: {
+    type: Boolean,
+    default: true
+  },
   imagenUrl: {
     type: String,
     required: false
