@@ -1,10 +1,23 @@
 const Producto = require('../models/Producto');
 
-// Obtener todos los productos (con opción de buscar por nombre si se necesita en el futuro)
 const getProductos = async (req, res) => {
   try {
-    // Podríamos añadir filtros aquí si vienen en query params
-    const productos = await Producto.find()
+    const { categoria, nombre } = req.query;
+    let query = {};
+
+    if (categoria) {
+      query.categoria = categoria;
+    }
+
+    if (nombre) {
+      // Búsqueda insensible a mayúsculas/minúsculas
+      query.nombre = { $regex: nombre, $options: 'i' };
+    }
+
+    // Solo devolver productos activos por defecto, salvo que se pida lo contrario en admin
+    // query.activo = true; // (Opcional: descomentar si se quiere forzar)
+
+    const productos = await Producto.find(query)
       .populate('categoria', 'nombre')
       .populate('proveedor', 'nombre');
     res.json(productos);
