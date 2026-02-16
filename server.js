@@ -28,10 +28,45 @@ app.use("/api/usuarios", (req, res, next) => {
   next();
 }, require("./routes/userRoutes"));
 
-app.use("/api/info", (req, res, next) => {
+app.use("/api/faqs", (req, res, next) => {
   req.publicKey = publicKey;
   next();
-}, require("./routes/infoRoutes"));
+}, require("./routes/faqRoutes"));
+
+app.use("/api/contactos", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/contactoRoutes"));
+
+app.use("/api/ubicacion", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/ubicacionRoutes"));
+
+app.use("/api/mision", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/misionRoutes"));
+
+app.use("/api/vision", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/visionRoutes"));
+
+app.use("/api/historia", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/historiaRoutes"));
+
+app.use("/api/politicas", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/politicasRoutes"));
+
+app.use("/api/terminos", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/terminosRoutes"));
 
 app.use("/api/metodos-pago", (req, res, next) => {
   req.publicKey = publicKey;
