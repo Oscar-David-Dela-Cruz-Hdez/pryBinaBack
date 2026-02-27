@@ -10,7 +10,7 @@ const limpiarDato = (dato) => {
   return dato; 
 };
 
-// Obtener todas las Carrusels (Público)
+// Obtener todos los carruseles (Público)
 // Se devuelven ordenadas por el campo 'orden' ascendente
 const getCarrusels = async (req, res) => {
   try {
@@ -20,22 +20,22 @@ const getCarrusels = async (req, res) => {
         query.activo = true;
     }
     // Sort: orden ascendente, luego por fecha de creación descendente
-    const Carrusels = await Carrusel.find(query).sort({ orden: 1, createdAt: -1 });
-    res.json(Carrusels);
+    const carruseles = await Carrusel.find(query).sort({ orden: 1, createdAt: -1 });
+    res.json(carruseles);
   } catch (error) {
-    res.status(500).json({ error: "Error al obtener Carrusels" });
+    res.status(500).json({ error: "Error al obtener carruseles" });
   }
 };
 
-// Obtener una Carrusel por ID
+// Obtener un carrusel por ID
 const getCarruselById = async (req, res) => {
     try {
         const { id } = req.params;
-        const Carrusel = await Carrusel.findById(id);
-        if (!Carrusel) return res.status(404).json({ error: "Carrusel no encontrada" });
-        res.json(Carrusel);
+        const carrusel = await Carrusel.findById(id);
+        if (!carrusel) return res.status(404).json({ error: "Carrusel no encontrado" });
+        res.json(carrusel);
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener Carrusel" });
+        res.status(500).json({ error: "Error al obtener carrusel" });
     }
 };
 
@@ -46,7 +46,7 @@ const createCarrusel = async (req, res) => {
     
     if (!imagenUrl) return res.status(400).json({ error: "La URL de la imagen es obligatoria" });
 
-    const nuevaCarrusel = new Carrusel({
+    const nuevoCarrusel = new Carrusel({
         titulo: limpiarDato(titulo),
         imagenUrl: limpiarDato(imagenUrl), // Asumimos URL externa o gestionada por otro servicio de subida
         enlaceDestino: limpiarDato(enlaceDestino),
@@ -54,11 +54,11 @@ const createCarrusel = async (req, res) => {
         activo: activo !== undefined ? activo : true
     });
 
-    await nuevaCarrusel.save();
-    res.status(201).json({ mensaje: "Carrusel creada", Carrusel: nuevaCarrusel });
+    await nuevoCarrusel.save();
+    res.status(201).json({ mensaje: "Carrusel creado", carrusel: nuevoCarrusel });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Error al crear Carrusel" });
+    res.status(500).json({ error: "Error al crear carrusel" });
   }
 };
 
@@ -75,13 +75,13 @@ const updateCarrusel = async (req, res) => {
     if (orden !== undefined) datosActualizar.orden = orden;
     if (activo !== undefined) datosActualizar.activo = activo;
 
-    const CarruselActualizada = await Carrusel.findByIdAndUpdate(id, datosActualizar, { new: true });
+    const carruselActualizado = await Carrusel.findByIdAndUpdate(id, datosActualizar, { new: true });
     
-    if (!CarruselActualizada) return res.status(404).json({ error: "Carrusel no encontrada" });
+    if (!carruselActualizado) return res.status(404).json({ error: "Carrusel no encontrado" });
 
-    res.json({ mensaje: "Carrusel actualizada", Carrusel: CarruselActualizada });
+    res.json({ mensaje: "Carrusel actualizado", carrusel: carruselActualizado });
   } catch (error) {
-    res.status(500).json({ error: "Error al actualizar Carrusel" });
+    res.status(500).json({ error: "Error al actualizar carrusel" });
   }
 };
 
@@ -89,13 +89,13 @@ const updateCarrusel = async (req, res) => {
 const deleteCarrusel = async (req, res) => {
   try {
     const { id } = req.params;
-    const CarruselEliminada = await Carrusel.findByIdAndDelete(id);
+    const carruselEliminado = await Carrusel.findByIdAndDelete(id);
     
-    if (!CarruselEliminada) return res.status(404).json({ error: "Carrusel no encontrada" });
+    if (!carruselEliminado) return res.status(404).json({ error: "Carrusel no encontrado" });
 
-    res.json({ mensaje: "Carrusel eliminada correctamente" });
+    res.json({ mensaje: "Carrusel eliminado correctamente" });
   } catch (error) {
-    res.status(500).json({ error: "Error al eliminar Carrusel" });
+    res.status(500).json({ error: "Error al eliminar carrusel" });
   }
 };
 
