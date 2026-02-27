@@ -73,10 +73,10 @@ app.use("/api/metodos-pago", (req, res, next) => {
   next();
 }, require("./routes/metodoPagoRoutes"));
 
-app.use("/api/proveedores", (req, res, next) => {
+app.use("/api/carruseles", (req, res, next) => {
   req.publicKey = publicKey;
   next();
-}, require("./routes/proveedorRoutes"));
+}, require("./routes/carruselRoutes"));
 
 app.use("/api/ofertas", (req, res, next) => {
   req.publicKey = publicKey;

@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+const varianteSchema = new mongoose.Schema({
+  sku: { type: String, required: false },
+  precio: { type: Number, required: true },
+  stock: { type: Number, default: 0 },
+  imagenUrl: { type: String, required: false },
+  atributos: {
+    type: Map,
+    of: String 
+  }
+});
+
 const productoSchema = new mongoose.Schema({
   nombre: {
     type: String,
@@ -23,11 +34,6 @@ const productoSchema = new mongoose.Schema({
     ref: 'Categoria',
     required: false
   },
-  proveedor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Proveedor',
-    required: false
-  },
   sku: {
     type: String,
     required: false
@@ -39,7 +45,20 @@ const productoSchema = new mongoose.Schema({
   imagenUrl: {
     type: String,
     required: false
-  }
+  },
+  
+  // ---- CAMPOS PARA VARIANTES ----
+  tieneVariantes: {
+    type: Boolean,
+    default: false
+  },
+  variantes: [varianteSchema],
+  
+  // ---- CAMPOS ORIGINALES BASE ----
+  precioBase: { type: Number },
+  stockTotal: { type: Number, default: 0 },
+  skuBase: { type: String },
+  imagenUrlPrincipal: { type: String }
 }, {
   timestamps: true
 });

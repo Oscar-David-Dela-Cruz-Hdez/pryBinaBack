@@ -1,26 +1,13 @@
 const Oferta = require("../models/Oferta");
-const filterXSS = require('xss');
+const Producto = require("../models/Producto");
 
-const limpiarDato = (dato) => {
-  if (dato === undefined || dato === null) return undefined;
-  if (typeof dato === 'string') {
-      const strDato = String(dato).trim();
-      return filterXSS(strDato);
-  }
-  return dato; 
-};
-
-// Obtener todas las ofertas (Público)
-// Se devuelven ordenadas por el campo 'orden' ascendente
+// Obtener todas las ofertas activas e inactivas (Admin)
 const getOfertas = async (req, res) => {
   try {
-    const { activo } = req.query;
-    let query = {};
-    if (activo === 'true') {
-        query.activo = true;
-    }
-    // Sort: orden ascendente, luego por fecha de creación descendente
-    const ofertas = await Oferta.find(query).sort({ orden: 1, createdAt: -1 });
+    const ofertas = await Oferta.find()
+      .populate('productos', 'nombre')
+      .populate('categorias', 'nombre')
+      .sort({ createdAt: -1 });
     res.json(ofertas);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener ofertas" });
@@ -29,29 +16,37 @@ const getOfertas = async (req, res) => {
 
 // Obtener una oferta por ID
 const getOfertaById = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const oferta = await Oferta.findById(id);
-        if (!oferta) return res.status(404).json({ error: "Oferta no encontrada" });
-        res.json(oferta);
-    } catch (error) {
-        res.status(500).json({ error: "Error al obtener oferta" });
-    }
+  try {
+    const { id } = req.params;
+    const oferta = await Oferta.findById(id)
+      .populate('productos', 'nombre')
+      .populate('categorias', 'nombre');
+    if (!oferta) return res.status(404).json({ error: "Oferta no encontrada" });
+    res.json(oferta);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener oferta" });
+  }
 };
 
 // Crear Oferta (Admin)
 const createOferta = async (req, res) => {
   try {
-    const { titulo, imagenUrl, enlaceDestino, orden, activo } = req.body;
+    const { nombre, descripcion, tipoDescuento, valorDescuento, productos, categorias, fechaInicio, fechaFin, activo } = req.body;
     
-    if (!imagenUrl) return res.status(400).json({ error: "La URL de la imagen es obligatoria" });
+    if (!nombre || !tipoDescuento || valorDescuento === undefined || !fechaInicio || !fechaFin) {
+      return res.status(400).json({ error: "Faltan campos obligatorios" });
+    }
 
     const nuevaOferta = new Oferta({
-        titulo: limpiarDato(titulo),
-        imagenUrl: limpiarDato(imagenUrl), // Asumimos URL externa o gestionada por otro servicio de subida
-        enlaceDestino: limpiarDato(enlaceDestino),
-        orden: orden !== undefined ? orden : 0,
-        activo: activo !== undefined ? activo : true
+      nombre,
+      descripcion,
+      tipoDescuento,
+      valorDescuento,
+      productos: productos || [],
+      categorias: categorias || [],
+      fechaInicio,
+      fechaFin,
+      activo: activo !== undefined ? activo : true
     });
 
     await nuevaOferta.save();
@@ -66,21 +61,28 @@ const createOferta = async (req, res) => {
 const updateOferta = async (req, res) => {
   try {
     const { id } = req.params;
-    const { titulo, imagenUrl, enlaceDestino, orden, activo } = req.body;
+    const { nombre, descripcion, tipoDescuento, valorDescuento, productos, categorias, fechaInicio, fechaFin, activo } = req.body;
 
     const datosActualizar = {};
-    if (titulo !== undefined) datosActualizar.titulo = limpiarDato(titulo);
-    if (imagenUrl !== undefined) datosActualizar.imagenUrl = limpiarDato(imagenUrl);
-    if (enlaceDestino !== undefined) datosActualizar.enlaceDestino = limpiarDato(enlaceDestino);
-    if (orden !== undefined) datosActualizar.orden = orden;
+    if (nombre !== undefined) datosActualizar.nombre = nombre;
+    if (descripcion !== undefined) datosActualizar.descripcion = descripcion;
+    if (tipoDescuento !== undefined) datosActualizar.tipoDescuento = tipoDescuento;
+    if (valorDescuento !== undefined) datosActualizar.valorDescuento = valorDescuento;
+    if (productos !== undefined) datosActualizar.productos = productos;
+    if (categorias !== undefined) datosActualizar.categorias = categorias;
+    if (fechaInicio !== undefined) datosActualizar.fechaInicio = fechaInicio;
+    if (fechaFin !== undefined) datosActualizar.fechaFin = fechaFin;
     if (activo !== undefined) datosActualizar.activo = activo;
 
-    const ofertaActualizada = await Oferta.findByIdAndUpdate(id, datosActualizar, { new: true });
+    const ofertaActualizada = await Oferta.findByIdAndUpdate(id, datosActualizar, { new: true })
+      .populate('productos', 'nombre')
+      .populate('categorias', 'nombre');
     
     if (!ofertaActualizada) return res.status(404).json({ error: "Oferta no encontrada" });
 
     res.json({ mensaje: "Oferta actualizada", oferta: ofertaActualizada });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Error al actualizar oferta" });
   }
 };

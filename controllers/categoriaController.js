@@ -29,7 +29,7 @@ const getCategoriaById = async (req, res) => {
 // Crear una nueva categoría
 const createCategoria = async (req, res) => {
   try {
-    const { nombre, descripcion, imagenUrl } = req.body;
+    const { nombre, descripcion } = req.body;
     
     // Validación básica
     if (!nombre) {
@@ -38,8 +38,7 @@ const createCategoria = async (req, res) => {
 
     const nuevaCategoria = new Categoria({
       nombre,
-      descripcion,
-      imagenUrl
+      descripcion
     });
 
     await nuevaCategoria.save();
@@ -54,7 +53,7 @@ const createCategoria = async (req, res) => {
 const updateCategoria = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, descripcion, imagenUrl } = req.body;
+    const { nombre, descripcion } = req.body;
 
     const categoria = await Categoria.findById(id);
     if (!categoria) {
@@ -63,7 +62,6 @@ const updateCategoria = async (req, res) => {
 
     if (nombre) categoria.nombre = nombre;
     if (descripcion !== undefined) categoria.descripcion = descripcion;
-    if (imagenUrl !== undefined) categoria.imagenUrl = imagenUrl;
 
     await categoria.save();
     res.json({ mensaje: "Categoría actualizada", categoria });

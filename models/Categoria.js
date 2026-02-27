@@ -9,10 +9,6 @@ const categoriaSchema = new mongoose.Schema({
   descripcion: {
     type: String,
     required: false
-  },
-  imagenUrl: {
-    type: String,
-    required: false
   }
 }, {
   timestamps: true

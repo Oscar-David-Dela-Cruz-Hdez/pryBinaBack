@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ofertaSchema = new mongoose.Schema({
+const carruselSchema = new mongoose.Schema({
   titulo: { type: String }, // Opcional: Texto alternativo o título
   imagenUrl: { type: String, required: true }, // URL de la imagen del banner
   enlaceDestino: { type: String }, // Opcional: URL a donde lleva al hacer click
@@ -8,4 +8,4 @@ const ofertaSchema = new mongoose.Schema({
   activo: { type: Boolean, default: true }
 }, { timestamps: true });
 
-module.exports = mongoose.model("Oferta", ofertaSchema);
+module.exports = mongoose.model("Carrusel", carruselSchema);

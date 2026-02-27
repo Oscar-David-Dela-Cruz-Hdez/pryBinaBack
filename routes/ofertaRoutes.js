@@ -10,8 +10,7 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-// --- PÚBLICO ---
-// Listar todas. ?activo=true para filtrar.
+// --- RUTAS OPORTUNAS ---
 router.get("/", getOfertas);
 router.get("/:id", getOfertaById);
 
