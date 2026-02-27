@@ -5,7 +5,7 @@ const {
     createCarrusel, 
     updateCarrusel, 
     deleteCarrusel 
-} = require("../controllers/CarruselController");
+} = require("../controllers/caruselController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
 const router = express.Router();
