@@ -1,5 +1,6 @@
 const Pedido = require("../models/Pedido");
 const Producto = require("../models/Producto");
+const ExcelJS = require('exceljs');
 const filterXSS = require('xss');
 
 // Crear Pedido (Cliente)
@@ -114,9 +115,69 @@ const updateEstadoPedido = async (req, res) => {
     }
 };
 
+// Exportar Pedidos a Excel (Admin)
+const exportarPedidosExcel = async (req, res) => {
+    try {
+        // Obtenemos todos los pedidos y los datos de quien lo compró
+        const pedidos = await Pedido.find()
+            .populate('usuario', 'nombre email')
+            .sort({ createdAt: -1 });
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Ventas');
+
+        // Definimos las columnas del Excel
+        worksheet.columns = [
+            { header: 'ID Pedido', key: 'id', width: 25 },
+            { header: 'Fecha', key: 'fecha', width: 20 },
+            { header: 'Cliente (Nombre)', key: 'clienteNombre', width: 25 },
+            { header: 'Cliente (Email)', key: 'clienteEmail', width: 30 },
+            { header: 'Total Gastado ($)', key: 'total', width: 15 },
+            { header: 'Costo Envío ($)', key: 'envio', width: 15 },
+            { header: 'Método de Pago', key: 'metodoPago', width: 15 },
+            { header: 'Estado', key: 'estado', width: 15 },
+            { header: 'Resumen de Productos', key: 'productos', width: 50 }
+        ];
+
+        // Llenamos las filas
+        pedidos.forEach(pedido => {
+            // Creamos un texto resumen de lo que compró: "2x Shampoo, 1x Acondicionador"
+            const productosTexto = pedido.productos.map(p => `${p.cantidad}x ${p.nombre || 'Producto'}`).join(', ');
+
+            // Formatear la fecha para que sea legible
+            const fechaFormateada = pedido.createdAt ? new Date(pedido.createdAt).toLocaleDateString('es-MX', {
+                 year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            }) : 'S/F';
+
+            worksheet.addRow({
+                id: pedido._id.toString(),
+                fecha: fechaFormateada,
+                clienteNombre: pedido.usuario ? pedido.usuario.nombre : 'Usuario Eliminado',
+                clienteEmail: pedido.usuario ? pedido.usuario.email : 'S/E',
+                total: pedido.total,
+                envio: pedido.costoEnvio,
+                metodoPago: pedido.metodoPago,
+                estado: pedido.estado,
+                productos: productosTexto
+            });
+        });
+
+        // Configurar los headers de respuesta para que inicie la descarga
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader('Content-Disposition', 'attachment; filename=reporte_pedidos.xlsx');
+
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (error) {
+        console.error('Error al exportar pedidos:', error);
+        res.status(500).json({ error: "Error al exportar pedidos a Excel" });
+    }
+};
+
 module.exports = {
     createPedido,
     getPedidos,
     getPedidoById,
-    updateEstadoPedido
+    updateEstadoPedido,
+    exportarPedidosExcel
 };

@@ -3,7 +3,8 @@ const {
     createPedido,
     getPedidos,
     getPedidoById,
-    updateEstadoPedido
+    updateEstadoPedido,
+    exportarPedidosExcel
 } = require("../controllers/pedidoController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -15,6 +16,7 @@ router.get("/", authMiddleware(), getPedidos); // Admin ve todo, User solo suyos
 router.get("/:id", authMiddleware(), getPedidoById);
 
 // Rutas Admin
+router.get("/exportar/excel", authMiddleware(["admin"]), exportarPedidosExcel);
 router.put("/:id/estado", authMiddleware(["admin"]), updateEstadoPedido);
 
 module.exports = router;
