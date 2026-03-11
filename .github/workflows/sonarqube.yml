@@ -1,0 +1,22 @@
+name: Análisis de Seguridad Estático (SAST)
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  analisis-sonarqube:
+    name: Escaneo de Código
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código del repositorio
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Ejecutar SonarQube Scanner
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
