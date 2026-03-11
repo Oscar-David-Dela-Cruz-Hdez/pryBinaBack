@@ -205,7 +205,9 @@ const deleteProducto = async (req, res) => {
     res.status(500).json({ error: "Error al eliminar el producto" });
   }
 };
-
+///
+///
+////NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 // Exportar productos a Excel
 const exportarProductosExcel = async (req, res) => {
   try {
@@ -250,7 +252,9 @@ const exportarProductosExcel = async (req, res) => {
     res.status(500).json({ error: "Error al exportar productos" });
   }
 };
-
+///
+///
+////NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 // Importar productos desde Excel
 const importarProductosExcel = async (req, res) => {
   try {
@@ -261,7 +265,7 @@ const importarProductosExcel = async (req, res) => {
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.load(req.file.buffer);
     
-    // Asumimos que la información está en la primera hoja
+    // para que esa información se ponga en la primera hoja
     const worksheet = workbook.getWorksheet(1);
     if (!worksheet) {
       return res.status(400).json({ error: "El archivo Excel no tiene hojas válidas" });

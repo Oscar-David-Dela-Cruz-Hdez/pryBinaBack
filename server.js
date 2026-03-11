@@ -103,6 +103,11 @@ app.use("/api/pedidos", (req, res, next) => {
   next();
 }, require("./routes/pedidoRoutes"));
 
+app.use("/api/respaldos", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/respaldoRoutes"));
+
 app.listen(port, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
 });
