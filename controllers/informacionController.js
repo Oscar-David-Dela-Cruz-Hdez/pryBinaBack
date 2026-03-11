@@ -22,8 +22,18 @@ const getInformacion = async (req, res) => {
   }
 };
 
-// Actualización General INTELIGENTE (Patch)
+// Actualización General sonarqube (Patch)
 // Permite actualizar solo lo que se envía (misión, visión, etc.) sin borrar lo demás
+const updateUbicacion = (info, ubicacion) => {
+    if (!ubicacion) return;
+    
+    if (!info.ubicacion) info.ubicacion = {};
+    if (ubicacion.direccion !== undefined) info.ubicacion.direccion = limpiarDato(ubicacion.direccion);
+    if (ubicacion.latitud !== undefined) info.ubicacion.latitud = ubicacion.latitud;
+    if (ubicacion.longitud !== undefined) info.ubicacion.longitud = ubicacion.longitud;
+    if (ubicacion.googleMapsUrl !== undefined) info.ubicacion.googleMapsUrl = filterXSS(ubicacion.googleMapsUrl);
+};
+
 const updateInformacion = async (req, res) => {
   try {
     const { 
@@ -40,13 +50,7 @@ const updateInformacion = async (req, res) => {
     if (terminosServicio !== undefined) info.terminosServicio = limpiarDato(terminosServicio);
     
     // Ubicación es un objeto, requiere cuidado para no borrar lat/lng si solo mandan direccion
-    if (ubicacion) {
-        if (!info.ubicacion) info.ubicacion = {};
-        if (ubicacion.direccion !== undefined) info.ubicacion.direccion = limpiarDato(ubicacion.direccion);
-        if (ubicacion.latitud !== undefined) info.ubicacion.latitud = ubicacion.latitud;
-        if (ubicacion.longitud !== undefined) info.ubicacion.longitud = ubicacion.longitud;
-        if (ubicacion.googleMapsUrl !== undefined) info.ubicacion.googleMapsUrl = filterXSS(ubicacion.googleMapsUrl);
-    }
+    updateUbicacion(info, ubicacion);
 
     await info.save();
     res.json({ mensaje: "Información actualizada", info });

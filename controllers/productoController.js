@@ -255,6 +255,87 @@ const exportarProductosExcel = async (req, res) => {
 ///
 ///
 ////NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+const parseFloatSeguro = (valor) => {
+  if (valor === null || valor === undefined) return 0;
+  const parsed = parseFloat(valor.toString().replace(/,/g, ''));
+  return isNaN(parsed) ? 0 : parsed;
+};
+
+const parseIntSeguro = (valor) => {
+  if (valor === null || valor === undefined) return 0;
+  const parsed = parseInt(valor.toString().replace(/,/g, ''), 10);
+  return isNaN(parsed) ? 0 : parsed;
+};
+
+const procesarFilaExcel = async (row, index, resumen) => {
+  if (!row.hasValues) return;
+
+  const id = row.getCell(1).value;
+  const nombre = row.getCell(2).value;
+  const descripcion = row.getCell(3).value;
+  const precioBase = row.getCell(4).value;
+  const stockTotal = row.getCell(5).value;
+  const skuBase = row.getCell(6).value;
+
+  try {
+    if (!nombre) {
+      throw new Error("El nombre es obligatorio");
+    }
+
+    let producto = null;
+    if (id && id.toString().length === 24) {
+      // Intentar buscar por ID si parece un ObjectId válido
+      producto = await Producto.findById(id.toString());
+    }
+
+    if (!producto && skuBase) {
+      // Intentar buscar por SKU si no se encontró por ID
+      producto = await Producto.findOne({ skuBase: skuBase.toString() });
+    }
+
+    // Determinar un precio seguro y stock seguro
+    const precioSeguro = parseFloatSeguro(precioBase);
+    const stockSeguro = parseIntSeguro(stockTotal);
+
+    if (producto) {
+      // Actualizar
+      producto.nombre = nombre.toString();
+      if (descripcion !== null && descripcion !== undefined) {
+         producto.descripcion = descripcion.toString();
+      }
+      producto.precio = precioSeguro;
+      producto.precioBase = precioSeguro;
+      producto.stock = stockSeguro;
+      producto.stockTotal = stockSeguro;
+      if (skuBase) {
+          producto.sku = skuBase.toString();
+          producto.skuBase = skuBase.toString();
+      }
+      await producto.save();
+      resumen.actualizados++;
+    } else {
+      // Crear
+      const nuevoProd = new Producto({
+        nombre: nombre.toString(),
+        descripcion: descripcion ? descripcion.toString() : '',
+        precio: precioSeguro,
+        precioBase: precioSeguro,
+        stock: stockSeguro,
+        stockTotal: stockSeguro,
+        sku: skuBase ? skuBase.toString() : '',
+        skuBase: skuBase ? skuBase.toString() : '',
+        tieneVariantes: false,
+        activo: true
+      });
+      await nuevoProd.save();
+      resumen.creados++;
+    }
+  } catch (err) {
+    resumen.errores++;
+    resumen.detallesErrores.push(`Fila ${index}: ${err.message}`);
+  }
+};
+
 // Importar productos desde Excel
 const importarProductosExcel = async (req, res) => {
   try {
@@ -275,81 +356,7 @@ const importarProductosExcel = async (req, res) => {
 
     for (let i = 2; i <= worksheet.rowCount; i++) {
       const row = worksheet.getRow(i);
-      if (!row.hasValues) continue;
-
-      const id = row.getCell(1).value;
-      const nombre = row.getCell(2).value;
-      const descripcion = row.getCell(3).value;
-      const precioBase = row.getCell(4).value;
-      const stockTotal = row.getCell(5).value;
-      const skuBase = row.getCell(6).value;
-
-      try {
-        if (!nombre) {
-          throw new Error("El nombre es obligatorio");
-        }
-
-        let producto = null;
-        if (id && id.toString().length === 24) {
-          // Intentar buscar por ID si parece un ObjectId válido
-          producto = await Producto.findById(id.toString());
-        }
-
-        if (!producto && skuBase) {
-          // Intentar buscar por SKU si no se encontró por ID
-          producto = await Producto.findOne({ skuBase: skuBase.toString() });
-        }
-
-        // Determinar un precio seguro
-        let precioSeguro = 0;
-        if (precioBase !== null && precioBase !== undefined) {
-             const parsed = parseFloat(precioBase.toString().replace(/,/g, ''));
-             if(!isNaN(parsed)) precioSeguro = parsed;
-        }
-
-        let stockSeguro = 0;
-        if (stockTotal !== null && stockTotal !== undefined) {
-             const parsed = parseInt(stockTotal.toString().replace(/,/g, ''), 10);
-             if(!isNaN(parsed)) stockSeguro = parsed;
-        }
-
-        if (producto) {
-          // Actualizar
-          producto.nombre = nombre.toString();
-          if(descripcion !== null && descripcion !== undefined) {
-             producto.descripcion = descripcion.toString();
-          }
-          producto.precio = precioSeguro;
-          producto.precioBase = precioSeguro;
-          producto.stock = stockSeguro;
-          producto.stockTotal = stockSeguro;
-          if (skuBase) {
-              producto.sku = skuBase.toString();
-              producto.skuBase = skuBase.toString();
-          }
-          await producto.save();
-          resumen.actualizados++;
-        } else {
-          // Crear
-          const nuevoProd = new Producto({
-            nombre: nombre.toString(),
-            descripcion: descripcion ? descripcion.toString() : '',
-            precio: precioSeguro,
-            precioBase: precioSeguro,
-            stock: stockSeguro,
-            stockTotal: stockSeguro,
-            sku: skuBase ? skuBase.toString() : '',
-            skuBase: skuBase ? skuBase.toString() : '',
-            tieneVariantes: false,
-            activo: true
-          });
-          await nuevoProd.save();
-          resumen.creados++;
-        }
-      } catch (err) {
-        resumen.errores++;
-        resumen.detallesErrores.push(`Fila ${i}: ${err.message}`);
-      }
+      await procesarFilaExcel(row, i, resumen);
     }
 
     res.json({ mensaje: "Importación finalizada", resumen });

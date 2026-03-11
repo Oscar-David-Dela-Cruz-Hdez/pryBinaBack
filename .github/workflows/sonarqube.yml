@@ -1,4 +1,4 @@
-name: Análisis de Seguridad Estático (SAST)
+name: Análisis de Seguridad Estático (SAST y SCA)
 
 on:
   push:
@@ -6,17 +6,25 @@ on:
       - master
 
 jobs:
-  analisis-sonarqube:
-    name: Escaneo de Código
+  analisis-seguridad:
+    name: Escaneo de Código y Dependencias
     runs-on: ubuntu-latest
+
     steps:
       - name: Descargar el código del repositorio
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Ejecutar SonarQube Scanner
+      - name: Ejecutar SonarQube Scanner (Análisis de Código)
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Ejecutar Snyk (Análisis de Dependencias)
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test # Analiza vulnerabilidades en paquetes instalados
