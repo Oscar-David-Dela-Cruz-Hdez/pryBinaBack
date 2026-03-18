@@ -28,3 +28,23 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           command: test # Analiza vulnerabilidades en paquetes instalados
+
+
+
+
+name: Análisis de Seguridad Dinámico (DAST) Backend
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: Escaneo DAST con OWASP ZAP
+    steps:
+      - name: ZAP Baseline Scan
+        uses: zaproxy/action-baseline@v0.10.0
+        with:
+          target: '[https://prybinaback.onrender.com](https://prybinaback.onrender.com)'
