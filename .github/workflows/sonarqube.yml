@@ -48,3 +48,37 @@ jobs:
         uses: zaproxy/action-baseline@v0.10.0
         with:
           target: '[https://prybinaback.onrender.com](https://prybinaback.onrender.com)'
+
+
+name: Snyk Security Scan (IAST/SAST)
+
+on:
+  push:
+    branches: [ "master", "main" ]
+  pull_request:
+    branches: [ "master", "main" ]
+
+jobs:
+  snyk-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código fuente
+        uses: actions/checkout@v3
+
+      - name: Configurar entorno Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22' # Ajustado a tu versión actual de Node.js
+
+      - name: Instalar dependencias del proyecto
+        run: npm install
+
+      - name: Ejecutar Análisis de Snyk Code (Data Flow)
+        uses: snyk/actions/node@master
+        env:
+          # Este token lo debes configurar en los secretos de GitHub
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: code test
+          # Configurado para que la acción solo "falle" (se ponga en rojo) si detecta vulnerabilidades Altas o Críticas
+          args: --severity-threshold=high
