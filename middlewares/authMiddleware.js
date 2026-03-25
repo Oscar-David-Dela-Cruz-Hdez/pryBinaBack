@@ -8,7 +8,6 @@ const authMiddleware = (roles = []) => {
       return res.status(401).json({ error: "Acceso denegado. No hay token proporcionado." });
     }
     try {
-      // Usamos la llave pública y forzamos RS256
       const decoded = jwt.verify(token, req.publicKey, { algorithms: ['RS256'] });
       
       const usuario = await Usuario.findById(decoded.id);

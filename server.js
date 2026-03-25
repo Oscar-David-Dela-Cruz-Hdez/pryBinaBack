@@ -2,13 +2,45 @@ const express = require("express");
 const cors = require("cors");
 const conectarDB = require("./config/db");
 require("dotenv").config();
+
 const app = express();
 const port = process.env.PORT || 4000;
-//limites de recup contra
-let recoveryAttempts = {};
-//limites para el inicio de sesion 
 
-//JWT
+// 1. PRIMERO le decimos a Express que entienda JSON y CORS
+app.use(express.json());
+app.use(cors());
+
+// ==========================================
+// 2. RASP (Runtime Application Self-Protection)
+// ==========================================
+const raspProtection = (req, res, next) => {
+    // Unimos los datos que envía el usuario (body y url) para analizarlos en tiempo real
+    const payload = JSON.stringify(req.body) + JSON.stringify(req.query);
+    
+    // Lista de firmas de ataques (NoSQL Injection y SQL Injection)
+    const maliciousPatterns = /\$gt|\$ne|\$or|\$where|' OR '1'='1/i;
+
+    // El RASP evalúa la memoria en ejecución. Si detecta un ataque, lo bloquea sin apagar el servidor.
+    if (maliciousPatterns.test(payload)) {
+        console.error("🚨 [RASP DETECTED] Intento de inyección interceptado en tiempo de ejecución.");
+        return res.status(403).json({
+            seguridad: "RASP ACTIVADO",
+            alerta: "Ejecución maliciosa bloqueada. El servidor sigue en línea y protegido."
+        });
+    }
+    next();
+};
+
+// 3. Encendemos el RASP para que vigile TODAS las rutas
+app.use(raspProtection);
+
+// ==========================================
+
+// limites de recup contra
+let recoveryAttempts = {};
+// limites para el inicio de sesion 
+
+// JWT
 const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
 const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
 
@@ -16,8 +48,7 @@ console.log("Private Key:", privateKey);
 console.log("Public Key:", publicKey);
 
 const loginAttempts = {};
-app.use(express.json());
-app.use(cors());
+
 conectarDB();
 
 app.use("/api/usuarios", (req, res, next) => {

@@ -25,7 +25,7 @@ usuarioSchema.methods.comparePassword = async function (password) {
 usuarioSchema.set("toJSON", {
   transform: function (doc, ret) {
     delete ret.password;
-    delete ret.activeTokens; // Por seguridad, no devolvemos los tokens en el JSON
+    delete ret.activeTokens;
     return ret;
   },
 });
