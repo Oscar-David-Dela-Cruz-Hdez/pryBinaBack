@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const conectarDB = require("./config/db");
+const { httpMetricsMiddleware } = require("./middlewares/httpMetricsMiddleware");
 require("dotenv").config();
 
 const app = express();
@@ -33,6 +34,9 @@ const raspProtection = (req, res, next) => {
 
 // 3. Encendemos el RASP para que vigile TODAS las rutas
 app.use(raspProtection);
+
+// 4. Middleware de métricas HTTP (registra latencia, errores y contadores)
+app.use(httpMetricsMiddleware);
 
 // ==========================================
 
@@ -138,6 +142,11 @@ app.use("/api/respaldos", (req, res, next) => {
   req.publicKey = publicKey;
   next();
 }, require("./routes/respaldoRoutes"));
+
+app.use("/api/monitoreo", (req, res, next) => {
+  req.publicKey = publicKey;
+  next();
+}, require("./routes/monitoreoRoutes"));
 
 app.listen(port, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
