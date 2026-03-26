@@ -7,6 +7,20 @@
 const os = require("os");
 const mongoose = require("mongoose");
 
+// ── Contadores propios a nivel de aplicación ────────────────────────────────
+// Necesario porque los drivers modernos de Mongoose envían deletes como
+// "comandos" (command protocol), por lo que opcounters.delete siempre es 0.
+const appCounters = {
+  deletes: 0,
+};
+
+// Plugin global de Mongoose: intercepta TODOS los modelos sin tocar cada uno
+mongoose.plugin((schema) => {
+  schema.post("deleteOne",      { document: false, query: true }, () => { appCounters.deletes++; });
+  schema.post("deleteMany",     { document: false, query: true }, () => { appCounters.deletes++; });
+  schema.post("findOneAndDelete", { document: true, query: true }, (doc) => { if (doc) appCounters.deletes++; });
+});
+
 // ── Historial circular del sistema ──────────────────────────────────────────
 const MAX_HISTORIAL = 60;
 const historialSistema = [];
@@ -96,7 +110,9 @@ const obtenerMetricasMongo = async () => {
         inserts: status.opcounters?.insert ?? 0,
         queries: status.opcounters?.query ?? 0,
         updates: status.opcounters?.update ?? 0,
-        deletes: status.opcounters?.delete ?? 0,
+        // opcounters.delete siempre es 0 con drivers modernos (usan command protocol).
+        // Usamos nuestro contador propio capturado desde el plugin de Mongoose.
+        deletes: appCounters.deletes,
         getmores: status.opcounters?.getmore ?? 0,
         commands: status.opcounters?.command ?? 0,
       },
@@ -133,4 +149,5 @@ module.exports = {
   obtenerMetricasSistema,
   obtenerMetricasMongo,
   historialSistema,
+  appCounters,   // exportado para tests / debug
 };
