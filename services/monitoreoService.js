@@ -113,7 +113,6 @@ const obtenerMetricasMongo = async () => {
         // opcounters.delete siempre es 0 con drivers modernos (usan command protocol).
         // Usamos nuestro contador propio capturado desde el plugin de Mongoose.
         deletes: appCounters.deletes,
-        getmores: status.opcounters?.getmore ?? 0,
         commands: status.opcounters?.command ?? 0,
       },
       red: {
