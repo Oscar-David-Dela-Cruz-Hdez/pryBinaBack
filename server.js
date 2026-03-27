@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const conectarDB = require("./config/db");
 const { httpMetricsMiddleware } = require("./middlewares/httpMetricsMiddleware");
+// IMPORTANTE: monitoreoService debe requerirse ANTES que cualquier ruta/modelo
+// para que el plugin global de Mongoose quede registrado a tiempo
+require("./services/monitoreoService");
 require("dotenv").config();
 
 const app = express();
