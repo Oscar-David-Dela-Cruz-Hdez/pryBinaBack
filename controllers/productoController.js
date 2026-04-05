@@ -2,27 +2,21 @@ const Producto = require('../models/Producto');
 const Oferta = require('../models/Oferta');
 const ExcelJS = require('exceljs');
 
-// Función de ayuda para calcular ofertas activas
 const aplicarOfertaAProducto = (producto, ofertasActivas) => {
-  // Buscar si alguna oferta aplica directamente a este producto
   let ofertaAplicable = ofertasActivas.find(o => 
     o.productos.some(id => id.toString() === producto._id.toString())
   );
 
-  // Si no aplica por producto, checar si aplica por categoría
-  if (!ofertaAplicable && producto.categoria) {
-    const catId = producto.categoria._id ? producto.categoria._id.toString() : producto.categoria.toString();
+  if (!ofertaAplicable && producto.marca) {
+    const marcaId = producto.marca._id ? producto.marca._id.toString() : producto.marca.toString();
     ofertaAplicable = ofertasActivas.find(o => 
-      o.categorias.some(id => id.toString() === catId)
+      o.marcas && o.marcas.some(id => id.toString() === marcaId)
     );
   }
 
-  // Convertir a objeto plano si es documento de mongoose
   const prodObj = producto.toObject ? producto.toObject() : producto;
 
-  prodObj.precioOriginal = prodObj.precioBase || prodObj.precio; // Compatibilidad
-  
-  if (ofertaAplicable) {
+  if (ofertaAplicable && prodObj.precioNormal) {
     prodObj.ofertaAplicada = {
       nombre: ofertaAplicable.nombre,
       tipoDescuento: ofertaAplicable.tipoDescuento,
@@ -30,39 +24,46 @@ const aplicarOfertaAProducto = (producto, ofertasActivas) => {
     };
 
     if (ofertaAplicable.tipoDescuento === 'porcentaje') {
-      const descuento = prodObj.precioOriginal * (ofertaAplicable.valorDescuento / 100);
-      prodObj.precioFinal = Math.max(0, prodObj.precioOriginal - descuento);
+      const descuentoNormal = prodObj.precioNormal * (ofertaAplicable.valorDescuento / 100);
+      prodObj.precioNormalFinal = Math.max(0, prodObj.precioNormal - descuentoNormal);
+      if (prodObj.precioMayoreo) {
+        const descuentoMayoreo = prodObj.precioMayoreo * (ofertaAplicable.valorDescuento / 100);
+        prodObj.precioMayoreoFinal = Math.max(0, prodObj.precioMayoreo - descuentoMayoreo);
+      }
+      if (prodObj.precioCaja) {
+        const descuentoCaja = prodObj.precioCaja * (ofertaAplicable.valorDescuento / 100);
+        prodObj.precioCajaFinal = Math.max(0, prodObj.precioCaja - descuentoCaja);
+      }
     } else if (ofertaAplicable.tipoDescuento === 'monto_fijo') {
-      prodObj.precioFinal = Math.max(0, prodObj.precioOriginal - ofertaAplicable.valorDescuento);
+      prodObj.precioNormalFinal = Math.max(0, prodObj.precioNormal - ofertaAplicable.valorDescuento);
+      if (prodObj.precioMayoreo) prodObj.precioMayoreoFinal = Math.max(0, prodObj.precioMayoreo - ofertaAplicable.valorDescuento);
+      if (prodObj.precioCaja) prodObj.precioCajaFinal = Math.max(0, prodObj.precioCaja - ofertaAplicable.valorDescuento);
     }
   } else {
-    prodObj.precioFinal = prodObj.precioOriginal;
+    prodObj.precioNormalFinal = prodObj.precioNormal;
+    prodObj.precioMayoreoFinal = prodObj.precioMayoreo;
+    prodObj.precioCajaFinal = prodObj.precioCaja;
   }
+  
+  // Compatibilidad hacia atrás para evitar romper frontend que usa precioFinal
+  prodObj.precioFinal = prodObj.precioNormalFinal;
 
   return prodObj;
 };
 
 const getProductos = async (req, res) => {
   try {
-    const { categoria, nombre } = req.query;
+    const { marca, familia, nombre } = req.query;
     let query = {};
 
-    if (categoria) {
-      query.categoria = categoria;
-    }
-
-    if (nombre) {
-      // Búsqueda insensible a mayúsculas/minúsculas
-      query.nombre = { $regex: nombre, $options: 'i' };
-    }
-
-    // Solo devolver productos activos por defecto, salvo que se pida lo contrario en admin
-    // query.activo = true; // (Opcional: descomentar si se quiere forzar)
+    if (marca) query.marca = marca;
+    if (familia) query.familia = familia;
+    if (nombre) query.nombre = { $regex: nombre, $options: 'i' };
 
     const productos = await Producto.find(query)
-      .populate('categoria', 'nombre');
+      .populate('marca', 'nombre')
+      .populate('familia', 'nombre');
       
-    // Buscar ofertas activas (vigentes hoy)
     const hoy = new Date();
     const ofertasActivas = await Oferta.find({
       activo: true,
@@ -79,12 +80,12 @@ const getProductos = async (req, res) => {
   }
 };
 
-// Obtener un producto por ID
 const getProductoById = async (req, res) => {
   try {
     const { id } = req.params;
     const producto = await Producto.findById(id)
-      .populate('categoria', 'nombre');
+      .populate('marca', 'nombre')
+      .populate('familia', 'nombre');
     if (!producto) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
@@ -96,66 +97,25 @@ const getProductoById = async (req, res) => {
       fechaFin: { $gte: hoy }
     });
 
-    const productoConOferta = aplicarOfertaAProducto(producto, ofertasActivas);
-
-    res.json(productoConOferta);
+    res.json(aplicarOfertaAProducto(producto, ofertasActivas));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al obtener el producto" });
   }
 };
 
-// Crear un nuevo producto
 const createProducto = async (req, res) => {
   try {
     const { 
-      nombre, descripcion, categoria, activo,
-      precio, stock, sku, imagenUrl, // Campos de la versión original
-      tieneVariantes, variantesGenerar, precioBase, stockTotal, skuBase, imagenUrlPrincipal
+      nombre, descripcion, precioNormal, skuNormal, precioMayoreo, skuMayoreo, precioCaja, skuCaja, stock, marca, familia, activo, imagenUrl
     } = req.body;
-
-    // Si viene req.body.precio, lo usamos para el precio base, de la versión original.
-    const _precioBase = precioBase || precio;
 
     if (!nombre) {
       return res.status(400).json({ error: "Nombre es obligatorio" });
     }
-    
-    // Si no hay precio base, y tiene variantes, al menos la variante debe tener precio, 
-    // pero si no tiene variantes, el precio es obligatorio.
-    if (!tieneVariantes && !_precioBase) {
-      return res.status(400).json({ error: "El precio base es obligatorio si no tiene variantes" });
-    }
-
-    let nuevasVariantes = [];
-    
-    if (tieneVariantes && variantesGenerar && variantesGenerar.length > 0) {
-      nuevasVariantes = variantesGenerar.map(variante => {
-        return {
-          precio: variante.precio || _precioBase || 0,
-          stock: variante.stock || 0,
-          sku: variante.sku || '',
-          imagenUrl: variante.imagenUrl || '',
-          atributos: variante.atributos // Ejemplo: { color: "Rojo" }
-        };
-      });
-    }
 
     const nuevoProducto = new Producto({
-      nombre,
-      descripcion,
-      categoria,
-      activo,
-      tieneVariantes,
-      variantes: nuevasVariantes,
-      precio: _precioBase, // Manteniendo compatibilidad hacia atrás
-      precioBase: _precioBase,
-      stock: stock || stockTotal, // Manteniendo compatibilidad
-      stockTotal: stockTotal || stock,
-      sku: sku || skuBase, // Manteniendo compatibilidad
-      skuBase: skuBase || sku,
-      imagenUrl: imagenUrl || imagenUrlPrincipal, // Manteniendo compatibilidad
-      imagenUrlPrincipal: imagenUrlPrincipal || imagenUrl
+      nombre, descripcion, precioNormal, skuNormal, precioMayoreo, skuMayoreo, precioCaja, skuCaja, stock, marca, familia, activo, imagenUrl
     });
 
     await nuevoProducto.save();
@@ -166,16 +126,17 @@ const createProducto = async (req, res) => {
   }
 };
 
-// Actualizar un producto
 const updateProducto = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, descripcion, precio, stock, categoria, sku, imagenUrl, activo } = req.body;
+    const { 
+        nombre, descripcion, precioNormal, skuNormal, precioMayoreo, skuMayoreo, precioCaja, skuCaja, stock, marca, familia, activo, imagenUrl
+    } = req.body;
 
     const producto = await Producto.findByIdAndUpdate(
       id,
-      { nombre, descripcion, precio, stock, categoria, sku, imagenUrl, activo },
-      { new: true } // Devuelve el objeto actualizado
+      { nombre, descripcion, precioNormal, skuNormal, precioMayoreo, skuMayoreo, precioCaja, skuCaja, stock, marca, familia, activo, imagenUrl },
+      { new: true }
     );
 
     if (!producto) {
@@ -189,7 +150,6 @@ const updateProducto = async (req, res) => {
   }
 };
 
-// Eliminar un producto
 const deleteProducto = async (req, res) => {
   try {
     const { id } = req.params;
@@ -205,13 +165,10 @@ const deleteProducto = async (req, res) => {
     res.status(500).json({ error: "Error al eliminar el producto" });
   }
 };
-///
-///
-////NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-// Exportar productos a Excel
+
 const exportarProductosExcel = async (req, res) => {
   try {
-    const productos = await Producto.find().populate('categoria', 'nombre');
+    const productos = await Producto.find().populate('marca', 'nombre').populate('familia', 'nombre');
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Productos');
@@ -220,12 +177,16 @@ const exportarProductosExcel = async (req, res) => {
       { header: 'ID', key: 'id', width: 25 },
       { header: 'Nombre', key: 'nombre', width: 30 },
       { header: 'Descripción', key: 'descripcion', width: 40 },
-      { header: 'Precio Base', key: 'precioBase', width: 15 },
-      { header: 'Stock Total', key: 'stockTotal', width: 15 },
-      { header: 'SKU Base', key: 'skuBase', width: 20 },
-      { header: 'Categoría', key: 'categoria', width: 20 },
-      { header: 'Activo', key: 'activo', width: 10 },
-      { header: 'Tiene Variantes', key: 'tieneVariantes', width: 15 }
+      { header: 'Precio Normal', key: 'precioNormal', width: 15 },
+      { header: 'SKU Normal', key: 'skuNormal', width: 20 },
+      { header: 'Precio Mayoreo', key: 'precioMayoreo', width: 15 },
+      { header: 'SKU Mayoreo', key: 'skuMayoreo', width: 20 },
+      { header: 'Precio Caja', key: 'precioCaja', width: 15 },
+      { header: 'SKU Caja', key: 'skuCaja', width: 20 },
+      { header: 'Stock', key: 'stock', width: 10 },
+      { header: 'Marca', key: 'marca', width: 20 },
+      { header: 'Familia', key: 'familia', width: 20 },
+      { header: 'Activo', key: 'activo', width: 10 }
     ];
 
     productos.forEach(prod => {
@@ -233,12 +194,16 @@ const exportarProductosExcel = async (req, res) => {
         id: prod._id.toString(),
         nombre: prod.nombre,
         descripcion: prod.descripcion || '',
-        precioBase: prod.precioBase !== undefined ? prod.precioBase : (prod.precio || 0),
-        stockTotal: prod.stockTotal !== undefined ? prod.stockTotal : (prod.stock || 0),
-        skuBase: prod.skuBase || prod.sku || '',
-        categoria: prod.categoria ? prod.categoria.nombre : '',
-        activo: prod.activo ? 'Sí' : 'No',
-        tieneVariantes: prod.tieneVariantes ? 'Sí' : 'No'
+        precioNormal: prod.precioNormal || 0,
+        skuNormal: prod.skuNormal || '',
+        precioMayoreo: prod.precioMayoreo || 0,
+        skuMayoreo: prod.skuMayoreo || '',
+        precioCaja: prod.precioCaja || 0,
+        skuCaja: prod.skuCaja || '',
+        stock: prod.stock || 0,
+        marca: prod.marca ? prod.marca.nombre : '',
+        familia: prod.familia ? prod.familia.nombre : '',
+        activo: prod.activo ? 'Sí' : 'No'
       });
     });
 
@@ -252,17 +217,15 @@ const exportarProductosExcel = async (req, res) => {
     res.status(500).json({ error: "Error al exportar productos" });
   }
 };
-///
-///
-////NUEVOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+
 const parseFloatSeguro = (valor) => {
-  if (valor === null || valor === undefined) return 0;
+  if (valor === null || valor === undefined || valor === '') return 0;
   const parsed = parseFloat(valor.toString().replace(/,/g, ''));
   return isNaN(parsed) ? 0 : parsed;
 };
 
 const parseIntSeguro = (valor) => {
-  if (valor === null || valor === undefined) return 0;
+  if (valor === null || valor === undefined || valor === '') return 0;
   const parsed = parseInt(valor.toString().replace(/,/g, ''), 10);
   return isNaN(parsed) ? 0 : parsed;
 };
@@ -273,9 +236,13 @@ const procesarFilaExcel = async (row, index, resumen) => {
   const id = row.getCell(1).value;
   const nombre = row.getCell(2).value;
   const descripcion = row.getCell(3).value;
-  const precioBase = row.getCell(4).value;
-  const stockTotal = row.getCell(5).value;
-  const skuBase = row.getCell(6).value;
+  const precioNormal = row.getCell(4).value;
+  const skuNormal = row.getCell(5).value;
+  const precioMayoreo = row.getCell(6).value;
+  const skuMayoreo = row.getCell(7).value;
+  const precioCaja = row.getCell(8).value;
+  const skuCaja = row.getCell(9).value;
+  const stock = row.getCell(10).value;
 
   try {
     if (!nombre) {
@@ -284,47 +251,37 @@ const procesarFilaExcel = async (row, index, resumen) => {
 
     let producto = null;
     if (id && id.toString().length === 24) {
-      // Intentar buscar por ID si parece un ObjectId válido
       producto = await Producto.findById(id.toString());
     }
 
-    if (!producto && skuBase) {
-      // Intentar buscar por SKU si no se encontró por ID
-      producto = await Producto.findOne({ skuBase: skuBase.toString() });
+    if (!producto && skuNormal) {
+      producto = await Producto.findOne({ skuNormal: skuNormal.toString() });
     }
 
-    // Determinar un precio seguro y stock seguro
-    const precioSeguro = parseFloatSeguro(precioBase);
-    const stockSeguro = parseIntSeguro(stockTotal);
-
     if (producto) {
-      // Actualizar
       producto.nombre = nombre.toString();
-      if (descripcion !== null && descripcion !== undefined) {
-         producto.descripcion = descripcion.toString();
-      }
-      producto.precio = precioSeguro;
-      producto.precioBase = precioSeguro;
-      producto.stock = stockSeguro;
-      producto.stockTotal = stockSeguro;
-      if (skuBase) {
-          producto.sku = skuBase.toString();
-          producto.skuBase = skuBase.toString();
-      }
+      if (descripcion !== null && descripcion !== undefined) producto.descripcion = descripcion.toString();
+      producto.precioNormal = parseFloatSeguro(precioNormal);
+      if (skuNormal) producto.skuNormal = skuNormal.toString();
+      producto.precioMayoreo = parseFloatSeguro(precioMayoreo);
+      if (skuMayoreo) producto.skuMayoreo = skuMayoreo.toString();
+      producto.precioCaja = parseFloatSeguro(precioCaja);
+      if (skuCaja) producto.skuCaja = skuCaja.toString();
+      producto.stock = parseIntSeguro(stock);
+      
       await producto.save();
       resumen.actualizados++;
     } else {
-      // Crear
       const nuevoProd = new Producto({
         nombre: nombre.toString(),
         descripcion: descripcion ? descripcion.toString() : '',
-        precio: precioSeguro,
-        precioBase: precioSeguro,
-        stock: stockSeguro,
-        stockTotal: stockSeguro,
-        sku: skuBase ? skuBase.toString() : '',
-        skuBase: skuBase ? skuBase.toString() : '',
-        tieneVariantes: false,
+        precioNormal: parseFloatSeguro(precioNormal),
+        skuNormal: skuNormal ? skuNormal.toString() : '',
+        precioMayoreo: parseFloatSeguro(precioMayoreo),
+        skuMayoreo: skuMayoreo ? skuMayoreo.toString() : '',
+        precioCaja: parseFloatSeguro(precioCaja),
+        skuCaja: skuCaja ? skuCaja.toString() : '',
+        stock: parseIntSeguro(stock),
         activo: true
       });
       await nuevoProd.save();
@@ -336,7 +293,6 @@ const procesarFilaExcel = async (row, index, resumen) => {
   }
 };
 
-// Importar productos desde Excel
 const importarProductosExcel = async (req, res) => {
   try {
     if (!req.file) {
@@ -346,7 +302,6 @@ const importarProductosExcel = async (req, res) => {
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.load(req.file.buffer);
     
-    // para que esa información se ponga en la primera hoja
     const worksheet = workbook.getWorksheet(1);
     if (!worksheet) {
       return res.status(400).json({ error: "El archivo Excel no tiene hojas válidas" });
@@ -355,8 +310,8 @@ const importarProductosExcel = async (req, res) => {
     const resumen = { creados: 0, actualizados: 0, errores: 0, detallesErrores: [] };
 
     for (let i = 2; i <= worksheet.rowCount; i++) {
-      const row = worksheet.getRow(i);
-      await procesarFilaExcel(row, i, resumen);
+        const row = worksheet.getRow(i);
+        await procesarFilaExcel(row, i, resumen);
     }
 
     res.json({ mensaje: "Importación finalizada", resumen });

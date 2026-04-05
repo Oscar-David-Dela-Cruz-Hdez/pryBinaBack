@@ -14,7 +14,7 @@ const ofertaSchema = new mongoose.Schema({
   
   // ¿A qué aplica?
   productos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Producto' }],
-  categorias: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Categoria' }],
+  marcas: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Marca' }],
   
   // Vigencia
   fechaInicio: { type: Date, required: true },

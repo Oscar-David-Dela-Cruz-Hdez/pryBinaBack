@@ -31,12 +31,12 @@ const createPedido = async (req, res) => {
             productoDb.stock -= item.cantidad;
             await productoDb.save();
 
-            total += productoDb.precio * item.cantidad;
+            total += productoDb.precioNormal * item.cantidad;
             productosValidados.push({
                 producto: productoDb._id,
                 nombre: productoDb.nombre,
                 cantidad: item.cantidad,
-                precio: productoDb.precio
+                precio: productoDb.precioNormal
             });
         }
 

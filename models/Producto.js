@@ -1,16 +1,5 @@
 const mongoose = require('mongoose');
 
-const varianteSchema = new mongoose.Schema({
-  sku: { type: String, required: false },
-  precio: { type: Number, required: true },
-  stock: { type: Number, default: 0 },
-  imagenUrl: { type: String, required: false },
-  atributos: {
-    type: Map,
-    of: String 
-  }
-});
-
 const productoSchema = new mongoose.Schema({
   nombre: {
     type: String,
@@ -21,21 +10,44 @@ const productoSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  precio: {
+  precioNormal: {
     type: Number,
-    required: true
+    required: false
+  },
+  skuNormal: {
+    type: String,
+    required: false
+  },
+  precioMayoreo: {
+    type: Number,
+    required: false
+  },
+  skuMayoreo: {
+    type: String,
+    required: false
+  },
+  precioCaja: {
+    type: Number,
+    required: false
+  },
+  skuCaja: {
+    type: String,
+    required: false
   },
   stock: {
     type: Number,
     default: 0
   },
-  categoria: {
+  // La Marca a la que pertenece
+  marca: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Categoria',
+    ref: 'Marca',
     required: false
   },
-  sku: {
-    type: String,
+  // La Familia a la que pertenece
+  familia: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Familia',
     required: false
   },
   activo: {
@@ -45,20 +57,7 @@ const productoSchema = new mongoose.Schema({
   imagenUrl: {
     type: String,
     required: false
-  },
-  
-  // ---- CAMPOS PARA VARIANTES ----
-  tieneVariantes: {
-    type: Boolean,
-    default: false
-  },
-  variantes: [varianteSchema],
-  
-  // ---- CAMPOS ORIGINALES BASE ----
-  precioBase: { type: Number },
-  stockTotal: { type: Number, default: 0 },
-  skuBase: { type: String },
-  imagenUrlPrincipal: { type: String }
+  }
 }, {
   timestamps: true
 });

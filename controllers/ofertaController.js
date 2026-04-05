@@ -6,7 +6,7 @@ const getOfertas = async (req, res) => {
   try {
     const ofertas = await Oferta.find()
       .populate('productos', 'nombre')
-      .populate('categorias', 'nombre')
+      .populate('marcas', 'nombre')
       .sort({ createdAt: -1 });
     res.json(ofertas);
   } catch (error) {
@@ -20,7 +20,7 @@ const getOfertaById = async (req, res) => {
     const { id } = req.params;
     const oferta = await Oferta.findById(id)
       .populate('productos', 'nombre')
-      .populate('categorias', 'nombre');
+      .populate('marcas', 'nombre');
     if (!oferta) return res.status(404).json({ error: "Oferta no encontrada" });
     res.json(oferta);
   } catch (error) {
@@ -31,7 +31,7 @@ const getOfertaById = async (req, res) => {
 // Crear Oferta (Admin)
 const createOferta = async (req, res) => {
   try {
-    const { nombre, descripcion, tipoDescuento, valorDescuento, productos, categorias, fechaInicio, fechaFin, activo } = req.body;
+    const { nombre, descripcion, tipoDescuento, valorDescuento, productos, marcas, fechaInicio, fechaFin, activo } = req.body;
     
     if (!nombre || !tipoDescuento || valorDescuento === undefined || !fechaInicio || !fechaFin) {
       return res.status(400).json({ error: "Faltan campos obligatorios" });
@@ -43,7 +43,7 @@ const createOferta = async (req, res) => {
       tipoDescuento,
       valorDescuento,
       productos: productos || [],
-      categorias: categorias || [],
+      marcas: marcas || [],
       fechaInicio,
       fechaFin,
       activo: activo !== undefined ? activo : true
@@ -61,7 +61,7 @@ const createOferta = async (req, res) => {
 const updateOferta = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nombre, descripcion, tipoDescuento, valorDescuento, productos, categorias, fechaInicio, fechaFin, activo } = req.body;
+    const { nombre, descripcion, tipoDescuento, valorDescuento, productos, marcas, fechaInicio, fechaFin, activo } = req.body;
 
     const datosActualizar = {};
     if (nombre !== undefined) datosActualizar.nombre = nombre;
@@ -69,14 +69,14 @@ const updateOferta = async (req, res) => {
     if (tipoDescuento !== undefined) datosActualizar.tipoDescuento = tipoDescuento;
     if (valorDescuento !== undefined) datosActualizar.valorDescuento = valorDescuento;
     if (productos !== undefined) datosActualizar.productos = productos;
-    if (categorias !== undefined) datosActualizar.categorias = categorias;
+    if (marcas !== undefined) datosActualizar.marcas = marcas;
     if (fechaInicio !== undefined) datosActualizar.fechaInicio = fechaInicio;
     if (fechaFin !== undefined) datosActualizar.fechaFin = fechaFin;
     if (activo !== undefined) datosActualizar.activo = activo;
 
     const ofertaActualizada = await Oferta.findByIdAndUpdate(id, datosActualizar, { new: true })
       .populate('productos', 'nombre')
-      .populate('categorias', 'nombre');
+      .populate('marcas', 'nombre');
     
     if (!ofertaActualizada) return res.status(404).json({ error: "Oferta no encontrada" });
 
