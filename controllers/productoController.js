@@ -1,5 +1,7 @@
 const Producto = require('../models/Producto');
 const Oferta = require('../models/Oferta');
+const Marca = require('../models/Marca');
+const Familia = require('../models/Familia');
 const ExcelJS = require('exceljs');
 
 const aplicarOfertaAProducto = (producto, ofertasActivas) => {
@@ -114,8 +116,34 @@ const createProducto = async (req, res) => {
       return res.status(400).json({ error: "Nombre es obligatorio" });
     }
 
+    let finalSkuNormal = skuNormal;
+    let finalSkuMayoreo = skuMayoreo;
+    let finalSkuCaja = skuCaja;
+
+    // Generación Automática de SKUs si están vacíos
+    if (!finalSkuNormal && marca && familia) {
+      // Por si Angular nos envía un objeto completo en lugar de solo el string ID
+      const marcaId = typeof marca === 'object' ? (marca._id || marca) : marca;
+      const familiaId = typeof familia === 'object' ? (familia._id || familia) : familia;
+
+      const marcaDoc = await Marca.findById(marcaId);
+      const familiaDoc = await Familia.findById(familiaId);
+      
+      if (marcaDoc && familiaDoc) {
+        const prefijoMarca = marcaDoc.nombre.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X').padEnd(3, 'X');
+        const prefijoFamilia = familiaDoc.nombre.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X').padEnd(3, 'X');
+
+        const count = await Producto.countDocuments({ familia });
+        const correlativo = (count + 1).toString().padStart(3, '0');
+
+        finalSkuNormal = `${prefijoMarca}-${prefijoFamilia}-${correlativo}-N`;
+        finalSkuMayoreo = finalSkuMayoreo || `${prefijoMarca}-${prefijoFamilia}-${correlativo}-M`;
+        finalSkuCaja = finalSkuCaja || `${prefijoMarca}-${prefijoFamilia}-${correlativo}-C`;
+      }
+    }
+
     const nuevoProducto = new Producto({
-      nombre, descripcion, precioNormal, skuNormal, precioMayoreo, skuMayoreo, precioCaja, skuCaja, stock, marca, familia, activo, imagenUrl
+      nombre, descripcion, precioNormal, skuNormal: finalSkuNormal, precioMayoreo, skuMayoreo: finalSkuMayoreo, precioCaja, skuCaja: finalSkuCaja, stock, marca, familia, activo, imagenUrl
     });
 
     await nuevoProducto.save();
@@ -129,19 +157,40 @@ const createProducto = async (req, res) => {
 const updateProducto = async (req, res) => {
   try {
     const { id } = req.params;
-    const { 
-        nombre, descripcion, precioNormal, skuNormal, precioMayoreo, skuMayoreo, precioCaja, skuCaja, stock, marca, familia, activo, imagenUrl
-    } = req.body;
+    const updateData = { ...req.body };
 
-    const producto = await Producto.findByIdAndUpdate(
-      id,
-      { nombre, descripcion, precioNormal, skuNormal, precioMayoreo, skuMayoreo, precioCaja, skuCaja, stock, marca, familia, activo, imagenUrl },
-      { new: true }
-    );
-
-    if (!producto) {
+    const productoActual = await Producto.findById(id);
+    if (!productoActual) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
+
+    // Proteger SKUs existentes si el frontend los envía vacíos por accidente
+    if (!updateData.skuNormal && productoActual.skuNormal) updateData.skuNormal = productoActual.skuNormal;
+    if (!updateData.skuMayoreo && productoActual.skuMayoreo) updateData.skuMayoreo = productoActual.skuMayoreo;
+    if (!updateData.skuCaja && productoActual.skuCaja) updateData.skuCaja = productoActual.skuCaja;
+
+    // Si siguen vacíos, intentar generarlos
+    if (!updateData.skuNormal && updateData.marca && updateData.familia) {
+      const marcaId = typeof updateData.marca === 'object' ? (updateData.marca._id || updateData.marca) : updateData.marca;
+      const familiaId = typeof updateData.familia === 'object' ? (updateData.familia._id || updateData.familia) : updateData.familia;
+
+      const marcaDoc = await Marca.findById(marcaId);
+      const familiaDoc = await Familia.findById(familiaId);
+      
+      if (marcaDoc && familiaDoc) {
+        const prefijoMarca = marcaDoc.nombre.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X').padEnd(3, 'X');
+        const prefijoFamilia = familiaDoc.nombre.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X').padEnd(3, 'X');
+
+        const count = await Producto.countDocuments({ familia: familiaId });
+        const correlativo = (count + 1).toString().padStart(3, '0');
+
+        updateData.skuNormal = `${prefijoMarca}-${prefijoFamilia}-${correlativo}-N`;
+        updateData.skuMayoreo = updateData.skuMayoreo || `${prefijoMarca}-${prefijoFamilia}-${correlativo}-M`;
+        updateData.skuCaja = updateData.skuCaja || `${prefijoMarca}-${prefijoFamilia}-${correlativo}-C`;
+      }
+    }
+
+    const producto = await Producto.findByIdAndUpdate(id, updateData, { new: true });
 
     res.json({ mensaje: "Producto actualizado", producto });
   } catch (error) {
