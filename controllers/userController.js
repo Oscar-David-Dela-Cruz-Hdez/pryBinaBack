@@ -314,47 +314,31 @@ const getMiPerfil = async (req, res) => {
 
 const updateMiPerfil = async (req, res) => {
   try {
-    const { nombre, ap, am, username, email, telefono } = req.body;
     const userId = req.user.id;
-
+    const { username, email } = req.body;
     const safeUsername = limpiarDato(username);
     const safeEmail = limpiarDato(email);
 
-    // Validar duplicados (solo si los campos vienen y no están vacíos)
-    if (safeUsername) {
-      const existing = await Usuario.findOne({ username: safeUsername, _id: { $ne: userId } });
-      if (existing) return res.status(400).json({ error: "Ese usuario ya existe" });
+    // 1. Validar duplicados de forma plana
+    if (safeUsername && await Usuario.findOne({ username: safeUsername, _id: { $ne: userId } })) {
+      return res.status(400).json({ error: "Ese usuario ya existe" });
     }
-    if (safeEmail) {
-      const existing = await Usuario.findOne({ email: safeEmail, _id: { $ne: userId } });
-      if (existing) return res.status(400).json({ error: "Ese email ya está en uso" });
+    if (safeEmail && await Usuario.findOne({ email: safeEmail, _id: { $ne: userId } })) {
+      return res.status(400).json({ error: "Ese email ya está en uso" });
     }
 
-    // Construcción Dinámica: Evita borrar datos si no se envían
+    // 2. Construcción Dinámica Compacta (Reduce Complejidad Cognitiva)
     const camposAActualizar = {};
-    
-    if (nombre !== undefined) {
-        const val = limpiarDato(nombre);
-        if (val !== undefined) camposAActualizar.nombre = val;
-    }
-    if (ap !== undefined) {
-        const val = limpiarDato(ap);
-        if (val !== undefined) camposAActualizar.ap = val;
-    }
-    if (am !== undefined) {
-        const val = limpiarDato(am);
-        if (val !== undefined) camposAActualizar.am = val;
-    }
-    if (username !== undefined) {
-        if (safeUsername !== undefined) camposAActualizar.username = safeUsername;
-    }
-    if (email !== undefined) {
-        if (safeEmail !== undefined) camposAActualizar.email = safeEmail;
-    }
-    if (telefono !== undefined) {
-        const val = limpiarDato(telefono);
-        if (val !== undefined) camposAActualizar.telefono = val;
-    }
+    const camposParaProcesar = ['nombre', 'ap', 'am', 'telefono'];
+
+    camposParaProcesar.forEach(campo => {
+      const valorLimpio = req.body[campo] === undefined ? undefined : limpiarDato(req.body[campo]);
+      if (valorLimpio !== undefined) camposAActualizar[campo] = valorLimpio;
+    });
+
+    // Casos especiales (ya sanitizados arriba)
+    if (username !== undefined && safeUsername !== undefined) camposAActualizar.username = safeUsername;
+    if (email !== undefined && safeEmail !== undefined) camposAActualizar.email = safeEmail;
 
     const usuarioActualizado = await Usuario.findByIdAndUpdate(
       userId,
@@ -364,7 +348,7 @@ const updateMiPerfil = async (req, res) => {
 
     res.json(usuarioActualizado);
   } catch (error) {
-    console.error(error);
+    console.error("Error al actualizar perfil:", error);
     res.status(500).json({ error: "Error al actualizar perfil" });
   }
 };

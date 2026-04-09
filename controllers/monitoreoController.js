@@ -60,10 +60,8 @@ const getHistorial = (req, res) => {
 // GET /api/monitoreo/resumen
 // Endpoint "all-in-one" para cargar el dashboard de una sola petición
 const getResumen = async (req, res) => {
-  const [sistema, mongo] = await Promise.all([
-    obtenerMetricasSistema(),
-    obtenerMetricasMongo(),
-  ]);
+  const sistema = obtenerMetricasSistema();
+  const mongo = await obtenerMetricasMongo();
 
   const latencias = httpMetrics.latenciasMs;
   const latenciaPromedio =

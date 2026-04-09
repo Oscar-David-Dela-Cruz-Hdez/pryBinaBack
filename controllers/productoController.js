@@ -4,19 +4,45 @@ const Marca = require('../models/Marca');
 const Familia = require('../models/Familia');
 const ExcelJS = require('exceljs');
 
-const aplicarOfertaAProducto = (producto, ofertasActivas) => {
-  let ofertaAplicable = ofertasActivas.find(o => 
-    o.productos.some(id => id.toString() === producto._id.toString())
+const obtenerOfertaParaProducto = (producto, ofertasActivas) => {
+  // 1. Buscar oferta directa al producto
+  let oferta = ofertasActivas.find(o => 
+    o.productos?.some(id => id.toString() === producto._id.toString())
   );
 
-  if (!ofertaAplicable && producto.marca) {
-    const marcaId = producto.marca._id ? producto.marca._id.toString() : producto.marca.toString();
-    ofertaAplicable = ofertasActivas.find(o => 
-      o.marcas && o.marcas.some(id => id.toString() === marcaId)
+  // 2. Si no hay, buscar oferta por marca
+  if (!oferta && producto.marca) {
+    const marcaId = producto.marca._id?.toString() || producto.marca.toString();
+    oferta = ofertasActivas.find(o => 
+      o.marcas?.some(id => id.toString() === marcaId)
     );
   }
+  return oferta;
+};
 
-  const prodObj = producto.toObject ? producto.toObject() : producto;
+const calcularPrecioConDescuento = (precio, oferta) => {
+  if (!precio || !oferta) return precio;
+  
+  if (oferta.tipoDescuento === 'porcentaje') {
+    const descuento = precio * (oferta.valorDescuento / 100);
+    return Math.max(0, precio - descuento);
+  }
+  
+  if (oferta.tipoDescuento === 'monto_fijo') {
+    return Math.max(0, precio - oferta.valorDescuento);
+  }
+  
+  return precio;
+};
+
+const aplicarOfertaAProducto = (producto, ofertasActivas) => {
+  const ofertaAplicable = obtenerOfertaParaProducto(producto, ofertasActivas);
+  const prodObj = producto.toObject?.() || { ...producto };
+
+  // Inicializar precios finales con los originales por defecto
+  prodObj.precioNormalFinal = prodObj.precioNormal;
+  prodObj.precioMayoreoFinal = prodObj.precioMayoreo;
+  prodObj.precioCajaFinal = prodObj.precioCaja;
 
   if (ofertaAplicable && prodObj.precioNormal) {
     prodObj.ofertaAplicada = {
@@ -25,29 +51,12 @@ const aplicarOfertaAProducto = (producto, ofertasActivas) => {
       valorDescuento: ofertaAplicable.valorDescuento
     };
 
-    if (ofertaAplicable.tipoDescuento === 'porcentaje') {
-      const descuentoNormal = prodObj.precioNormal * (ofertaAplicable.valorDescuento / 100);
-      prodObj.precioNormalFinal = Math.max(0, prodObj.precioNormal - descuentoNormal);
-      if (prodObj.precioMayoreo) {
-        const descuentoMayoreo = prodObj.precioMayoreo * (ofertaAplicable.valorDescuento / 100);
-        prodObj.precioMayoreoFinal = Math.max(0, prodObj.precioMayoreo - descuentoMayoreo);
-      }
-      if (prodObj.precioCaja) {
-        const descuentoCaja = prodObj.precioCaja * (ofertaAplicable.valorDescuento / 100);
-        prodObj.precioCajaFinal = Math.max(0, prodObj.precioCaja - descuentoCaja);
-      }
-    } else if (ofertaAplicable.tipoDescuento === 'monto_fijo') {
-      prodObj.precioNormalFinal = Math.max(0, prodObj.precioNormal - ofertaAplicable.valorDescuento);
-      if (prodObj.precioMayoreo) prodObj.precioMayoreoFinal = Math.max(0, prodObj.precioMayoreo - ofertaAplicable.valorDescuento);
-      if (prodObj.precioCaja) prodObj.precioCajaFinal = Math.max(0, prodObj.precioCaja - ofertaAplicable.valorDescuento);
-    }
-  } else {
-    prodObj.precioNormalFinal = prodObj.precioNormal;
-    prodObj.precioMayoreoFinal = prodObj.precioMayoreo;
-    prodObj.precioCajaFinal = prodObj.precioCaja;
+    prodObj.precioNormalFinal = calcularPrecioConDescuento(prodObj.precioNormal, ofertaAplicable);
+    prodObj.precioMayoreoFinal = calcularPrecioConDescuento(prodObj.precioMayoreo, ofertaAplicable);
+    prodObj.precioCajaFinal = calcularPrecioConDescuento(prodObj.precioCaja, ofertaAplicable);
   }
   
-  // Compatibilidad hacia atrás para evitar romper frontend que usa precioFinal
+  // Compatibilidad hacia atrás para evitar romper frontend
   prodObj.precioFinal = prodObj.precioNormalFinal;
 
   return prodObj;
@@ -120,25 +129,12 @@ const createProducto = async (req, res) => {
     let finalSkuMayoreo = skuMayoreo;
     let finalSkuCaja = skuCaja;
 
-    // Generación Automática de SKUs si están vacíos
     if (!finalSkuNormal && marca && familia) {
-      // Por si Angular nos envía un objeto completo en lugar de solo el string ID
-      const marcaId = typeof marca === 'object' ? (marca._id || marca) : marca;
-      const familiaId = typeof familia === 'object' ? (familia._id || familia) : familia;
-
-      const marcaDoc = await Marca.findById(marcaId);
-      const familiaDoc = await Familia.findById(familiaId);
-      
-      if (marcaDoc && familiaDoc) {
-        const prefijoMarca = marcaDoc.nombre.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X').padEnd(3, 'X');
-        const prefijoFamilia = familiaDoc.nombre.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X').padEnd(3, 'X');
-
-        const count = await Producto.countDocuments({ familia });
-        const correlativo = (count + 1).toString().padStart(3, '0');
-
-        finalSkuNormal = `${prefijoMarca}-${prefijoFamilia}-${correlativo}-N`;
-        finalSkuMayoreo = finalSkuMayoreo || `${prefijoMarca}-${prefijoFamilia}-${correlativo}-M`;
-        finalSkuCaja = finalSkuCaja || `${prefijoMarca}-${prefijoFamilia}-${correlativo}-C`;
+      const gSkus = await generarSkusAutomaticos({ marca, familia });
+      if (gSkus) {
+        finalSkuNormal = gSkus.skuNormal;
+        finalSkuMayoreo = skuMayoreo || gSkus.skuMayoreo;
+        finalSkuCaja = skuCaja || gSkus.skuCaja;
       }
     }
 
@@ -164,34 +160,22 @@ const updateProducto = async (req, res) => {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
 
-    // Proteger SKUs existentes si el frontend los envía vacíos por accidente
-    if (!updateData.skuNormal && productoActual.skuNormal) updateData.skuNormal = productoActual.skuNormal;
-    if (!updateData.skuMayoreo && productoActual.skuMayoreo) updateData.skuMayoreo = productoActual.skuMayoreo;
-    if (!updateData.skuCaja && productoActual.skuCaja) updateData.skuCaja = productoActual.skuCaja;
+    // Proteger SKUs existentes
+    updateData.skuNormal = updateData.skuNormal || productoActual.skuNormal;
+    updateData.skuMayoreo = updateData.skuMayoreo || productoActual.skuMayoreo;
+    updateData.skuCaja = updateData.skuCaja || productoActual.skuCaja;
 
-    // Si siguen vacíos, intentar generarlos
+    // Generar SKUs si siguen vacíos
     if (!updateData.skuNormal && updateData.marca && updateData.familia) {
-      const marcaId = typeof updateData.marca === 'object' ? (updateData.marca._id || updateData.marca) : updateData.marca;
-      const familiaId = typeof updateData.familia === 'object' ? (updateData.familia._id || updateData.familia) : updateData.familia;
-
-      const marcaDoc = await Marca.findById(marcaId);
-      const familiaDoc = await Familia.findById(familiaId);
-      
-      if (marcaDoc && familiaDoc) {
-        const prefijoMarca = marcaDoc.nombre.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X').padEnd(3, 'X');
-        const prefijoFamilia = familiaDoc.nombre.substring(0, 3).toUpperCase().replace(/[^A-Z]/g, 'X').padEnd(3, 'X');
-
-        const count = await Producto.countDocuments({ familia: familiaId });
-        const correlativo = (count + 1).toString().padStart(3, '0');
-
-        updateData.skuNormal = `${prefijoMarca}-${prefijoFamilia}-${correlativo}-N`;
-        updateData.skuMayoreo = updateData.skuMayoreo || `${prefijoMarca}-${prefijoFamilia}-${correlativo}-M`;
-        updateData.skuCaja = updateData.skuCaja || `${prefijoMarca}-${prefijoFamilia}-${correlativo}-C`;
+      const gSkus = await generarSkusAutomaticos(updateData);
+      if (gSkus) {
+        updateData.skuNormal = gSkus.skuNormal;
+        updateData.skuMayoreo = updateData.skuMayoreo || gSkus.skuMayoreo;
+        updateData.skuCaja = updateData.skuCaja || gSkus.skuCaja;
       }
     }
 
     const producto = await Producto.findByIdAndUpdate(id, updateData, { new: true });
-
     res.json({ mensaje: "Producto actualizado", producto });
   } catch (error) {
     console.error(error);
@@ -250,8 +234,8 @@ const exportarProductosExcel = async (req, res) => {
         precioCaja: prod.precioCaja || 0,
         skuCaja: prod.skuCaja || '',
         stock: prod.stock || 0,
-        marca: prod.marca ? prod.marca.nombre : '',
-        familia: prod.familia ? prod.familia.nombre : '',
+        marca: prod.marca?.nombre || '',
+        familia: prod.familia?.nombre || '',
         activo: prod.activo ? 'Sí' : 'No'
       });
     });
@@ -269,14 +253,40 @@ const exportarProductosExcel = async (req, res) => {
 
 const parseFloatSeguro = (valor) => {
   if (valor === null || valor === undefined || valor === '') return 0;
-  const parsed = parseFloat(valor.toString().replace(/,/g, ''));
-  return isNaN(parsed) ? 0 : parsed;
+  const parsed = Number.parseFloat(valor.toString().replaceAll(',', ''));
+  return Number.isNaN(parsed) ? 0 : parsed;
 };
 
 const parseIntSeguro = (valor) => {
   if (valor === null || valor === undefined || valor === '') return 0;
-  const parsed = parseInt(valor.toString().replace(/,/g, ''), 10);
-  return isNaN(parsed) ? 0 : parsed;
+  const parsed = Number.parseInt(valor.toString().replaceAll(',', ''), 10);
+  return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+const generarSkusAutomaticos = async (data) => {
+  const marcaId = data.marca?._id || data.marca;
+  const familiaId = data.familia?._id || data.familia;
+
+  if (!marcaId || !familiaId) return null;
+
+  const [marcaDoc, familiaDoc] = await Promise.all([
+    Marca.findById(marcaId),
+    Familia.findById(familiaId)
+  ]);
+
+  if (!marcaDoc || !familiaDoc) return null;
+
+  const prefijoM = marcaDoc.nombre.substring(0, 3).toUpperCase().replaceAll(/[^A-Z]/g, 'X').padEnd(3, 'X');
+  const prefijoF = familiaDoc.nombre.substring(0, 3).toUpperCase().replaceAll(/[^A-Z]/g, 'X').padEnd(3, 'X');
+  
+  const count = await Producto.countDocuments({ familia: familiaId });
+  const correlativo = String(count + 1).padStart(3, '0');
+
+  return {
+    skuNormal: `${prefijoM}-${prefijoF}-${correlativo}-N`,
+    skuMayoreo: `${prefijoM}-${prefijoF}-${correlativo}-M`,
+    skuCaja: `${prefijoM}-${prefijoF}-${correlativo}-C`
+  };
 };
 
 const procesarFilaExcel = async (row, index, resumen) => {
@@ -309,13 +319,13 @@ const procesarFilaExcel = async (row, index, resumen) => {
 
     if (producto) {
       producto.nombre = nombre.toString();
-      if (descripcion !== null && descripcion !== undefined) producto.descripcion = descripcion.toString();
+      producto.descripcion = descripcion?.toString() ?? producto.descripcion;
       producto.precioNormal = parseFloatSeguro(precioNormal);
-      if (skuNormal) producto.skuNormal = skuNormal.toString();
+      producto.skuNormal = skuNormal?.toString() ?? producto.skuNormal;
       producto.precioMayoreo = parseFloatSeguro(precioMayoreo);
-      if (skuMayoreo) producto.skuMayoreo = skuMayoreo.toString();
+      producto.skuMayoreo = skuMayoreo?.toString() ?? producto.skuMayoreo;
       producto.precioCaja = parseFloatSeguro(precioCaja);
-      if (skuCaja) producto.skuCaja = skuCaja.toString();
+      producto.skuCaja = skuCaja?.toString() ?? producto.skuCaja;
       producto.stock = parseIntSeguro(stock);
       
       await producto.save();
@@ -323,13 +333,13 @@ const procesarFilaExcel = async (row, index, resumen) => {
     } else {
       const nuevoProd = new Producto({
         nombre: nombre.toString(),
-        descripcion: descripcion ? descripcion.toString() : '',
+        descripcion: descripcion?.toString() ?? '',
         precioNormal: parseFloatSeguro(precioNormal),
-        skuNormal: skuNormal ? skuNormal.toString() : '',
+        skuNormal: skuNormal?.toString() ?? '',
         precioMayoreo: parseFloatSeguro(precioMayoreo),
-        skuMayoreo: skuMayoreo ? skuMayoreo.toString() : '',
+        skuMayoreo: skuMayoreo?.toString() ?? '',
         precioCaja: parseFloatSeguro(precioCaja),
-        skuCaja: skuCaja ? skuCaja.toString() : '',
+        skuCaja: skuCaja?.toString() ?? '',
         stock: parseIntSeguro(stock),
         activo: true
       });

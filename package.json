@@ -13,7 +13,7 @@
   "type": "commonjs",
   "dependencies": {
     "archiver": "^7.0.1",
-    "axios": "^1.13.1",
+    "axios": "^1.13.5",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",

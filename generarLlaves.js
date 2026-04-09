@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require('node:crypto');
 
 // Generamos el par de llaves
 const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {

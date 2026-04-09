@@ -4,7 +4,7 @@
  * Usa SÓLO módulos nativos de Node.js + mongoose (sin dependencias extra)
  */
 
-const os = require("os");
+const os = require("node:os");
 const mongoose = require("mongoose");
 
 // ── Contadores propios a nivel de aplicación ────────────────────────────────

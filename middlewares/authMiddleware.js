@@ -15,7 +15,7 @@ const authMiddleware = (roles = []) => {
         return res.status(401).json({ error: "Acceso denegado. Usuario no encontrado." });
       }
 
-      if (!usuario.activeTokens || !usuario.activeTokens.includes(token)) {
+      if (!usuario.activeTokens?.includes(token)) {
         return res.status(401).json({ error: "Acceso denegado. Token inválido o sesión cerrada." });
       }
 
