@@ -219,7 +219,8 @@ const exportarProductosExcel = async (req, res) => {
       { header: 'Stock', key: 'stock', width: 10 },
       { header: 'Marca', key: 'marca', width: 20 },
       { header: 'Familia', key: 'familia', width: 20 },
-      { header: 'Activo', key: 'activo', width: 10 }
+      { header: 'Activo', key: 'activo', width: 10 },
+      { header: 'Imagen URL', key: 'imagenUrl', width: 50 }
     ];
 
     productos.forEach(prod => {
@@ -236,7 +237,8 @@ const exportarProductosExcel = async (req, res) => {
         stock: prod.stock || 0,
         marca: prod.marca?.nombre || '',
         familia: prod.familia?.nombre || '',
-        activo: prod.activo ? 'Sí' : 'No'
+        activo: prod.activo ? 'Sí' : 'No',
+        imagenUrl: prod.imagenUrl || ''
       });
     });
 
@@ -295,18 +297,34 @@ const procesarFilaExcel = async (row, index, resumen) => {
   const id = row.getCell(1).value;
   const nombre = row.getCell(2).value;
   const descripcion = row.getCell(3).value;
-  const precioNormal = row.getCell(4).value;
-  const skuNormal = row.getCell(5).value;
-  const precioMayoreo = row.getCell(6).value;
-  const skuMayoreo = row.getCell(7).value;
   const precioCaja = row.getCell(8).value;
   const skuCaja = row.getCell(9).value;
   const stock = row.getCell(10).value;
+  const marcaNombre = row.getCell(11).value;
+  const familiaNombre = row.getCell(12).value;
+  const activoTexto = row.getCell(13).value;
+  const imagenUrl = row.getCell(14).value;
 
   try {
     if (!nombre) {
       throw new Error("El nombre es obligatorio");
     }
+
+    // Resolver Marca por nombre
+    let marcaId = null;
+    if (marcaNombre) {
+      const marcaDoc = await Marca.findOne({ nombre: { $regex: new RegExp(`^${marcaNombre.toString()}$`, 'i') } });
+      if (marcaDoc) marcaId = marcaDoc._id;
+    }
+
+    // Resolver Familia por nombre
+    let familiaId = null;
+    if (familiaNombre) {
+      const familiaDoc = await Familia.findOne({ nombre: { $regex: new RegExp(`^${familiaNombre.toString()}$`, 'i') } });
+      if (familiaDoc) familiaId = familiaDoc._id;
+    }
+
+    const activoFlag = activoTexto?.toString().toLowerCase() === 'sí' || activoTexto?.toString().toLowerCase() === 'si';
 
     let producto = null;
     if (id && id.toString().length === 24) {
@@ -324,9 +342,12 @@ const procesarFilaExcel = async (row, index, resumen) => {
       producto.skuNormal = skuNormal?.toString() ?? producto.skuNormal;
       producto.precioMayoreo = parseFloatSeguro(precioMayoreo);
       producto.skuMayoreo = skuMayoreo?.toString() ?? producto.skuMayoreo;
-      producto.precioCaja = parseFloatSeguro(precioCaja);
       producto.skuCaja = skuCaja?.toString() ?? producto.skuCaja;
       producto.stock = parseIntSeguro(stock);
+      producto.marca = marcaId || producto.marca;
+      producto.familia = familiaId || producto.familia;
+      producto.activo = activoFlag ?? producto.activo;
+      producto.imagenUrl = imagenUrl?.toString() ?? producto.imagenUrl;
       
       await producto.save();
       resumen.actualizados++;
@@ -341,7 +362,10 @@ const procesarFilaExcel = async (row, index, resumen) => {
         precioCaja: parseFloatSeguro(precioCaja),
         skuCaja: skuCaja?.toString() ?? '',
         stock: parseIntSeguro(stock),
-        activo: true
+        marca: marcaId,
+        familia: familiaId,
+        activo: activoFlag,
+        imagenUrl: imagenUrl?.toString() ?? ''
       });
       await nuevoProd.save();
       resumen.creados++;
