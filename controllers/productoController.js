@@ -349,7 +349,12 @@ const procesarFilaExcel = async (row, index, resumen) => {
       familiaId = familiaDoc._id;
     }
 
-    const activoFlag = activoTexto?.toString().toLowerCase() === 'sí' || activoTexto?.toString().toLowerCase() === 'si' || activoTexto === true;
+    // Lógica elástica para el estado Activo (Default: true si está vacío)
+    let activoFlag = true;
+    if (activoTexto !== null && activoTexto !== undefined && activoTexto !== '') {
+      const val = String(activoTexto).trim().toLowerCase();
+      activoFlag = (val === 'sí' || val === 'si' || val === 'true' || val === '1' || activoTexto === true);
+    }
 
     let producto = null;
     if (id && String(id).length === 24) {
@@ -367,9 +372,9 @@ const procesarFilaExcel = async (row, index, resumen) => {
       producto.precioNormal = parseFloatSeguro(precioNormal);
       producto.skuNormal = skuNormal ? String(skuNormal) : producto.skuNormal;
       producto.precioMayoreo = parseFloatSeguro(precioMayoreo);
-      producto.skuMayoreo = skuMayoreo?.toString() ?? producto.skuMayoreo;
+      producto.skuMayoreo = skuMayoreo ? String(skuMayoreo) : producto.skuMayoreo;
       producto.precioCaja = parseFloatSeguro(precioCaja);
-      producto.skuCaja = skuCaja?.toString() ?? producto.skuCaja;
+      producto.skuCaja = skuCaja ? String(skuCaja) : producto.skuCaja;
       producto.stock = parseIntSeguro(stock);
       producto.marca = marcaId || producto.marca;
       producto.familia = familiaId || producto.familia;
