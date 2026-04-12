@@ -297,6 +297,10 @@ const procesarFilaExcel = async (row, index, resumen) => {
   const id = row.getCell(1).value;
   const nombre = row.getCell(2).value;
   const descripcion = row.getCell(3).value;
+  const precioNormal = row.getCell(4).value;
+  const skuNormal = row.getCell(5).value;
+  const precioMayoreo = row.getCell(6).value;
+  const skuMayoreo = row.getCell(7).value;
   const precioCaja = row.getCell(8).value;
   const skuCaja = row.getCell(9).value;
   const stock = row.getCell(10).value;
@@ -313,7 +317,7 @@ const procesarFilaExcel = async (row, index, resumen) => {
     // 1. Resolver o CREAR Marca por nombre
     let marcaId = null;
     if (marcaNombre) {
-      const nombreLimpio = marcaNombre.toString().trim();
+      const nombreLimpio = String(marcaNombre).trim();
       let marcaDoc = await Marca.findOne({ nombre: { $regex: new RegExp(`^${nombreLimpio}$`, 'i') } });
       
       if (!marcaDoc) {
@@ -327,7 +331,7 @@ const procesarFilaExcel = async (row, index, resumen) => {
     // 2. Resolver o CREAR Familia por nombre
     let familiaId = null;
     if (familiaNombre) {
-      const nombreLimpioF = familiaNombre.toString().trim();
+      const nombreLimpioF = String(familiaNombre).trim();
       // Buscamos la familia que coincida con el nombre Y con la marca (pueden haber familias con mismo nombre en marcas distintas)
       let familiaDoc = await Familia.findOne({ 
         nombre: { $regex: new RegExp(`^${nombreLimpioF}$`, 'i') },
@@ -348,20 +352,20 @@ const procesarFilaExcel = async (row, index, resumen) => {
     const activoFlag = activoTexto?.toString().toLowerCase() === 'sí' || activoTexto?.toString().toLowerCase() === 'si' || activoTexto === true;
 
     let producto = null;
-    if (id && id.toString().length === 24) {
-      producto = await Producto.findById(id.toString());
+    if (id && String(id).length === 24) {
+      producto = await Producto.findById(String(id));
     }
 
     if (!producto && skuNormal) {
-      producto = await Producto.findOne({ skuNormal: skuNormal.toString() });
+      producto = await Producto.findOne({ skuNormal: String(skuNormal) });
     }
 
     if (producto) {
       // ACTUALIZAR PRODUCTO EXISTENTE
-      producto.nombre = nombre.toString();
-      producto.descripcion = descripcion?.toString() ?? producto.descripcion;
+      producto.nombre = String(nombre || '');
+      producto.descripcion = descripcion ? String(descripcion) : producto.descripcion;
       producto.precioNormal = parseFloatSeguro(precioNormal);
-      producto.skuNormal = skuNormal?.toString() ?? producto.skuNormal;
+      producto.skuNormal = skuNormal ? String(skuNormal) : producto.skuNormal;
       producto.precioMayoreo = parseFloatSeguro(precioMayoreo);
       producto.skuMayoreo = skuMayoreo?.toString() ?? producto.skuMayoreo;
       producto.precioCaja = parseFloatSeguro(precioCaja);
@@ -376,9 +380,9 @@ const procesarFilaExcel = async (row, index, resumen) => {
       resumen.actualizados++;
     } else {
       // CREAR PRODUCTO NUEVO
-      let finalSkuN = skuNormal?.toString() || '';
-      let finalSkuM = skuMayoreo?.toString() || '';
-      let finalSkuC = skuCaja?.toString() || '';
+      let finalSkuN = skuNormal ? String(skuNormal) : '';
+      let finalSkuM = skuMayoreo ? String(skuMayoreo) : '';
+      let finalSkuC = skuCaja ? String(skuCaja) : '';
 
       // Si no hay SKUs y tenemos marca/familia, generarlos
       if (!finalSkuN && marcaId && familiaId) {
@@ -391,8 +395,8 @@ const procesarFilaExcel = async (row, index, resumen) => {
       }
 
       const nuevoProd = new Producto({
-        nombre: nombre.toString(),
-        descripcion: descripcion?.toString() ?? '',
+        nombre: String(nombre || ''),
+        descripcion: descripcion ? String(descripcion) : '',
         precioNormal: parseFloatSeguro(precioNormal),
         skuNormal: finalSkuN,
         precioMayoreo: parseFloatSeguro(precioMayoreo),
@@ -403,7 +407,7 @@ const procesarFilaExcel = async (row, index, resumen) => {
         marca: marcaId,
         familia: familiaId,
         activo: activoFlag,
-        imagenUrl: imagenUrl?.toString() ?? ''
+        imagenUrl: imagenUrl ? String(imagenUrl) : ''
       });
       await nuevoProd.save();
       resumen.creados++;
