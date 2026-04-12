@@ -310,21 +310,42 @@ const procesarFilaExcel = async (row, index, resumen) => {
       throw new Error("El nombre es obligatorio");
     }
 
-    // Resolver Marca por nombre
+    // 1. Resolver o CREAR Marca por nombre
     let marcaId = null;
     if (marcaNombre) {
-      const marcaDoc = await Marca.findOne({ nombre: { $regex: new RegExp(`^${marcaNombre.toString()}$`, 'i') } });
-      if (marcaDoc) marcaId = marcaDoc._id;
+      const nombreLimpio = marcaNombre.toString().trim();
+      let marcaDoc = await Marca.findOne({ nombre: { $regex: new RegExp(`^${nombreLimpio}$`, 'i') } });
+      
+      if (!marcaDoc) {
+        // CREACIÓN AUTOMÁTICA DE MARCA
+        marcaDoc = new Marca({ nombre: nombreLimpio });
+        await marcaDoc.save();
+      }
+      marcaId = marcaDoc._id;
     }
 
-    // Resolver Familia por nombre
+    // 2. Resolver o CREAR Familia por nombre
     let familiaId = null;
     if (familiaNombre) {
-      const familiaDoc = await Familia.findOne({ nombre: { $regex: new RegExp(`^${familiaNombre.toString()}$`, 'i') } });
-      if (familiaDoc) familiaId = familiaDoc._id;
+      const nombreLimpioF = familiaNombre.toString().trim();
+      // Buscamos la familia que coincida con el nombre Y con la marca (pueden haber familias con mismo nombre en marcas distintas)
+      let familiaDoc = await Familia.findOne({ 
+        nombre: { $regex: new RegExp(`^${nombreLimpioF}$`, 'i') },
+        marca: marcaId 
+      });
+
+      if (!familiaDoc) {
+        if (!marcaId) {
+          throw new Error(`No se puede crear la familia '${nombreLimpioF}' porque no hay una marca definida en esta fila.`);
+        }
+        // CREACIÓN AUTOMÁTICA DE FAMILIA vinculada a la Marca
+        familiaDoc = new Familia({ nombre: nombreLimpioF, marca: marcaId });
+        await familiaDoc.save();
+      }
+      familiaId = familiaDoc._id;
     }
 
-    const activoFlag = activoTexto?.toString().toLowerCase() === 'sí' || activoTexto?.toString().toLowerCase() === 'si';
+    const activoFlag = activoTexto?.toString().toLowerCase() === 'sí' || activoTexto?.toString().toLowerCase() === 'si' || activoTexto === true;
 
     let producto = null;
     if (id && id.toString().length === 24) {
@@ -336,31 +357,48 @@ const procesarFilaExcel = async (row, index, resumen) => {
     }
 
     if (producto) {
+      // ACTUALIZAR PRODUCTO EXISTENTE
       producto.nombre = nombre.toString();
       producto.descripcion = descripcion?.toString() ?? producto.descripcion;
       producto.precioNormal = parseFloatSeguro(precioNormal);
       producto.skuNormal = skuNormal?.toString() ?? producto.skuNormal;
       producto.precioMayoreo = parseFloatSeguro(precioMayoreo);
       producto.skuMayoreo = skuMayoreo?.toString() ?? producto.skuMayoreo;
+      producto.precioCaja = parseFloatSeguro(precioCaja);
       producto.skuCaja = skuCaja?.toString() ?? producto.skuCaja;
       producto.stock = parseIntSeguro(stock);
       producto.marca = marcaId || producto.marca;
       producto.familia = familiaId || producto.familia;
-      producto.activo = activoFlag ?? producto.activo;
+      producto.activo = activoFlag;
       producto.imagenUrl = imagenUrl?.toString() ?? producto.imagenUrl;
       
       await producto.save();
       resumen.actualizados++;
     } else {
+      // CREAR PRODUCTO NUEVO
+      let finalSkuN = skuNormal?.toString() || '';
+      let finalSkuM = skuMayoreo?.toString() || '';
+      let finalSkuC = skuCaja?.toString() || '';
+
+      // Si no hay SKUs y tenemos marca/familia, generarlos
+      if (!finalSkuN && marcaId && familiaId) {
+        const autoSkus = await generarSkusAutomaticos({ marca: marcaId, familia: familiaId });
+        if (autoSkus) {
+          finalSkuN = autoSkus.skuNormal;
+          finalSkuM = autoSkus.skuMayoreo;
+          finalSkuC = autoSkus.skuCaja;
+        }
+      }
+
       const nuevoProd = new Producto({
         nombre: nombre.toString(),
         descripcion: descripcion?.toString() ?? '',
         precioNormal: parseFloatSeguro(precioNormal),
-        skuNormal: skuNormal?.toString() ?? '',
+        skuNormal: finalSkuN,
         precioMayoreo: parseFloatSeguro(precioMayoreo),
-        skuMayoreo: skuMayoreo?.toString() ?? '',
+        skuMayoreo: finalSkuM,
         precioCaja: parseFloatSeguro(precioCaja),
-        skuCaja: skuCaja?.toString() ?? '',
+        skuCaja: finalSkuC,
         stock: parseIntSeguro(stock),
         marca: marcaId,
         familia: familiaId,
