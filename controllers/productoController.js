@@ -349,11 +349,13 @@ const procesarFilaExcel = async (row, index, resumen) => {
       familiaId = familiaDoc._id;
     }
 
-    // Lógica elástica para el estado Activo (Default: true si está vacío)
+    // Lógica Permisiva: Todo es Activo por defecto. Solo es Falso si dice 'No', '0' o 'false'.
     let activoFlag = true;
     if (activoTexto !== null && activoTexto !== undefined && activoTexto !== '') {
       const val = String(activoTexto).trim().toLowerCase();
-      activoFlag = (val === 'sí' || val === 'si' || val === 'true' || val === '1' || activoTexto === true);
+      if (val === 'no' || val === '0' || val === 'false' || val === 'n' || activoTexto === false) {
+        activoFlag = false;
+      }
     }
 
     let producto = null;
