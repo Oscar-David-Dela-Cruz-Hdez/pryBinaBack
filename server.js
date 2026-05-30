@@ -10,6 +10,9 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 4000;
 
+// Ruta para el Webhook de Alexa (DEBE IR ANTES de express.json para que Amazon pueda validar la firma)
+app.use("/api/alexa", require("./routes/alexaRoutes"));
+
 // 1. PRIMERO le decimos a Express que entienda JSON y CORS
 app.use(express.json());
 app.use(cors());
@@ -155,9 +158,6 @@ app.use("/api/monitoreo", (req, res, next) => {
   req.publicKey = publicKey;
   next();
 }, require("./routes/monitoreoRoutes"));
-
-// Ruta para el Webhook de Alexa
-app.use("/api/alexa", require("./routes/alexaRoutes"));
 
 app.listen(port, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
