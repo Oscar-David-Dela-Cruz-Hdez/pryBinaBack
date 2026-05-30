@@ -156,6 +156,9 @@ app.use("/api/monitoreo", (req, res, next) => {
   next();
 }, require("./routes/monitoreoRoutes"));
 
+// Ruta para el Webhook de Alexa
+app.use("/api/alexa", require("./routes/alexaRoutes"));
+
 app.listen(port, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
 });
