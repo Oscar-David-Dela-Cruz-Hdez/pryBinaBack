@@ -1,9 +1,30 @@
 const Alexa = require('ask-sdk-core');
 const { ExpressAdapter } = require('ask-sdk-express-adapter');
-// const Producto = require('../models/producto'); // Simulación: importar los modelos que necesites luego
-// const Venta = require('../models/venta');
 
-// 1. Manejador para cuando el usuario dice: "Alexa, abre Asistente Panamericana"
+// Importación de modelos
+const Pedido = require('../models/Pedido');
+const Producto = require('../models/Producto');
+const Familia = require('../models/Familia');
+const Marca = require('../models/Marca');
+
+// Función de utilidad para calcular fechas
+function obtenerRangoFechas(periodo, diasPersonalizados = 0) {
+    const inicio = new Date();
+    const fin = new Date();
+    inicio.setHours(0,0,0,0);
+    fin.setHours(23,59,59,999);
+
+    if (periodo === 'semana') {
+        inicio.setDate(inicio.getDate() - 7);
+    } else if (periodo === 'mes') {
+        inicio.setMonth(inicio.getMonth() - 1);
+    } else if (periodo === 'personalizado' && diasPersonalizados) {
+        inicio.setDate(inicio.getDate() - parseInt(diasPersonalizados));
+    }
+    return { inicio, fin };
+}
+
+// 1. Manejador para LaunchRequest
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
@@ -12,7 +33,7 @@ const LaunchRequestHandler = {
         const speakOutput = '¡Hola! Bienvenido al asistente de Panamericana. Puedes consultar las ventas, revisar el stock o ver el estado de los pedidos. ¿Qué deseas hacer?';
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt('¿Qué deseas consultar hoy?') // Reprompt mantiene el micrófono abierto si no responde
+            .reprompt('¿Qué deseas consultar hoy?')
             .getResponse();
     }
 };
@@ -30,47 +51,72 @@ const VentasIntentHandler = {
         let speakOutput = '';
 
         if (!tipoConsulta) {
-            // Delega a Alexa para que pida el tipoConsulta
-            return handlerInput.responseBuilder
-                .addDelegateDirective(handlerInput.requestEnvelope.request.intent)
-                .getResponse();
+            return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
         }
 
-        if (tipoConsulta === 'ganancia' || tipoConsulta === 'ganancias') {
-            const periodo = slots.periodoGanancia && slots.periodoGanancia.value ? slots.periodoGanancia.value : null;
-            if (!periodo) {
-                return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
-            }
-            
-            if (periodo === 'personalizado') {
-                const diasPersonalizado = slots.diasPersonalizado && slots.diasPersonalizado.value ? slots.diasPersonalizado.value : null;
-                if (!diasPersonalizado) {
+        try {
+            if (tipoConsulta === 'ganancia' || tipoConsulta === 'ganancias') {
+                const periodo = slots.periodoGanancia && slots.periodoGanancia.value ? slots.periodoGanancia.value.toLowerCase() : null;
+                if (!periodo) {
                     return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
                 }
-                // AQUÍ: Llamar a la BD (Simulado)
-                speakOutput = `Las ganancias consultadas de los últimos ${diasPersonalizado} días fueron procesadas correctamente. `;
+                
+                let rangoFechas;
+                if (periodo === 'personalizado') {
+                    const dias = slots.diasPersonalizado && slots.diasPersonalizado.value ? slots.diasPersonalizado.value : null;
+                    if (!dias) {
+                        return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
+                    }
+                    rangoFechas = obtenerRangoFechas('personalizado', dias);
+                    speakOutput = `Las ganancias de los últimos ${dias} días `;
+                } else {
+                    rangoFechas = obtenerRangoFechas(periodo);
+                    speakOutput = `Las ganancias del periodo por ${periodo} `;
+                }
+
+                // Consulta a BD
+                const pedidos = await Pedido.find({
+                    fecha: { $gte: rangoFechas.inicio, $lte: rangoFechas.fin },
+                    estado: { $in: ['Pagado', 'Enviado', 'Entregado'] }
+                });
+
+                const totalGanancia = pedidos.reduce((sum, p) => sum + p.total, 0);
+                speakOutput += `fueron de ${totalGanancia} pesos. `;
+
+            } else if (tipoConsulta === 'mercancía' || tipoConsulta === 'mercancia') {
+                const tipoMercancia = slots.tipoMercancia && slots.tipoMercancia.value ? slots.tipoMercancia.value.toLowerCase() : null;
+                const nombreMercancia = slots.nombreMercancia && slots.nombreMercancia.value ? slots.nombreMercancia.value : null;
+                if (!tipoMercancia || !nombreMercancia) {
+                    return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
+                }
+
+                if (tipoMercancia === 'producto') {
+                    const producto = await Producto.findOne({ nombre: { $regex: nombreMercancia, $options: "i" } });
+                    if (producto) {
+                        speakOutput = `El producto ${producto.nombre} tiene un stock actual de ${producto.stock} unidades a un precio normal de ${producto.precioNormal || 0} pesos. `;
+                    } else {
+                        speakOutput = `No encontré ningún producto llamado ${nombreMercancia}. `;
+                    }
+                } else {
+                    // Para familia o categoría
+                    const familia = await Familia.findOne({ nombre: { $regex: nombreMercancia, $options: "i" } });
+                    if (familia) {
+                        const totalProductos = await Producto.countDocuments({ familia: familia._id });
+                        speakOutput = `En la familia ${familia.nombre} tenemos un total de ${totalProductos} productos distintos en catálogo. `;
+                    } else {
+                        speakOutput = `No encontré ninguna familia o categoría llamada ${nombreMercancia}. `;
+                    }
+                }
             } else {
-                // AQUÍ: Llamar a la BD (Simulado)
-                speakOutput = `Las ganancias consultadas por ${periodo} fueron procesadas correctamente. `;
+                speakOutput = `No entendí el tipo de consulta para ventas. `;
             }
-        } else if (tipoConsulta === 'mercancía' || tipoConsulta === 'mercancia') {
-            const tipoMercancia = slots.tipoMercancia && slots.tipoMercancia.value ? slots.tipoMercancia.value : null;
-            const nombreMercancia = slots.nombreMercancia && slots.nombreMercancia.value ? slots.nombreMercancia.value : null;
-            if (!tipoMercancia || !nombreMercancia) {
-                return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
-            }
-            // AQUÍ: Llamar a la BD para obtener información de la mercancía (Simulado)
-            speakOutput = `La información sobre la mercancía tipo ${tipoMercancia} con el nombre ${nombreMercancia} indica que hay artículos disponibles. `;
-        } else {
-            speakOutput = `No entendí el tipo de consulta para ventas. `;
+        } catch (error) {
+            console.error("Error en VentasIntent:", error);
+            speakOutput = 'Hubo un error al consultar la base de datos para tus ventas. ';
         }
 
         speakOutput += '¿Deseas consultar algo más de ventas o terminamos?';
-
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt('¿Deseas algo más?')
-            .getResponse(); // No usamos withShouldEndSession(true) para mantener el ciclo abierto (morado)
+        return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas algo más?').getResponse();
     }
 };
 
@@ -89,23 +135,44 @@ const StockIntentHandler = {
         }
 
         let speakOutput = '';
-        if (tipoFiltro === 'general') {
-            // Simular consulta a BD de stock general bajo
-            speakOutput = 'Se han encontrado 5 artículos con stock bajo a nivel general. ';
-        } else {
-            const nombreFiltro = slots.nombreFiltro && slots.nombreFiltro.value ? slots.nombreFiltro.value : null;
-            if (!nombreFiltro) {
-                return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
+        try {
+            const STOCK_MINIMO = 5;
+
+            if (tipoFiltro === 'general') {
+                const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
+                speakOutput = `Se han encontrado ${totalBajos} artículos con stock bajo menor a ${STOCK_MINIMO} unidades en general. `;
+            } else {
+                const nombreFiltro = slots.nombreFiltro && slots.nombreFiltro.value ? slots.nombreFiltro.value : null;
+                if (!nombreFiltro) {
+                    return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
+                }
+                
+                if (tipoFiltro === 'producto') {
+                    const producto = await Producto.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
+                    if (producto) {
+                        speakOutput = `El stock del producto ${producto.nombre} es de ${producto.stock} unidades. `;
+                        if (producto.stock < STOCK_MINIMO) speakOutput += "Este es un stock considerado bajo. ";
+                    } else {
+                        speakOutput = `No se encontró el producto ${nombreFiltro}. `;
+                    }
+                } else {
+                    // Familia
+                    const familia = await Familia.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
+                    if (familia) {
+                        const bajosFamilia = await Producto.countDocuments({ familia: familia._id, stock: { $lt: STOCK_MINIMO } });
+                        speakOutput = `En la familia ${familia.nombre} hay ${bajosFamilia} productos con stock bajo. `;
+                    } else {
+                        speakOutput = `No se encontró la categoría ${nombreFiltro}. `;
+                    }
+                }
             }
-            // Simular consulta filtrada
-            speakOutput = `Revisando el stock bajo para ${tipoFiltro} llamado ${nombreFiltro}, se encontraron algunas incidencias. `;
+        } catch (error) {
+            console.error("Error en StockIntent:", error);
+            speakOutput = 'Hubo un problema al consultar el inventario. ';
         }
 
         speakOutput += '¿Deseas revisar otro stock o terminamos?';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt('¿Deseas algo más?')
-            .getResponse();
+        return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas algo más?').getResponse();
     }
 };
 
@@ -124,32 +191,45 @@ const EstadoIntentHandler = {
         }
 
         let speakOutput = '';
-        if (tipoEstado === 'por enviar' || tipoEstado === 'actuales') {
-            // Consulta directa
-            speakOutput = `Actualmente hay 3 pedidos ${tipoEstado} registrados en el sistema. `;
-        } else {
-            // Finalizados o enviados (requieren periodo)
-            const periodo = slots.periodoEstado && slots.periodoEstado.value ? slots.periodoEstado.value : null;
-            if (!periodo) {
-                return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
-            }
-            
-            if (periodo === 'personalizado') {
-                const diasPersonalizado = slots.diasPersonalizado && slots.diasPersonalizado.value ? slots.diasPersonalizado.value : null;
-                if (!diasPersonalizado) {
+        try {
+            if (tipoEstado === 'por enviar' || tipoEstado === 'actuales') {
+                const totalPorEnviar = await Pedido.countDocuments({ estado: { $in: ['Pendiente', 'Pagado'] } });
+                speakOutput = `Actualmente hay ${totalPorEnviar} pedidos listos por enviar. `;
+            } else {
+                const periodo = slots.periodoEstado && slots.periodoEstado.value ? slots.periodoEstado.value.toLowerCase() : null;
+                if (!periodo) {
                     return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
                 }
-                speakOutput = `Se encontraron varios pedidos ${tipoEstado} en los últimos ${diasPersonalizado} días. `;
-            } else {
-                speakOutput = `Se encontraron varios pedidos ${tipoEstado} en el periodo de ${periodo}. `;
+                
+                let rangoFechas;
+                if (periodo === 'personalizado') {
+                    const dias = slots.diasPersonalizado && slots.diasPersonalizado.value ? slots.diasPersonalizado.value : null;
+                    if (!dias) {
+                        return handlerInput.responseBuilder.addDelegateDirective(handlerInput.requestEnvelope.request.intent).getResponse();
+                    }
+                    rangoFechas = obtenerRangoFechas('personalizado', dias);
+                    speakOutput = `En los últimos ${dias} días, `;
+                } else {
+                    rangoFechas = obtenerRangoFechas(periodo);
+                    speakOutput = `En el periodo por ${periodo}, `;
+                }
+
+                // Definir qué estado buscar (Enviados o Entregados/Finalizados)
+                const filtroEstado = (tipoEstado === 'enviados') ? 'Enviado' : 'Entregado';
+                const totalPedidos = await Pedido.countDocuments({
+                    estado: filtroEstado,
+                    fecha: { $gte: rangoFechas.inicio, $lte: rangoFechas.fin }
+                });
+
+                speakOutput += `se registraron ${totalPedidos} pedidos como ${filtroEstado}s. `;
             }
+        } catch (error) {
+            console.error("Error en EstadoIntent:", error);
+            speakOutput = 'Ocurrió un error al consultar el estado de los pedidos. ';
         }
 
         speakOutput += '¿Deseas consultar otro estado o finalizamos?';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt('¿Deseas consultar algo más?')
-            .getResponse();
+        return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas consultar algo más?').getResponse();
     }
 };
 
@@ -162,30 +242,23 @@ const CancelAndStopIntentHandler = {
     },
     handle(handlerInput) {
         const speakOutput = 'De acuerdo, cerrando el asistente de Panamericana. ¡Hasta luego!';
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .withShouldEndSession(true)
-            .getResponse();
+        return handlerInput.responseBuilder.speak(speakOutput).withShouldEndSession(true).getResponse();
     }
 };
 
-// 6. Manejador de Errores (Por si algo falla)
+// 6. Manejador de Errores
 const ErrorHandler = {
     canHandle() {
         return true;
     },
     handle(handlerInput, error) {
         console.log(`~~~~ Error manejado: ${error.stack}`);
-        const speakOutput = 'Hubo un error al conectar con la base de datos de Panamericana. Por favor intenta de nuevo.';
-
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
-            .getResponse();
+        const speakOutput = 'Hubo un error interno al procesar la intención de Alexa. Por favor intenta de nuevo.';
+        return handlerInput.responseBuilder.speak(speakOutput).reprompt(speakOutput).getResponse();
     }
 };
 
-// Configurar el Skill de Alexa
+// Configurar el Skill
 const skillBuilder = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
