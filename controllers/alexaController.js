@@ -399,6 +399,21 @@ const HelpIntentHandler = {
     }
 };
 
+// 6.5 Manejador de Fallback (Evita que Alexa se salga de la skill)
+const FallbackIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.FallbackIntent';
+    },
+    handle(handlerInput) {
+        const speakOutput = 'Lo siento, no tengo información sobre eso en los registros de la Distribuidora Panamericana. Recuerda que solo puedo consultar ventas, stock o pedidos. ¿Qué deseas hacer?';
+        return handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt('¿Deseas consultar ventas, stock o pedidos?')
+            .getResponse();
+    }
+};
+
 // 7. Manejador de Errores
 const ErrorHandler = {
     canHandle() {
@@ -419,7 +434,8 @@ const skillBuilder = Alexa.SkillBuilders.custom()
         StockIntentHandler,
         EstadoIntentHandler,
         CancelAndStopIntentHandler,
-        HelpIntentHandler
+        HelpIntentHandler,
+        FallbackIntentHandler
     )
     .addErrorHandlers(
         ErrorHandler
