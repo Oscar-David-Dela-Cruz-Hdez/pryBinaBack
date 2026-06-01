@@ -5,6 +5,17 @@ const Pedido = require('../models/Pedido');
 const Producto = require('../models/Producto');
 const Familia = require('../models/Familia');
 
+// Normaliza el periodo para aceptar variantes como "del mes", "mensual", etc.
+function normalizarPeriodo(valor) {
+    if (!valor) return null;
+    const v = valor.toLowerCase().trim();
+    if (v.includes('día') || v.includes('dia') || v === 'hoy' || v === 'diario' || v === 'al día') return 'día';
+    if (v.includes('semana') || v === 'semanal' || v === 'esta semana') return 'semana';
+    if (v.includes('mes') || v === 'mensual' || v === 'este mes') return 'mes';
+    if (v.includes('personalizado') || v.includes('custom')) return 'personalizado';
+    return v;
+}
+
 function obtenerRangoFechas(periodo, diasPersonalizados = 0) {
     const inicio = new Date();
     const fin = new Date();
@@ -27,6 +38,12 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
+        // Limpiar sesión al iniciar
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        sessionAttributes.waitingFor = null;
+        sessionAttributes.savedContext = {};
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
         const speakOutput = '¡Hola! Bienvenido al asistente de Panamericana. Puedes consultar las ventas, revisar el stock o ver el estado de los pedidos. ¿Qué deseas hacer?';
         return handlerInput.responseBuilder
             .speak(speakOutput)
@@ -44,60 +61,83 @@ const VentasIntentHandler = {
     async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         sessionAttributes.lastIntent = 'ventasIntent';
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
-        let tipoConsulta = slots.tipoConsulta && slots.tipoConsulta.value ? slots.tipoConsulta.value.toLowerCase() : null;
-        let periodo = slots.periodoGanancia && slots.periodoGanancia.value ? slots.periodoGanancia.value.toLowerCase() : null;
-        let dias = slots.diasPersonalizado && slots.diasPersonalizado.value ? slots.diasPersonalizado.value : null;
-        let tipoMercancia = slots.tipoMercancia && slots.tipoMercancia.value ? slots.tipoMercancia.value.toLowerCase() : null;
-        let nombreMercancia = slots.nombreMercancia && slots.nombreMercancia.value ? slots.nombreMercancia.value : null;
+        let tipoConsulta = slots.tipoConsulta?.value?.toLowerCase() || null;
+        let periodo = normalizarPeriodo(slots.periodoGanancia?.value);
+        let dias = slots.diasPersonalizado?.value || null;
+        let tipoMercancia = slots.tipoMercancia?.value?.toLowerCase() || null;
+        let nombreMercancia = slots.nombreMercancia?.value || null;
 
-        let speakOutput = '';
+        // Restaurar contexto guardado si veníamos de una pregunta pendiente
+        const ctx = sessionAttributes.savedContext || {};
+        if (sessionAttributes.waitingFor === 'periodoGanancia') {
+            tipoConsulta = tipoConsulta || ctx.tipoConsulta || 'ganancia';
+            if (!periodo && !dias) periodo = normalizarPeriodo(tipoMercancia || nombreMercancia);
+            tipoMercancia = null;
+            nombreMercancia = null;
+        } else if (sessionAttributes.waitingFor === 'tipoMercancia') {
+            tipoConsulta = 'mercancía';
+            tipoMercancia = tipoMercancia || normalizarPeriodo(slots.periodoGanancia?.value);
+            nombreMercancia = ctx.nombreMercancia || nombreMercancia;
+        } else if (sessionAttributes.waitingFor === 'nombreMercancia') {
+            tipoConsulta = 'mercancía';
+            tipoMercancia = ctx.tipoMercancia || tipoMercancia;
+        } else if (sessionAttributes.waitingFor === 'diasPersonalizadoVentas') {
+            tipoConsulta = ctx.tipoConsulta || 'ganancia';
+            periodo = 'personalizado';
+            dias = slots.diasPersonalizado?.value || slots.tipoConsulta?.value || null;
+        }
 
-        // Deducción inteligente o ElicitSlot manual condicional
+        // Limpiar estado de espera
+        sessionAttributes.waitingFor = null;
+        sessionAttributes.savedContext = {};
+
+        // Deducción automática
         if (!tipoConsulta) {
             if (periodo || dias) tipoConsulta = 'ganancia';
             else if (tipoMercancia || nombreMercancia) tipoConsulta = 'mercancía';
             else {
+                sessionAttributes.waitingFor = 'tipoConsultaVentas';
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return handlerInput.responseBuilder
                     .speak('¿Qué deseas consultar, las ganancias o la mercancía?')
                     .reprompt('¿Deseas ver ganancias o mercancía?')
-                    .addElicitSlotDirective('tipoConsulta')
+                    .withShouldEndSession(false)
                     .getResponse();
             }
         }
 
+        if (!periodo && dias) periodo = 'personalizado';
+
+        let speakOutput = '';
+
         try {
             if (tipoConsulta === 'ganancia' || tipoConsulta === 'ganancias') {
-                // Si ya viene el número de días, deducir automáticamente que es personalizado
-                if (!periodo && dias) periodo = 'personalizado';
-
                 if (!periodo) {
+                    sessionAttributes.waitingFor = 'periodoGanancia';
+                    sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                     return handlerInput.responseBuilder
-                        .speak('¿De qué periodo? día, semana, mes o personalizado.')
-                        .reprompt('¿De qué periodo?')
-                        .addElicitSlotDirective('periodoGanancia')
+                        .speak('¿De qué periodo? Puedes decir: del día, de la semana, del mes o personalizado.')
+                        .reprompt('¿Del día, de la semana, del mes o personalizado?')
+                        .withShouldEndSession(false)
                         .getResponse();
                 }
-                
-                let rangoFechas;
-                let textoPeriodo = '';
-                
-                if (periodo === 'personalizado') {
-                    if (!dias) {
-                        return handlerInput.responseBuilder
-                            .speak('¿De cuántos días atrás quieres revisar las ganancias?')
-                            .reprompt('¿De cuántos días?')
-                            .addElicitSlotDirective('diasPersonalizado')
-                            .getResponse();
-                    }
-                    rangoFechas = obtenerRangoFechas('personalizado', dias);
-                    textoPeriodo = `los últimos ${dias} días`;
-                } else {
-                    rangoFechas = obtenerRangoFechas(periodo);
-                    textoPeriodo = periodo;
+
+                if (periodo === 'personalizado' && !dias) {
+                    sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
+                    sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                    return handlerInput.responseBuilder
+                        .speak('¿De cuántos días atrás quieres revisar las ganancias?')
+                        .reprompt('¿De cuántos días?')
+                        .withShouldEndSession(false)
+                        .getResponse();
                 }
+
+                const rangoFechas = obtenerRangoFechas(periodo, dias);
+                const textoPeriodo = periodo === 'personalizado' ? `los últimos ${dias} días` : periodo;
 
                 const pedidos = await Pedido.find({
                     fecha: { $gte: rangoFechas.inicio, $lte: rangoFechas.fin },
@@ -105,26 +145,28 @@ const VentasIntentHandler = {
                 });
 
                 const totalGanancia = pedidos.reduce((sum, p) => sum + p.total, 0);
-                
-                if (periodo === 'personalizado') {
-                    speakOutput = `Las ganancias de ${textoPeriodo} fueron procesadas correctamente. Entraron ${totalGanancia} pesos. `;
-                } else {
-                    speakOutput = `Las ganancias consultadas por ${textoPeriodo} fueron procesadas correctamente. Entraron ${totalGanancia} pesos. `;
-                }
+                speakOutput = periodo === 'personalizado'
+                    ? `Las ganancias de ${textoPeriodo} fueron procesadas correctamente. Entraron ${totalGanancia} pesos. `
+                    : `Las ganancias consultadas por ${textoPeriodo} fueron procesadas correctamente. Entraron ${totalGanancia} pesos. `;
 
             } else if (tipoConsulta === 'mercancía' || tipoConsulta === 'mercancia') {
                 if (!tipoMercancia && !nombreMercancia) {
+                    sessionAttributes.waitingFor = 'tipoMercancia';
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                     return handlerInput.responseBuilder
                         .speak('¿Sobre qué deseas consultar? producto, familia o categoría.')
                         .reprompt('¿Producto, familia o categoría?')
-                        .addElicitSlotDirective('tipoMercancia')
+                        .withShouldEndSession(false)
                         .getResponse();
                 }
                 if (!nombreMercancia) {
+                    sessionAttributes.waitingFor = 'nombreMercancia';
+                    sessionAttributes.savedContext = { tipoMercancia };
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                     return handlerInput.responseBuilder
-                        .speak(`¿Cuál es el nombre exacto que buscas?`)
+                        .speak('¿Cuál es el nombre exacto que buscas?')
                         .reprompt('¿Cuál es el nombre?')
-                        .addElicitSlotDirective('nombreMercancia')
+                        .withShouldEndSession(false)
                         .getResponse();
                 }
 
@@ -134,44 +176,40 @@ const VentasIntentHandler = {
                     const producto = await Producto.findOne({ nombre: { $regex: nombreMercancia, $options: "i" } });
                     if (producto) {
                         const pedidos = await Pedido.find({ estado: { $in: ['Pagado', 'Enviado', 'Entregado'] }, "productos.producto": producto._id });
-                        for(let ped of pedidos) {
-                            for(let prod of ped.productos) {
-                                if(prod.producto.toString() === producto._id.toString()) totalVendido += prod.cantidad;
+                        for (let ped of pedidos) {
+                            for (let prod of ped.productos) {
+                                if (prod.producto.toString() === producto._id.toString()) totalVendido += prod.cantidad;
                             }
                         }
-                        speakOutput = `La información sobre la mercancía tipo producto con el nombre ${producto.nombre} indica que hay ${totalVendido} artículos vendidos. `;
-                    } else if (!tipoMercancia) {
-                        // Búsqueda comodín como familia si no encontró producto
+                        speakOutput = `La información sobre el producto ${producto.nombre} indica que hay ${totalVendido} artículos vendidos. `;
+                    } else {
                         const familia = await Familia.findOne({ nombre: { $regex: nombreMercancia, $options: "i" } });
                         if (familia) {
                             const productosFamilia = await Producto.find({ familia: familia._id });
                             const idsProductos = productosFamilia.map(p => p._id);
                             const pedidos = await Pedido.find({ estado: { $in: ['Pagado', 'Enviado', 'Entregado'] }, "productos.producto": { $in: idsProductos } });
-                            for(let ped of pedidos) {
-                                for(let prod of ped.productos) {
-                                    if(idsProductos.some(id => id.toString() === prod.producto.toString())) totalVendido += prod.cantidad;
+                            for (let ped of pedidos) {
+                                for (let prod of ped.productos) {
+                                    if (idsProductos.some(id => id.toString() === prod.producto.toString())) totalVendido += prod.cantidad;
                                 }
                             }
-                            speakOutput = `La información sobre la mercancía tipo familia con el nombre ${familia.nombre} indica que se han vendido ${totalVendido} artículos, teniendo un buen movimiento. `;
+                            speakOutput = `La familia ${familia.nombre} tiene ${totalVendido} artículos vendidos, con buen movimiento. `;
                         } else {
                             speakOutput = `No encontré ningún producto ni categoría llamada ${nombreMercancia}. `;
                         }
-                    } else {
-                        speakOutput = `No encontré ningún producto llamado ${nombreMercancia}. `;
                     }
                 } else {
                     const familia = await Familia.findOne({ nombre: { $regex: nombreMercancia, $options: "i" } });
                     if (familia) {
                         const productosFamilia = await Producto.find({ familia: familia._id });
                         const idsProductos = productosFamilia.map(p => p._id);
-                        
                         const pedidos = await Pedido.find({ estado: { $in: ['Pagado', 'Enviado', 'Entregado'] }, "productos.producto": { $in: idsProductos } });
-                        for(let ped of pedidos) {
-                            for(let prod of ped.productos) {
-                                if(idsProductos.some(id => id.toString() === prod.producto.toString())) totalVendido += prod.cantidad;
+                        for (let ped of pedidos) {
+                            for (let prod of ped.productos) {
+                                if (idsProductos.some(id => id.toString() === prod.producto.toString())) totalVendido += prod.cantidad;
                             }
                         }
-                        speakOutput = `La información sobre la mercancía tipo familia con el nombre ${familia.nombre} indica que se han vendido ${totalVendido} artículos, teniendo un buen movimiento. `;
+                        speakOutput = `La familia ${familia.nombre} tiene ${totalVendido} artículos vendidos, con buen movimiento. `;
                     } else {
                         speakOutput = `No encontré ninguna familia o categoría llamada ${nombreMercancia}. `;
                     }
@@ -182,6 +220,7 @@ const VentasIntentHandler = {
             speakOutput = 'Hubo un error al consultar la base de datos para tus ventas. ';
         }
 
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas consultar algo más de ventas o terminamos?';
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas algo más?').getResponse();
     }
@@ -196,24 +235,38 @@ const StockIntentHandler = {
     async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         sessionAttributes.lastIntent = 'stockIntent';
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
-        const tipoFiltro = slots.tipoFiltroStock && slots.tipoFiltroStock.value ? slots.tipoFiltroStock.value.toLowerCase() : null;
-        const nombreFiltro = slots.nombreFiltro && slots.nombreFiltro.value ? slots.nombreFiltro.value : null;
+        let tipoFiltro = slots.tipoFiltroStock?.value?.toLowerCase() || null;
+        let nombreFiltro = slots.nombreFiltro?.value || null;
+
+        const ctx = sessionAttributes.savedContext || {};
+        if (sessionAttributes.waitingFor === 'tipoFiltroStock') {
+            nombreFiltro = ctx.nombreFiltro || nombreFiltro;
+        } else if (sessionAttributes.waitingFor === 'nombreFiltroStock') {
+            tipoFiltro = ctx.tipoFiltro || tipoFiltro;
+        }
+
+        sessionAttributes.waitingFor = null;
+        sessionAttributes.savedContext = {};
 
         if (!tipoFiltro) {
             if (nombreFiltro) {
+                sessionAttributes.waitingFor = 'tipoFiltroStock';
+                sessionAttributes.savedContext = { nombreFiltro };
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return handlerInput.responseBuilder
                     .speak(`¿Deseas ver el stock de ${nombreFiltro} por producto o por familia?`)
                     .reprompt('¿Por producto o familia?')
-                    .addElicitSlotDirective('tipoFiltroStock')
+                    .withShouldEndSession(false)
                     .getResponse();
             } else {
+                sessionAttributes.waitingFor = 'tipoFiltroStock';
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return handlerInput.responseBuilder
                     .speak('¿Deseas ver el stock por producto, familia, categoría o general?')
                     .reprompt('¿Por producto, familia, categoría o general?')
-                    .addElicitSlotDirective('tipoFiltroStock')
+                    .withShouldEndSession(false)
                     .getResponse();
             }
         }
@@ -227,17 +280,20 @@ const StockIntentHandler = {
                 speakOutput = `Se han encontrado ${totalBajos} artículos con stock bajo a nivel general en el almacén. `;
             } else {
                 if (!nombreFiltro) {
+                    sessionAttributes.waitingFor = 'nombreFiltroStock';
+                    sessionAttributes.savedContext = { tipoFiltro };
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                     return handlerInput.responseBuilder
                         .speak(`¿Cuál es el nombre de la ${tipoFiltro}?`)
                         .reprompt('¿Cuál es el nombre exacto?')
-                        .addElicitSlotDirective('nombreFiltro')
+                        .withShouldEndSession(false)
                         .getResponse();
                 }
-                
+
                 if (tipoFiltro === 'producto') {
                     const producto = await Producto.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
                     if (producto) {
-                        speakOutput = `Revisando el stock bajo para el producto ${producto.nombre}, nos quedan solamente ${producto.stock} unidades. `;
+                        speakOutput = `Revisando el stock del producto ${producto.nombre}, nos quedan solamente ${producto.stock} unidades. `;
                     } else {
                         speakOutput = `No se encontró el producto ${nombreFiltro}. `;
                     }
@@ -246,10 +302,10 @@ const StockIntentHandler = {
                     if (familia) {
                         const productosBajos = await Producto.find({ familia: familia._id, stock: { $lt: STOCK_MINIMO } });
                         if (productosBajos.length > 0) {
-                            const nombres = productosBajos.map(p => p.nombre).join(' y ');
-                            speakOutput = `Revisando el stock bajo para la familia ${familia.nombre}, detecté que faltan ${nombres}. `;
+                            const nombres = productosBajos.map(p => p.nombre).join(', ');
+                            speakOutput = `En la familia ${familia.nombre}, detecté stock bajo en: ${nombres}. `;
                         } else {
-                            speakOutput = `Revisando el stock para la familia ${familia.nombre}, todo parece estar en niveles normales. `;
+                            speakOutput = `La familia ${familia.nombre} tiene niveles de stock normales. `;
                         }
                     } else {
                         speakOutput = `No se encontró la categoría ${nombreFiltro}. `;
@@ -261,6 +317,7 @@ const StockIntentHandler = {
             speakOutput = 'Hubo un problema al consultar el inventario. ';
         }
 
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas revisar otro stock o terminamos?';
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas revisar algo más?').getResponse();
     }
@@ -275,16 +332,35 @@ const EstadoIntentHandler = {
     async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         sessionAttributes.lastIntent = 'estadoIntent';
-        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
-        const tipoEstado = slots.tipoEstado && slots.tipoEstado.value ? slots.tipoEstado.value.toLowerCase() : null;
+        let tipoEstado = slots.tipoEstado?.value?.toLowerCase() || null;
+        let periodo = normalizarPeriodo(slots.periodoEstado?.value);
+        let dias = slots.diasPersonalizado?.value || null;
+
+        const ctx = sessionAttributes.savedContext || {};
+        if (sessionAttributes.waitingFor === 'periodoEstado') {
+            tipoEstado = ctx.tipoEstado || tipoEstado;
+            if (!periodo && !dias) periodo = normalizarPeriodo(slots.tipoEstado?.value);
+            tipoEstado = ctx.tipoEstado;
+        } else if (sessionAttributes.waitingFor === 'diasPersonalizadoEstado') {
+            tipoEstado = ctx.tipoEstado;
+            periodo = 'personalizado';
+            dias = slots.diasPersonalizado?.value || slots.tipoEstado?.value || null;
+        }
+
+        sessionAttributes.waitingFor = null;
+        sessionAttributes.savedContext = {};
+
+        if (!periodo && dias) periodo = 'personalizado';
 
         if (!tipoEstado) {
+            sessionAttributes.waitingFor = 'tipoEstado';
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
             return handlerInput.responseBuilder
                 .speak('¿Deseas ver los pedidos por enviar, actuales, finalizados o enviados?')
                 .reprompt('¿Qué estado de pedidos te interesa?')
-                .addElicitSlotDirective('tipoEstado')
+                .withShouldEndSession(false)
                 .getResponse();
         }
 
@@ -294,33 +370,30 @@ const EstadoIntentHandler = {
                 const totalPorEnviar = await Pedido.countDocuments({ estado: { $in: ['Pendiente', 'Pagado'] } });
                 speakOutput = `Actualmente hay ${totalPorEnviar} pedidos por enviar registrados en el sistema. `;
             } else {
-                const periodo = slots.periodoEstado && slots.periodoEstado.value ? slots.periodoEstado.value.toLowerCase() : null;
                 if (!periodo) {
+                    sessionAttributes.waitingFor = 'periodoEstado';
+                    sessionAttributes.savedContext = { tipoEstado };
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                     return handlerInput.responseBuilder
-                        .speak('¿De qué periodo? día, semana, mes o personalizado.')
-                        .reprompt('¿Qué periodo deseas consultar?')
-                        .addElicitSlotDirective('periodoEstado')
+                        .speak('¿De qué periodo? Puedes decir: del día, de la semana, del mes o personalizado.')
+                        .reprompt('¿Del día, de la semana, del mes o personalizado?')
+                        .withShouldEndSession(false)
                         .getResponse();
                 }
-                
-                let rangoFechas;
-                let textoPeriodo;
-                if (periodo === 'personalizado') {
-                    const dias = slots.diasPersonalizado && slots.diasPersonalizado.value ? slots.diasPersonalizado.value : null;
-                    if (!dias) {
-                        return handlerInput.responseBuilder
-                            .speak('¿De cuántos días quieres revisar los pedidos?')
-                            .reprompt('¿De cuántos días?')
-                            .addElicitSlotDirective('diasPersonalizado')
-                            .getResponse();
-                    }
-                    rangoFechas = obtenerRangoFechas('personalizado', dias);
-                    textoPeriodo = `${dias} días`;
-                } else {
-                    rangoFechas = obtenerRangoFechas(periodo);
-                    textoPeriodo = periodo;
+
+                if (periodo === 'personalizado' && !dias) {
+                    sessionAttributes.waitingFor = 'diasPersonalizadoEstado';
+                    sessionAttributes.savedContext = { tipoEstado };
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                    return handlerInput.responseBuilder
+                        .speak('¿De cuántos días quieres revisar los pedidos?')
+                        .reprompt('¿De cuántos días?')
+                        .withShouldEndSession(false)
+                        .getResponse();
                 }
 
+                const rangoFechas = obtenerRangoFechas(periodo, dias);
+                const textoPeriodo = periodo === 'personalizado' ? `${dias} días` : periodo;
                 const filtroEstado = (tipoEstado === 'enviados') ? 'Enviado' : 'Entregado';
                 const totalPedidos = await Pedido.countDocuments({
                     estado: filtroEstado,
@@ -334,6 +407,7 @@ const EstadoIntentHandler = {
             speakOutput = 'Ocurrió un error al consultar el estado de los pedidos. ';
         }
 
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas consultar otro estado o finalizamos?';
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas consultar algo más?').getResponse();
     }
@@ -350,6 +424,10 @@ const CancelAndStopIntentHandler = {
         const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const lastIntent = sessionAttributes.lastIntent;
+
+        // Limpiar estado de espera siempre que se cancele
+        sessionAttributes.waitingFor = null;
+        sessionAttributes.savedContext = {};
 
         if (intentName === 'AMAZON.CancelIntent' && lastIntent) {
             sessionAttributes.lastIntent = null;
@@ -370,6 +448,7 @@ const CancelAndStopIntentHandler = {
                 .getResponse();
         }
 
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         const speakOutput = 'De acuerdo, cerrando el asistente de Panamericana. ¡Hasta luego!';
         return handlerInput.responseBuilder.speak(speakOutput).withShouldEndSession(true).getResponse();
     }
@@ -384,15 +463,15 @@ const HelpIntentHandler = {
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const lastIntent = sessionAttributes.lastIntent;
-        
+
         let speakOutput = 'Puedes preguntarme por las ventas de algún producto, revisar el stock disponible o consultar el estado de los pedidos. ¿En qué te puedo ayudar?';
 
         if (lastIntent === 'ventasIntent') {
-            speakOutput = 'Para consultar ventas, puedes decir "las ganancias del mes" o pedir información de mercancía como "ventas de lapiceros". ¿Qué te gustaría intentar?';
+            speakOutput = 'Para consultar ventas, puedes decir "las ganancias del mes" o pedir información de mercancía como "ventas de Barbería". ¿Qué te gustaría intentar?';
         } else if (lastIntent === 'stockIntent') {
-            speakOutput = 'Para revisar el inventario, puedes pedir "stock general", "stock del producto cajas" o "stock de la familia electrónica". ¿Qué deseas buscar?';
+            speakOutput = 'Para revisar el inventario, puedes pedir "stock general" o "consulta el stock de Barbería". ¿Qué deseas buscar?';
         } else if (lastIntent === 'estadoIntent') {
-            speakOutput = 'Para revisar los pedidos, puedes decir "pedidos por enviar" o "pedidos enviados de la semana". ¿Qué deseas consultar?';
+            speakOutput = 'Para revisar los pedidos, puedes decir "pedidos por enviar" o "pedidos enviados de este mes". ¿Qué deseas consultar?';
         }
 
         return handlerInput.responseBuilder
@@ -402,14 +481,41 @@ const HelpIntentHandler = {
     }
 };
 
-// 6.5 Manejador de Fallback (Evita que Alexa se salga de la skill)
+// 7. Manejador de Fallback (Escudo contra Amazon Music)
 const FallbackIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.FallbackIntent';
     },
     handle(handlerInput) {
-        const speakOutput = 'Lo siento, no tengo información sobre eso en los registros de la Distribuidora Panamericana. Recuerda que solo puedo consultar ventas, stock o pedidos. ¿Qué deseas hacer?';
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const waitingFor = sessionAttributes.waitingFor;
+
+        // Si estábamos esperando algo, recordarle al usuario qué responder
+        if (waitingFor === 'periodoGanancia' || waitingFor === 'periodoEstado') {
+            return handlerInput.responseBuilder
+                .speak('No entendí bien el periodo. Por favor di: del día, de la semana, del mes, o personalizado.')
+                .reprompt('¿Del día, de la semana, del mes o personalizado?')
+                .withShouldEndSession(false)
+                .getResponse();
+        }
+        if (waitingFor === 'diasPersonalizadoVentas' || waitingFor === 'diasPersonalizadoEstado') {
+            return handlerInput.responseBuilder
+                .speak('No entendí el número. Por favor dime cuántos días, por ejemplo: veinte días, o quince días.')
+                .reprompt('¿De cuántos días?')
+                .withShouldEndSession(false)
+                .getResponse();
+        }
+        if (waitingFor === 'nombreMercancia' || waitingFor === 'nombreFiltroStock') {
+            return handlerInput.responseBuilder
+                .speak('No entendí el nombre. Por favor di el nombre completo, por ejemplo: Barbería, o Styling y Peinado.')
+                .reprompt('¿Cuál es el nombre exacto?')
+                .withShouldEndSession(false)
+                .getResponse();
+        }
+
+        // Respuesta general si no había contexto
+        const speakOutput = 'Lo siento, no tengo información sobre eso en los registros de Panamericana. Solo puedo consultar ventas, stock o pedidos. ¿Qué deseas hacer?';
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt('¿Deseas consultar ventas, stock o pedidos?')
@@ -417,7 +523,7 @@ const FallbackIntentHandler = {
     }
 };
 
-// 7. Manejador de Errores
+// 8. Manejador de Errores
 const ErrorHandler = {
     canHandle() {
         return true;
