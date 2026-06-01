@@ -70,6 +70,9 @@ const VentasIntentHandler = {
 
         try {
             if (tipoConsulta === 'ganancia' || tipoConsulta === 'ganancias') {
+                // Si ya viene el número de días, deducir automáticamente que es personalizado
+                if (!periodo && dias) periodo = 'personalizado';
+
                 if (!periodo) {
                     return handlerInput.responseBuilder
                         .speak('¿De qué periodo? día, semana, mes o personalizado.')
