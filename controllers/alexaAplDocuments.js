@@ -12,20 +12,20 @@ const BEAUTY_THEME = {
 
 const baseDocument = {
     type: 'APL',
-    version: '2023.2',
+    version: '1.7',
     mainTemplate: {
         parameters: ['payload'],
         item: {
             type: 'Frame',
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
             backgroundColor: '${payload.theme.background}',
             item: {
                 type: 'Container',
                 width: '100%',
                 height: '100%',
-                paddingLeft: '@marginHorizontal',
-                paddingRight: '@marginHorizontal',
+                paddingLeft: '48dp',
+                paddingRight: '48dp',
                 paddingTop: '32dp',
                 paddingBottom: '28dp',
                 justifyContent: 'spaceBetween',
@@ -38,7 +38,7 @@ const baseDocument = {
                             text: '${payload.screen.eyebrow}',
                             color: '${payload.theme.primary}',
                             fontSize: '24dp',
-                            fontWeight: '700',
+                            fontWeight: 'bold',
                             maxLines: 1
                         },
                         {
@@ -46,7 +46,7 @@ const baseDocument = {
                             text: '${payload.screen.title}',
                             color: '${payload.theme.ink}',
                             fontSize: '48dp',
-                            fontWeight: '800',
+                            fontWeight: 'bold',
                             maxLines: 2,
                             spacing: '8dp'
                         },
@@ -63,7 +63,7 @@ const baseDocument = {
                 {
                     type: 'Sequence',
                     width: '100%',
-                    height: '58%',
+                    height: '430dp',
                     scrollDirection: 'vertical',
                     data: '${payload.screen.cards}',
                     item: {
@@ -100,7 +100,7 @@ const baseDocument = {
                                                 text: '${data.title}',
                                                 color: '${data.textColor}',
                                                 fontSize: '30dp',
-                                                fontWeight: '700',
+                                                fontWeight: 'bold',
                                                 maxLines: 1
                                             },
                                             {
@@ -119,7 +119,7 @@ const baseDocument = {
                                         text: '${data.badge}',
                                         color: '${data.textColor}',
                                         fontSize: '34dp',
-                                        fontWeight: '800',
+                                        fontWeight: 'bold',
                                         maxLines: 1
                                     }
                                 ]
@@ -139,20 +139,7 @@ const baseDocument = {
                 ]
             }
         }
-    },
-    resources: [
-        {
-            dimensions: {
-                marginHorizontal: '48dp'
-            }
-        },
-        {
-            when: '${@viewportProfile == @hubRoundSmall}',
-            dimensions: {
-                marginHorizontal: '28dp'
-            }
-        }
-    ]
+    }
 };
 
 function card(title, subtitle, action, color, badge = '>') {

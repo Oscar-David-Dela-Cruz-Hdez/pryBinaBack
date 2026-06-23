@@ -13,7 +13,7 @@ const {
 } = require('./alexaAplDocuments');
 
 function supportsAPL(handlerInput) {
-    const supportedInterfaces = Alexa.getSupportedInterfaces(handlerInput.requestEnvelope);
+    const supportedInterfaces = handlerInput.requestEnvelope.context?.System?.device?.supportedInterfaces || {};
     return !!supportedInterfaces['Alexa.Presentation.APL'];
 }
 
@@ -707,6 +707,17 @@ const FallbackIntentHandler = {
     }
 };
 
+// 8. Manejador para cierre de sesion
+const SessionEndedRequestHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'SessionEndedRequest';
+    },
+    handle(handlerInput) {
+        console.log(`Sesion finalizada: ${handlerInput.requestEnvelope.request.reason}`);
+        return handlerInput.responseBuilder.getResponse();
+    }
+};
+
 // 8. Manejador de Errores
 const ErrorHandler = {
     canHandle() {
@@ -730,6 +741,7 @@ const skillBuilder = Alexa.SkillBuilders.custom()
         EstadoIntentHandler,
         CancelAndStopIntentHandler,
         HelpIntentHandler,
+        SessionEndedRequestHandler,
         FallbackIntentHandler
     )
     .addErrorHandlers(
