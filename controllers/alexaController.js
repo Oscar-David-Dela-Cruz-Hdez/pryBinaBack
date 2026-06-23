@@ -8,7 +8,8 @@ const {
     baseDocument,
     welcomePayload,
     sectionPayload,
-    goodbyePayload
+    goodbyePayload,
+    resultPayload
 } = require('./alexaAplDocuments');
 
 function supportsAPL(handlerInput) {
@@ -341,6 +342,19 @@ const VentasIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas consultar algo más de ventas o terminamos?';
+        if (supportsAPL(handlerInput)) {
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt('¿Deseas algo más?');
+
+            return addAplDirective(
+                handlerInput,
+                responseBuilder,
+                resultPayload('Ventas', speakOutput),
+                'ventas-result'
+            ).getResponse();
+        }
+
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas algo más?').getResponse();
     }
 };
@@ -438,6 +452,19 @@ const StockIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas revisar otro stock o terminamos?';
+        if (supportsAPL(handlerInput)) {
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt('¿Deseas revisar algo más?');
+
+            return addAplDirective(
+                handlerInput,
+                responseBuilder,
+                resultPayload('Stock', speakOutput),
+                'stock-result'
+            ).getResponse();
+        }
+
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas revisar algo más?').getResponse();
     }
 };
@@ -528,6 +555,19 @@ const EstadoIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas consultar otro estado o finalizamos?';
+        if (supportsAPL(handlerInput)) {
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt('¿Deseas consultar algo más?');
+
+            return addAplDirective(
+                handlerInput,
+                responseBuilder,
+                resultPayload('Pedidos', speakOutput),
+                'pedidos-result'
+            ).getResponse();
+        }
+
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas consultar algo más?').getResponse();
     }
 };

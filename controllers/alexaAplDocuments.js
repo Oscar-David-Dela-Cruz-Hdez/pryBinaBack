@@ -12,19 +12,13 @@ const BEAUTY_THEME = {
 
 const baseDocument = {
     type: 'APL',
-    version: '1.7',
-    import: [
-        {
-            name: 'alexa-layouts',
-            version: '1.7.0'
-        }
-    ],
+    version: '1.4',
     mainTemplate: {
         parameters: ['payload'],
         item: {
             type: 'Frame',
-            width: '100vw',
-            height: '100vh',
+            width: '100%',
+            height: '100%',
             backgroundColor: '${payload.theme.background}',
             item: {
                 type: 'Container',
@@ -69,7 +63,7 @@ const baseDocument = {
                 {
                     type: 'Sequence',
                     width: '100%',
-                    height: '58vh',
+                    height: '58%',
                     scrollDirection: 'vertical',
                     data: '${payload.screen.cards}',
                     item: {
@@ -158,8 +152,7 @@ const baseDocument = {
                 marginHorizontal: '28dp'
             }
         }
-    ],
-    layouts: {}
+    ]
 };
 
 function card(title, subtitle, action, color, badge = '>') {
@@ -260,9 +253,25 @@ function goodbyePayload() {
     });
 }
 
+function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o decir salir.') {
+    return makePayload({
+        eyebrow: 'Resultado',
+        title,
+        subtitle,
+        cards: [
+            card('Ventas', 'Consultar ganancias o mercancia.', 'ventas', BEAUTY_THEME.primary),
+            card('Stock', 'Revisar inventario.', 'stock', BEAUTY_THEME.secondary),
+            card('Pedidos', 'Consultar estado de pedidos.', 'pedidos', BEAUTY_THEME.success),
+            card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+        ],
+        footer
+    });
+}
+
 module.exports = {
     baseDocument,
     welcomePayload,
     sectionPayload,
-    goodbyePayload
+    goodbyePayload,
+    resultPayload
 };
