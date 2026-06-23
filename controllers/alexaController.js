@@ -5,7 +5,7 @@ const Pedido = require('../models/Pedido');
 const Producto = require('../models/Producto');
 const Familia = require('../models/Familia');
 const {
-    baseDocument,
+    createAplDocument,
     welcomePayload,
     sectionPayload,
     goodbyePayload,
@@ -23,10 +23,7 @@ function addAplDirective(handlerInput, responseBuilder, datasource, token = 'pan
     return responseBuilder.addDirective({
         type: 'Alexa.Presentation.APL.RenderDocument',
         token,
-        document: baseDocument,
-        datasources: {
-            payload: datasource
-        }
+        document: createAplDocument(datasource)
     });
 }
 

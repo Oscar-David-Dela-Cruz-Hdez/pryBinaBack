@@ -5,151 +5,15 @@ const BEAUTY_THEME = {
     accent: '#F8B84E',
     ink: '#2D1B2F',
     muted: '#765568',
-    surface: '#FFFFFF',
-    surfaceAlt: '#FCE7F3',
     success: '#2F9E7E'
 };
 
-const baseDocument = {
-    type: 'APL',
-    version: '1.7',
-    mainTemplate: {
-        parameters: ['payload'],
-        item: {
-            type: 'Frame',
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: '${payload.theme.background}',
-            item: {
-                type: 'Container',
-                width: '100%',
-                height: '100%',
-                paddingLeft: '48dp',
-                paddingRight: '48dp',
-                paddingTop: '32dp',
-                paddingBottom: '28dp',
-                justifyContent: 'spaceBetween',
-                items: [
-                {
-                    type: 'Container',
-                    items: [
-                        {
-                            type: 'Text',
-                            text: '${payload.screen.eyebrow}',
-                            color: '${payload.theme.primary}',
-                            fontSize: '24dp',
-                            fontWeight: 'bold',
-                            maxLines: 1
-                        },
-                        {
-                            type: 'Text',
-                            text: '${payload.screen.title}',
-                            color: '${payload.theme.ink}',
-                            fontSize: '48dp',
-                            fontWeight: 'bold',
-                            maxLines: 2,
-                            spacing: '8dp'
-                        },
-                        {
-                            type: 'Text',
-                            text: '${payload.screen.subtitle}',
-                            color: '${payload.theme.muted}',
-                            fontSize: '26dp',
-                            maxLines: 2,
-                            spacing: '10dp'
-                        }
-                    ]
-                },
-                {
-                    type: 'Sequence',
-                    width: '100%',
-                    height: '430dp',
-                    scrollDirection: 'vertical',
-                    data: '${payload.screen.cards}',
-                    item: {
-                        type: 'TouchWrapper',
-                        width: '100%',
-                        spacing: '14dp',
-                        onPress: [
-                            {
-                                type: 'SendEvent',
-                                arguments: ['${data.action}']
-                            }
-                        ],
-                        item: {
-                            type: 'Frame',
-                            width: '100%',
-                            backgroundColor: '${data.color}',
-                            borderRadius: '8dp',
-                            paddingLeft: '22dp',
-                            paddingRight: '22dp',
-                            paddingTop: '18dp',
-                            paddingBottom: '18dp',
-                            item: {
-                                type: 'Container',
-                                direction: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'spaceBetween',
-                                items: [
-                                    {
-                                        type: 'Container',
-                                        width: '82%',
-                                        items: [
-                                            {
-                                                type: 'Text',
-                                                text: '${data.title}',
-                                                color: '${data.textColor}',
-                                                fontSize: '30dp',
-                                                fontWeight: 'bold',
-                                                maxLines: 1
-                                            },
-                                            {
-                                                type: 'Text',
-                                                text: '${data.subtitle}',
-                                                color: '${data.textColor}',
-                                                opacity: 0.82,
-                                                fontSize: '22dp',
-                                                maxLines: 2,
-                                                spacing: '4dp'
-                                            }
-                                        ]
-                                    },
-                                    {
-                                        type: 'Text',
-                                        text: '${data.badge}',
-                                        color: '${data.textColor}',
-                                        fontSize: '34dp',
-                                        fontWeight: 'bold',
-                                        maxLines: 1
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                {
-                    type: 'Text',
-                    text: '${payload.screen.footer}',
-                    color: '${payload.theme.muted}',
-                    fontSize: '20dp',
-                    textAlign: 'center',
-                    width: '100%',
-                    maxLines: 2
-                }
-                ]
-            }
-        }
-    }
-};
-
-function card(title, subtitle, action, color, badge = '>') {
+function card(title, subtitle, action, color) {
     return {
         title,
         subtitle,
         action,
-        color,
-        badge,
-        textColor: '#FFFFFF'
+        color
     };
 }
 
@@ -157,6 +21,126 @@ function makePayload(screen) {
     return {
         theme: BEAUTY_THEME,
         screen
+    };
+}
+
+function textBlock(text, color, fontSize, extra = {}) {
+    return {
+        type: 'Text',
+        text,
+        color,
+        fontSize,
+        ...extra
+    };
+}
+
+function cardComponent(item) {
+    return {
+        type: 'TouchWrapper',
+        width: '100%',
+        spacing: '14dp',
+        onPress: [
+            {
+                type: 'SendEvent',
+                arguments: [item.action]
+            }
+        ],
+        item: {
+            type: 'Frame',
+            width: '100%',
+            backgroundColor: item.color,
+            borderRadius: '8dp',
+            paddingLeft: '22dp',
+            paddingRight: '22dp',
+            paddingTop: '18dp',
+            paddingBottom: '18dp',
+            item: {
+                type: 'Container',
+                direction: 'row',
+                alignItems: 'center',
+                justifyContent: 'spaceBetween',
+                items: [
+                    {
+                        type: 'Container',
+                        width: '86%',
+                        items: [
+                            textBlock(item.title, '#FFFFFF', '30dp', {
+                                fontWeight: 'bold',
+                                maxLines: 1
+                            }),
+                            textBlock(item.subtitle, '#FFFFFF', '22dp', {
+                                opacity: 0.82,
+                                maxLines: 2,
+                                spacing: '4dp'
+                            })
+                        ]
+                    },
+                    textBlock('>', '#FFFFFF', '34dp', {
+                        fontWeight: 'bold',
+                        maxLines: 1
+                    })
+                ]
+            }
+        }
+    };
+}
+
+function createAplDocument(payload) {
+    const { theme, screen } = payload;
+
+    return {
+        type: 'APL',
+        version: '1.7',
+        mainTemplate: {
+            parameters: ['payload'],
+            item: {
+                type: 'Frame',
+                width: '100vw',
+                height: '100vh',
+                backgroundColor: theme.background,
+                item: {
+                    type: 'Container',
+                    width: '100%',
+                    height: '100%',
+                    paddingLeft: '48dp',
+                    paddingRight: '48dp',
+                    paddingTop: '32dp',
+                    paddingBottom: '28dp',
+                    justifyContent: 'spaceBetween',
+                    items: [
+                        {
+                            type: 'Container',
+                            items: [
+                                textBlock(screen.eyebrow, theme.primary, '24dp', {
+                                    fontWeight: 'bold',
+                                    maxLines: 1
+                                }),
+                                textBlock(screen.title, theme.ink, '48dp', {
+                                    fontWeight: 'bold',
+                                    maxLines: 2,
+                                    spacing: '8dp'
+                                }),
+                                textBlock(screen.subtitle, theme.muted, '26dp', {
+                                    maxLines: 2,
+                                    spacing: '10dp'
+                                })
+                            ]
+                        },
+                        {
+                            type: 'Container',
+                            width: '100%',
+                            height: '430dp',
+                            items: screen.cards.map(cardComponent)
+                        },
+                        textBlock(screen.footer, theme.muted, '20dp', {
+                            textAlign: 'center',
+                            width: '100%',
+                            maxLines: 2
+                        })
+                    ]
+                }
+            }
+        }
     };
 }
 
@@ -256,7 +240,7 @@ function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o d
 }
 
 module.exports = {
-    baseDocument,
+    createAplDocument,
     welcomePayload,
     sectionPayload,
     goodbyePayload,
