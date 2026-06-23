@@ -12,7 +12,7 @@ const BEAUTY_THEME = {
 
 const baseDocument = {
     type: 'APL',
-    version: '1.4',
+    version: '2023.2',
     mainTemplate: {
         parameters: ['payload'],
         item: {
