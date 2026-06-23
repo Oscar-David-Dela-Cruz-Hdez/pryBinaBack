@@ -14,7 +14,9 @@ const {
 
 function supportsAPL(handlerInput) {
     const supportedInterfaces = handlerInput.requestEnvelope.context?.System?.device?.supportedInterfaces || {};
-    return !!supportedInterfaces['Alexa.Presentation.APL'];
+    const viewports = handlerInput.requestEnvelope.context?.Viewports || [];
+    const hasAplViewport = viewports.some((viewport) => viewport.type === 'APL');
+    return !!supportedInterfaces['Alexa.Presentation.APL'] || hasAplViewport;
 }
 
 function addAplDirective(handlerInput, responseBuilder, datasource, token = 'panamericana-apl') {

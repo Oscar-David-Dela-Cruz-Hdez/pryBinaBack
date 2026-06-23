@@ -46,14 +46,14 @@ function cardComponent(item) {
             }
         ],
         item: {
-            type: 'Frame',
-            width: '100%',
-            backgroundColor: item.color,
-            borderRadius: '8dp',
-            paddingLeft: '22dp',
-            paddingRight: '22dp',
-            paddingTop: '18dp',
-            paddingBottom: '18dp',
+        type: 'Frame',
+        width: '100%',
+        backgroundColor: item.color,
+        borderRadius: '8dp',
+        paddingLeft: '18dp',
+        paddingRight: '18dp',
+        paddingTop: '12dp',
+        paddingBottom: '12dp',
             item: {
                 type: 'Container',
                 direction: 'row',
@@ -64,18 +64,18 @@ function cardComponent(item) {
                         type: 'Container',
                         width: '86%',
                         items: [
-                            textBlock(item.title, '#FFFFFF', '30dp', {
+                            textBlock(item.title, '#FFFFFF', '26dp', {
                                 fontWeight: 'bold',
                                 maxLines: 1
                             }),
-                            textBlock(item.subtitle, '#FFFFFF', '22dp', {
+                            textBlock(item.subtitle, '#FFFFFF', '19dp', {
                                 opacity: 0.82,
                                 maxLines: 2,
                                 spacing: '4dp'
                             })
                         ]
                     },
-                    textBlock('>', '#FFFFFF', '34dp', {
+                    textBlock('>', '#FFFFFF', '30dp', {
                         fontWeight: 'bold',
                         maxLines: 1
                     })
@@ -102,25 +102,25 @@ function createAplDocument(payload) {
                     type: 'Container',
                     width: '100%',
                     height: '100%',
-                    paddingLeft: '48dp',
-                    paddingRight: '48dp',
-                    paddingTop: '32dp',
-                    paddingBottom: '28dp',
+                    paddingLeft: '44dp',
+                    paddingRight: '44dp',
+                    paddingTop: '28dp',
+                    paddingBottom: '20dp',
                     justifyContent: 'spaceBetween',
                     items: [
                         {
                             type: 'Container',
                             items: [
-                                textBlock(screen.eyebrow, theme.primary, '24dp', {
+                                textBlock(screen.eyebrow, theme.primary, '22dp', {
                                     fontWeight: 'bold',
                                     maxLines: 1
                                 }),
-                                textBlock(screen.title, theme.ink, '48dp', {
+                                textBlock(screen.title, theme.ink, '42dp', {
                                     fontWeight: 'bold',
                                     maxLines: 2,
                                     spacing: '8dp'
                                 }),
-                                textBlock(screen.subtitle, theme.muted, '26dp', {
+                                textBlock(screen.subtitle, theme.muted, '23dp', {
                                     maxLines: 2,
                                     spacing: '10dp'
                                 })
@@ -129,7 +129,7 @@ function createAplDocument(payload) {
                         {
                             type: 'Container',
                             width: '100%',
-                            height: '430dp',
+                            height: '390dp',
                             items: screen.cards.map(cardComponent)
                         },
                         textBlock(screen.footer, theme.muted, '20dp', {
