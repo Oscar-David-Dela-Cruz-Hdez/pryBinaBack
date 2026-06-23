@@ -4,6 +4,30 @@ const { ExpressAdapter } = require('ask-sdk-express-adapter');
 const Pedido = require('../models/Pedido');
 const Producto = require('../models/Producto');
 const Familia = require('../models/Familia');
+const {
+    baseDocument,
+    welcomePayload,
+    sectionPayload,
+    goodbyePayload
+} = require('./alexaAplDocuments');
+
+function supportsAPL(handlerInput) {
+    const supportedInterfaces = Alexa.getSupportedInterfaces(handlerInput.requestEnvelope);
+    return !!supportedInterfaces['Alexa.Presentation.APL'];
+}
+
+function addAplDirective(handlerInput, responseBuilder, datasource, token = 'panamericana-apl') {
+    if (!supportsAPL(handlerInput)) return responseBuilder;
+
+    return responseBuilder.addDirective({
+        type: 'Alexa.Presentation.APL.RenderDocument',
+        token,
+        document: baseDocument,
+        datasources: {
+            payload: datasource
+        }
+    });
+}
 
 // Normaliza el periodo para aceptar variantes como "del mes", "mensual", etc.
 function normalizarPeriodo(valor) {
@@ -45,9 +69,104 @@ const LaunchRequestHandler = {
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
         const speakOutput = '¡Hola! Bienvenido al asistente de Panamericana. Puedes consultar las ventas, revisar el stock o ver el estado de los pedidos. ¿Qué deseas hacer?';
+        if (supportsAPL(handlerInput)) {
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt('Que deseas consultar hoy?');
+
+            return addAplDirective(handlerInput, responseBuilder, welcomePayload(), 'welcome-menu')
+                .getResponse();
+        }
+
         return handlerInput.responseBuilder
             .speak(speakOutput)
             .reprompt('¿Qué deseas consultar hoy?')
+            .getResponse();
+    }
+};
+
+// Manejador para volver al menu principal por voz
+const NavigateHomeIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.NavigateHomeIntent';
+    },
+    handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        sessionAttributes.waitingFor = null;
+        sessionAttributes.savedContext = {};
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+        const speakOutput = 'Claro, volvemos al menu principal. Puedes consultar ventas, stock o pedidos.';
+        const responseBuilder = handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt('Quieres consultar ventas, stock o pedidos?')
+            .withShouldEndSession(false);
+
+        return addAplDirective(handlerInput, responseBuilder, welcomePayload(), 'welcome-menu')
+            .getResponse();
+    }
+};
+
+// Manejador para toques en botones APL
+const AplUserEventHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent';
+    },
+    handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const args = handlerInput.requestEnvelope.request.arguments || [];
+        const action = args[0] || 'menu';
+
+        let speakOutput = '';
+        let datasource = welcomePayload();
+
+        if (action === 'ventas') {
+            sessionAttributes.lastIntent = 'ventasIntent';
+            sessionAttributes.waitingFor = 'tipoConsultaVentas';
+            sessionAttributes.savedContext = {};
+            speakOutput = 'Abrimos ventas. Puedes decir ganancias del mes, ganancias del dia, o ventas de una mercancia.';
+            datasource = sectionPayload('ventas');
+        } else if (action === 'stock') {
+            sessionAttributes.lastIntent = 'stockIntent';
+            sessionAttributes.waitingFor = 'tipoFiltroStock';
+            sessionAttributes.savedContext = {};
+            speakOutput = 'Abrimos inventario. Puedes decir stock general, por producto, por familia o por categoria.';
+            datasource = sectionPayload('stock');
+        } else if (action === 'pedidos') {
+            sessionAttributes.lastIntent = 'estadoIntent';
+            sessionAttributes.waitingFor = 'tipoEstado';
+            sessionAttributes.savedContext = {};
+            speakOutput = 'Abrimos pedidos. Puedes consultar pedidos por enviar, actuales, enviados o finalizados.';
+            datasource = sectionPayload('pedidos');
+        } else if (action === 'ayuda') {
+            speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, stock o pedidos.';
+            datasource = sectionPayload('ayuda');
+        } else if (action === 'salir') {
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+            const responseBuilder = handlerInput.responseBuilder
+                .speak('De acuerdo, cerrando el asistente de Panamericana. Hasta luego!')
+                .withShouldEndSession(true);
+
+            return addAplDirective(handlerInput, responseBuilder, goodbyePayload(), 'goodbye-screen')
+                .getResponse();
+        } else {
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = 'Volvemos al menu principal. Puedes consultar ventas, stock o pedidos.';
+            datasource = welcomePayload();
+        }
+
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        const responseBuilder = handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt('Que deseas consultar?')
+            .withShouldEndSession(false);
+
+        return addAplDirective(handlerInput, responseBuilder, datasource, `${action}-screen`)
             .getResponse();
     }
 };
@@ -450,6 +569,15 @@ const CancelAndStopIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         const speakOutput = 'De acuerdo, cerrando el asistente de Panamericana. ¡Hasta luego!';
+        if (supportsAPL(handlerInput)) {
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .withShouldEndSession(true);
+
+            return addAplDirective(handlerInput, responseBuilder, goodbyePayload(), 'goodbye-screen')
+                .getResponse();
+        }
+
         return handlerInput.responseBuilder.speak(speakOutput).withShouldEndSession(true).getResponse();
     }
 };
@@ -472,6 +600,22 @@ const HelpIntentHandler = {
             speakOutput = 'Para revisar el inventario, puedes pedir "stock general" o "consulta el stock de Barbería". ¿Qué deseas buscar?';
         } else if (lastIntent === 'estadoIntent') {
             speakOutput = 'Para revisar los pedidos, puedes decir "pedidos por enviar" o "pedidos enviados de este mes". ¿Qué deseas consultar?';
+        }
+
+        if (supportsAPL(handlerInput)) {
+            const helpSection = lastIntent === 'ventasIntent'
+                ? 'ventas'
+                : lastIntent === 'stockIntent'
+                    ? 'stock'
+                    : lastIntent === 'estadoIntent'
+                        ? 'pedidos'
+                        : 'ayuda';
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt(speakOutput);
+
+            return addAplDirective(handlerInput, responseBuilder, sectionPayload(helpSection), 'help-screen')
+                .getResponse();
         }
 
         return handlerInput.responseBuilder
@@ -539,6 +683,8 @@ const ErrorHandler = {
 const skillBuilder = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
+        AplUserEventHandler,
+        NavigateHomeIntentHandler,
         VentasIntentHandler,
         StockIntentHandler,
         EstadoIntentHandler,
