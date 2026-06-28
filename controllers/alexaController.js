@@ -114,7 +114,7 @@ const AplUserEventHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent';
     },
-    handle(handlerInput) {
+    async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const args = handlerInput.requestEnvelope.request.arguments || [];
         const action = args[0] || 'menu';
@@ -122,6 +122,7 @@ const AplUserEventHandler = {
         let speakOutput = '';
         let datasource = menuPayload();
 
+        try {
         if (action === 'ventas') {
             sessionAttributes.lastIntent = 'ventasIntent';
             sessionAttributes.waitingFor = 'tipoConsultaVentas';
@@ -143,6 +144,57 @@ const AplUserEventHandler = {
         } else if (action === 'ayuda') {
             speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, stock o pedidos.';
             datasource = sectionPayload('ayuda');
+        } else if (action === 'ventas_ganancias_mes' || action === 'ventas_ganancias_dia') {
+            const periodo = action === 'ventas_ganancias_mes' ? 'mes' : 'dÃ­a';
+            const rangoFechas = obtenerRangoFechas(periodo);
+            const pedidos = await Pedido.find({
+                fecha: { $gte: rangoFechas.inicio, $lte: rangoFechas.fin },
+                estado: { $in: ['Pagado', 'Enviado', 'Entregado'] }
+            });
+            const totalGanancia = pedidos.reduce((sum, pedido) => sum + pedido.total, 0);
+            const textoPeriodo = action === 'ventas_ganancias_mes' ? 'del ultimo mes' : 'de hoy';
+            sessionAttributes.lastIntent = 'ventasIntent';
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = `Las ganancias ${textoPeriodo} fueron ${totalGanancia} pesos.`;
+            datasource = resultPayload('Ventas', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+        } else if (action === 'stock_general') {
+            const STOCK_MINIMO = 5;
+            const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
+            sessionAttributes.lastIntent = 'stockIntent';
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = `Se encontraron ${totalBajos} productos con stock bajo en el almacen.`;
+            datasource = resultPayload('Stock general', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+        } else if (action === 'stock_bajos') {
+            const STOCK_MINIMO = 5;
+            const productosBajos = await Producto.find({ stock: { $lt: STOCK_MINIMO } }).limit(5);
+            const nombres = productosBajos.map((producto) => producto.nombre).join(', ');
+            sessionAttributes.lastIntent = 'stockIntent';
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = productosBajos.length > 0
+                ? `Los primeros productos con stock bajo son: ${nombres}.`
+                : 'No se encontraron productos con stock bajo.';
+            datasource = resultPayload('Productos bajos', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+        } else if (action === 'pedidos_por_enviar') {
+            const totalPorEnviar = await Pedido.countDocuments({ estado: { $in: ['Pendiente', 'Pagado'] } });
+            sessionAttributes.lastIntent = 'estadoIntent';
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = `Actualmente hay ${totalPorEnviar} pedidos por enviar registrados en el sistema.`;
+            datasource = resultPayload('Pedidos por enviar', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+        } else if (action === 'pedidos_enviados_mes') {
+            const rangoFechas = obtenerRangoFechas('mes');
+            const totalPedidos = await Pedido.countDocuments({
+                estado: 'Enviado',
+                fecha: { $gte: rangoFechas.inicio, $lte: rangoFechas.fin }
+            });
+            sessionAttributes.lastIntent = 'estadoIntent';
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = `Se encontraron ${totalPedidos} pedidos enviados en el ultimo mes.`;
+            datasource = resultPayload('Enviados del mes', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
         } else if (action === 'menu') {
             sessionAttributes.waitingFor = null;
             sessionAttributes.savedContext = {};
@@ -164,6 +216,13 @@ const AplUserEventHandler = {
             sessionAttributes.savedContext = {};
             speakOutput = 'Volvemos al menu principal. Puedes consultar ventas, stock o pedidos.';
             datasource = menuPayload();
+        }
+        } catch (error) {
+            console.error('Error en APL UserEvent:', error);
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = 'Hubo un problema al consultar la informacion. Intenta de nuevo.';
+            datasource = resultPayload('Consulta no disponible', speakOutput, 'Puedes volver al menu principal.');
         }
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);

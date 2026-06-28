@@ -193,32 +193,32 @@ function sectionPayload(section) {
         ventas: {
             eyebrow: 'Consulta de ventas',
             title: 'Ventas y ganancias',
-            subtitle: 'Puedes pedir ganancias o movimiento de mercancia.',
+            subtitle: 'Toca una opcion para consultar al momento.',
             cards: [
-                card('Ganancias del mes', 'Di: checa las ganancias del mes.', 'ventas', BEAUTY_THEME.primary),
-                card('Mercancia vendida', 'Di: cuanto se vendio de la categoria.', 'ventas', BEAUTY_THEME.secondary),
+                card('Ganancias del mes', 'Consulta el total vendido del ultimo mes.', 'ventas_ganancias_mes', BEAUTY_THEME.primary),
+                card('Ganancias del dia', 'Consulta el total vendido hoy.', 'ventas_ganancias_dia', BEAUTY_THEME.secondary),
                 card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
-            footer: 'Ejemplos: ganancias del dia, ventas de Barberia, ultimos 15 dias.'
+            footer: 'Para mercancia especifica, dime el producto o categoria por voz.'
         },
         stock: {
             eyebrow: 'Consulta de stock',
             title: 'Inventario',
-            subtitle: 'Revisa faltantes y niveles bajos de almacen.',
+            subtitle: 'Toca una opcion para revisar inventario.',
             cards: [
-                card('Stock general', 'Di: consulta el stock general.', 'stock', BEAUTY_THEME.primary),
-                card('Por producto', 'Di: consulta el stock de un producto.', 'stock', BEAUTY_THEME.secondary),
+                card('Stock general', 'Cuenta productos con stock bajo.', 'stock_general', BEAUTY_THEME.primary),
+                card('Productos bajos', 'Muestra los primeros productos con bajo stock.', 'stock_bajos', BEAUTY_THEME.secondary),
                 card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
-            footer: 'Ejemplos: stock general, stock por familia, inventario en Barberia.'
+            footer: 'Para un producto exacto, dime el nombre por voz.'
         },
         pedidos: {
             eyebrow: 'Estado de pedidos',
             title: 'Pedidos',
-            subtitle: 'Consulta pendientes, enviados y finalizados.',
+            subtitle: 'Toca una opcion para consultar pedidos.',
             cards: [
-                card('Por enviar', 'Di: cuantos pedidos por enviar tenemos.', 'pedidos', BEAUTY_THEME.primary),
-                card('Enviados del mes', 'Di: pedidos enviados del mes.', 'pedidos', BEAUTY_THEME.success),
+                card('Por enviar', 'Cuenta pedidos pendientes o pagados.', 'pedidos_por_enviar', BEAUTY_THEME.primary),
+                card('Enviados del mes', 'Cuenta pedidos enviados en el ultimo mes.', 'pedidos_enviados_mes', BEAUTY_THEME.success),
                 card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
             footer: 'Ejemplos: pedidos actuales, pedidos enviados de la semana.'
@@ -245,10 +245,7 @@ function goodbyePayload() {
         eyebrow: 'Distribuidora Panamericana',
         title: 'Hasta luego',
         subtitle: 'Tu asistente queda listo para la siguiente consulta.',
-        cards: [
-            card('Ventas', 'Cuando vuelvas, revisamos ganancias y mercancia.', 'menu', BEAUTY_THEME.primary),
-            card('Stock', 'Tambien podemos revisar inventario y pedidos.', 'menu', BEAUTY_THEME.secondary)
-        ],
+        cards: [],
         footer: 'Gracias por usar el asistente de Panamericana.'
     });
 }
