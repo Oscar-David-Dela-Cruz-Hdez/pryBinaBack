@@ -223,10 +223,10 @@ function sectionPayload(section) {
             title: 'Pedidos',
             subtitle: 'Toca una opcion para consultar pedidos.',
             cards: [
-                card('Por enviar', 'Cuenta pedidos pendientes o pagados.', 'pedidos_por_enviar', BEAUTY_THEME.primary),
-                card('Enviados', 'Elegir rango para pedidos enviados.', 'pedidos_enviados', BEAUTY_THEME.success),
-                card('Finalizados', 'Elegir rango para pedidos finalizados.', 'pedidos_finalizados', BEAUTY_THEME.secondary),
-                card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                compactCard('Por enviar', 'Cuenta pedidos pendientes o pagados.', 'pedidos_por_enviar', BEAUTY_THEME.primary),
+                compactCard('Enviados', 'Elegir rango para pedidos enviados.', 'pedidos_enviados', BEAUTY_THEME.success),
+                compactCard('Finalizados', 'Elegir rango para pedidos finalizados.', 'pedidos_finalizados', BEAUTY_THEME.secondary),
+                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
             footer: 'Los enviados y finalizados se pueden filtrar por rango.'
         },
@@ -261,10 +261,10 @@ function sectionPayload(section) {
             title: 'Que puedes preguntar',
             subtitle: 'Usa frases naturales para moverte por el asistente.',
             cards: [
-                card('Ventas', 'Checa las ganancias del mes.', 'ventas', BEAUTY_THEME.primary),
-                card('Stock', 'Consulta el stock general.', 'stock', BEAUTY_THEME.secondary),
-                card('Pedidos', 'Dime los pedidos por enviar.', 'pedidos', BEAUTY_THEME.success),
-                card('Salir', 'Terminar la skill.', 'salir', BEAUTY_THEME.ink)
+                compactCard('Ventas', 'Checa las ganancias del mes.', 'ventas', BEAUTY_THEME.primary),
+                compactCard('Stock', 'Consulta el stock general.', 'stock', BEAUTY_THEME.secondary),
+                compactCard('Pedidos', 'Dime los pedidos por enviar.', 'pedidos', BEAUTY_THEME.success),
+                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
             footer: 'Tambien puedes decir: menu principal, ayuda o salir.'
         }
