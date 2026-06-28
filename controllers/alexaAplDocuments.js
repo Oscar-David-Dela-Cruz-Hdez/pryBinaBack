@@ -13,7 +13,15 @@ function card(title, subtitle, action, color) {
         title,
         subtitle,
         action,
-        color
+        color,
+        compact: false
+    };
+}
+
+function compactCard(title, subtitle, action, color) {
+    return {
+        ...card(title, subtitle, action, color),
+        compact: true
     };
 }
 
@@ -35,10 +43,15 @@ function textBlock(text, color, fontSize, extra = {}) {
 }
 
 function cardComponent(item) {
+    const titleSize = item.compact ? '24dp' : '26dp';
+    const subtitleSize = item.compact ? '17dp' : '19dp';
+    const verticalPadding = item.compact ? '9dp' : '12dp';
+    const cardSpacing = item.compact ? '10dp' : '14dp';
+
     return {
         type: 'TouchWrapper',
         width: '100%',
-        spacing: '14dp',
+        spacing: cardSpacing,
         onPress: [
             {
                 type: 'SendEvent',
@@ -52,8 +65,8 @@ function cardComponent(item) {
         borderRadius: '8dp',
         paddingLeft: '18dp',
         paddingRight: '18dp',
-        paddingTop: '12dp',
-        paddingBottom: '12dp',
+        paddingTop: verticalPadding,
+        paddingBottom: verticalPadding,
             item: {
                 type: 'Container',
                 direction: 'row',
@@ -64,11 +77,11 @@ function cardComponent(item) {
                         type: 'Container',
                         width: '86%',
                         items: [
-                            textBlock(item.title, '#FFFFFF', '26dp', {
+                            textBlock(item.title, '#FFFFFF', titleSize, {
                                 fontWeight: 'bold',
                                 maxLines: 1
                             }),
-                            textBlock(item.subtitle, '#FFFFFF', '19dp', {
+                            textBlock(item.subtitle, '#FFFFFF', subtitleSize, {
                                 opacity: 0.82,
                                 maxLines: 2,
                                 spacing: '4dp'
@@ -147,13 +160,27 @@ function createAplDocument(payload) {
 function welcomePayload() {
     return makePayload({
         eyebrow: 'Distribuidora Panamericana',
+        title: 'Bienvenida',
+        subtitle: 'Tu asistente para ventas, inventario y pedidos de belleza.',
+        cards: [
+            card('Ir al menu', 'Ver ventas, stock, pedidos, ayuda y salida.', 'menu', BEAUTY_THEME.primary),
+            card('Salir', 'Cerrar el asistente con una despedida.', 'salir', BEAUTY_THEME.ink)
+        ],
+        footer: 'Toca Ir al menu o dime que quieres consultar.'
+    });
+}
+
+function menuPayload() {
+    return makePayload({
+        eyebrow: 'Distribuidora Panamericana',
         title: 'Menu de belleza',
         subtitle: 'Consulta ventas, inventario y pedidos desde un solo lugar.',
         cards: [
-            card('Ventas', 'Ganancias del dia, semana, mes o mercancia vendida.', 'ventas', BEAUTY_THEME.primary),
-            card('Stock', 'Stock general, por producto, familia o categoria.', 'stock', BEAUTY_THEME.secondary),
-            card('Pedidos', 'Pedidos por enviar, enviados o finalizados.', 'pedidos', BEAUTY_THEME.success),
-            card('Ayuda', 'Ver ejemplos de lo que puedes preguntar.', 'ayuda', BEAUTY_THEME.accent)
+            compactCard('Ventas', 'Ganancias del dia, semana, mes o mercancia vendida.', 'ventas', BEAUTY_THEME.primary),
+            compactCard('Stock', 'Stock general, por producto, familia o categoria.', 'stock', BEAUTY_THEME.secondary),
+            compactCard('Pedidos', 'Pedidos por enviar, enviados o finalizados.', 'pedidos', BEAUTY_THEME.success),
+            compactCard('Ayuda', 'Ver ejemplos de lo que puedes preguntar.', 'ayuda', BEAUTY_THEME.accent),
+            compactCard('Salir', 'Cerrar el asistente con una despedida.', 'salir', BEAUTY_THEME.ink)
         ],
         footer: 'Toca una opcion o dime que quieres consultar.'
     });
@@ -242,6 +269,7 @@ function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o d
 module.exports = {
     createAplDocument,
     welcomePayload,
+    menuPayload,
     sectionPayload,
     goodbyePayload,
     resultPayload

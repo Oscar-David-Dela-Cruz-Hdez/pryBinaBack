@@ -7,6 +7,7 @@ const Familia = require('../models/Familia');
 const {
     createAplDocument,
     welcomePayload,
+    menuPayload,
     sectionPayload,
     goodbyePayload,
     resultPayload
@@ -103,7 +104,7 @@ const NavigateHomeIntentHandler = {
             .reprompt('Quieres consultar ventas, stock o pedidos?')
             .withShouldEndSession(false);
 
-        return addAplDirective(handlerInput, responseBuilder, welcomePayload(), 'welcome-menu')
+        return addAplDirective(handlerInput, responseBuilder, menuPayload(), 'main-menu')
             .getResponse();
     }
 };
@@ -119,7 +120,7 @@ const AplUserEventHandler = {
         const action = args[0] || 'menu';
 
         let speakOutput = '';
-        let datasource = welcomePayload();
+        let datasource = menuPayload();
 
         if (action === 'ventas') {
             sessionAttributes.lastIntent = 'ventasIntent';
@@ -142,6 +143,11 @@ const AplUserEventHandler = {
         } else if (action === 'ayuda') {
             speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, stock o pedidos.';
             datasource = sectionPayload('ayuda');
+        } else if (action === 'menu') {
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = 'Este es el menu principal. Puedes consultar ventas, stock, pedidos, ayuda o salir.';
+            datasource = menuPayload();
         } else if (action === 'salir') {
             sessionAttributes.waitingFor = null;
             sessionAttributes.savedContext = {};
@@ -157,7 +163,7 @@ const AplUserEventHandler = {
             sessionAttributes.waitingFor = null;
             sessionAttributes.savedContext = {};
             speakOutput = 'Volvemos al menu principal. Puedes consultar ventas, stock o pedidos.';
-            datasource = welcomePayload();
+            datasource = menuPayload();
         }
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
