@@ -195,9 +195,11 @@ function sectionPayload(section) {
             title: 'Ventas y ganancias',
             subtitle: 'Toca una opcion para consultar al momento.',
             cards: [
-                card('Ganancias del mes', 'Consulta el total vendido del ultimo mes.', 'ventas_ganancias_mes', BEAUTY_THEME.primary),
-                card('Ganancias del dia', 'Consulta el total vendido hoy.', 'ventas_ganancias_dia', BEAUTY_THEME.secondary),
-                card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                compactCard('Por dia', 'Ganancias de hoy.', 'ventas_ganancias_dia', BEAUTY_THEME.primary),
+                compactCard('Por semana', 'Ganancias de la ultima semana.', 'ventas_ganancias_semana', BEAUTY_THEME.secondary),
+                compactCard('Por mes', 'Ganancias del ultimo mes.', 'ventas_ganancias_mes', BEAUTY_THEME.success),
+                compactCard('Personalizado', 'Di cuantos dias quieres revisar.', 'ventas_ganancias_personalizado', BEAUTY_THEME.accent),
+                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
             footer: 'Para mercancia especifica, dime el producto o categoria por voz.'
         },
@@ -206,11 +208,13 @@ function sectionPayload(section) {
             title: 'Inventario',
             subtitle: 'Toca una opcion para revisar inventario.',
             cards: [
-                card('Stock general', 'Cuenta productos con stock bajo.', 'stock_general', BEAUTY_THEME.primary),
-                card('Productos bajos', 'Muestra los primeros productos con bajo stock.', 'stock_bajos', BEAUTY_THEME.secondary),
-                card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                compactCard('General', 'Cuenta productos con stock bajo.', 'stock_general', BEAUTY_THEME.primary),
+                compactCard('Producto', 'Di el nombre del producto.', 'stock_producto', BEAUTY_THEME.secondary),
+                compactCard('Familia', 'Di el nombre de la familia.', 'stock_familia', BEAUTY_THEME.success),
+                compactCard('Categoria', 'Di el nombre de la categoria.', 'stock_categoria', BEAUTY_THEME.accent),
+                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
-            footer: 'Para un producto exacto, dime el nombre por voz.'
+            footer: 'Para producto, familia o categoria, completa el nombre por voz.'
         },
         pedidos: {
             eyebrow: 'Estado de pedidos',
@@ -218,10 +222,37 @@ function sectionPayload(section) {
             subtitle: 'Toca una opcion para consultar pedidos.',
             cards: [
                 card('Por enviar', 'Cuenta pedidos pendientes o pagados.', 'pedidos_por_enviar', BEAUTY_THEME.primary),
-                card('Enviados del mes', 'Cuenta pedidos enviados en el ultimo mes.', 'pedidos_enviados_mes', BEAUTY_THEME.success),
+                card('Enviados', 'Elegir rango para pedidos enviados.', 'pedidos_enviados', BEAUTY_THEME.success),
+                card('Finalizados', 'Elegir rango para pedidos finalizados.', 'pedidos_finalizados', BEAUTY_THEME.secondary),
                 card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
-            footer: 'Ejemplos: pedidos actuales, pedidos enviados de la semana.'
+            footer: 'Los enviados y finalizados se pueden filtrar por rango.'
+        },
+        pedidosEnviados: {
+            eyebrow: 'Pedidos enviados',
+            title: 'Rango de enviados',
+            subtitle: 'Selecciona el periodo que quieres revisar.',
+            cards: [
+                compactCard('Por dia', 'Enviados de hoy.', 'pedidos_enviados_dia', BEAUTY_THEME.primary),
+                compactCard('Por semana', 'Enviados de la ultima semana.', 'pedidos_enviados_semana', BEAUTY_THEME.secondary),
+                compactCard('Por mes', 'Enviados del ultimo mes.', 'pedidos_enviados_mes', BEAUTY_THEME.success),
+                compactCard('Personalizado', 'Di cuantos dias quieres revisar.', 'pedidos_enviados_personalizado', BEAUTY_THEME.accent),
+                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+            ],
+            footer: 'Tambien puedes decir: pedidos enviados de la semana.'
+        },
+        pedidosFinalizados: {
+            eyebrow: 'Pedidos finalizados',
+            title: 'Rango de finalizados',
+            subtitle: 'Selecciona el periodo que quieres revisar.',
+            cards: [
+                compactCard('Por dia', 'Finalizados de hoy.', 'pedidos_finalizados_dia', BEAUTY_THEME.primary),
+                compactCard('Por semana', 'Finalizados de la ultima semana.', 'pedidos_finalizados_semana', BEAUTY_THEME.secondary),
+                compactCard('Por mes', 'Finalizados del ultimo mes.', 'pedidos_finalizados_mes', BEAUTY_THEME.success),
+                compactCard('Personalizado', 'Di cuantos dias quieres revisar.', 'pedidos_finalizados_personalizado', BEAUTY_THEME.accent),
+                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+            ],
+            footer: 'Tambien puedes decir: pedidos finalizados del mes.'
         },
         ayuda: {
             eyebrow: 'Ayuda',

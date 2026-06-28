@@ -57,6 +57,30 @@ function obtenerRangoFechas(periodo, diasPersonalizados = 0) {
     return { inicio, fin };
 }
 
+function textoPeriodoApl(periodo) {
+    if (periodo === 'dÃ­a' || periodo === 'dia') return 'de hoy';
+    if (periodo === 'semana') return 'de la ultima semana';
+    if (periodo === 'mes') return 'del ultimo mes';
+    return `de los ultimos ${periodo} dias`;
+}
+
+async function consultarGanancias(periodo, dias = null) {
+    const rangoFechas = obtenerRangoFechas(periodo, dias);
+    const pedidos = await Pedido.find({
+        fecha: { $gte: rangoFechas.inicio, $lte: rangoFechas.fin },
+        estado: { $in: ['Pagado', 'Enviado', 'Entregado'] }
+    });
+    return pedidos.reduce((sum, pedido) => sum + pedido.total, 0);
+}
+
+async function consultarPedidosPorEstado(tipoEstado, periodo, dias = null) {
+    const rangoFechas = obtenerRangoFechas(periodo, dias);
+    return Pedido.countDocuments({
+        estado: tipoEstado,
+        fecha: { $gte: rangoFechas.inicio, $lte: rangoFechas.fin }
+    });
+}
+
 // 1. Manejador para LaunchRequest
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -111,6 +135,153 @@ const NavigateHomeIntentHandler = {
 
 // Manejador para toques en botones APL
 const AplUserEventHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent';
+    },
+    async handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const args = handlerInput.requestEnvelope.request.arguments || [];
+        const action = args[0] || 'menu';
+
+        let speakOutput = '';
+        let datasource = menuPayload();
+
+        try {
+            if (action === 'ventas') {
+                sessionAttributes.lastIntent = 'ventasIntent';
+                sessionAttributes.waitingFor = 'tipoConsultaVentas';
+                sessionAttributes.savedContext = {};
+                speakOutput = 'Abrimos ventas. Puedes elegir ganancias por dia, semana, mes o personalizado.';
+                datasource = sectionPayload('ventas');
+            } else if (action === 'stock') {
+                sessionAttributes.lastIntent = 'stockIntent';
+                sessionAttributes.waitingFor = 'tipoFiltroStock';
+                sessionAttributes.savedContext = {};
+                speakOutput = 'Abrimos inventario. Puedes elegir general, producto, familia o categoria.';
+                datasource = sectionPayload('stock');
+            } else if (action === 'pedidos') {
+                sessionAttributes.lastIntent = 'estadoIntent';
+                sessionAttributes.waitingFor = 'tipoEstado';
+                sessionAttributes.savedContext = {};
+                speakOutput = 'Abrimos pedidos. Puedes consultar por enviar, enviados o finalizados.';
+                datasource = sectionPayload('pedidos');
+            } else if (action === 'ayuda') {
+                speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, stock o pedidos.';
+                datasource = sectionPayload('ayuda');
+            } else if (action.startsWith('ventas_ganancias_') && action !== 'ventas_ganancias_personalizado') {
+                const periodo = action.replace('ventas_ganancias_', '');
+                const totalGanancia = await consultarGanancias(periodo);
+                speakOutput = `Las ganancias ${textoPeriodoApl(periodo)} fueron ${totalGanancia} pesos.`;
+                sessionAttributes.lastIntent = 'ventasIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                datasource = resultPayload('Ventas', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+            } else if (action === 'ventas_ganancias_personalizado') {
+                sessionAttributes.lastIntent = 'ventasIntent';
+                sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
+                sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
+                speakOutput = 'Claro, dime cuantos dias hacia atras quieres revisar las ganancias.';
+                datasource = resultPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
+            } else if (action === 'stock_general') {
+                const STOCK_MINIMO = 5;
+                const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
+                sessionAttributes.lastIntent = 'stockIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = `Se encontraron ${totalBajos} productos con stock bajo en el almacen.`;
+                datasource = resultPayload('Stock general', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+            } else if (action === 'stock_producto' || action === 'stock_familia' || action === 'stock_categoria') {
+                const tipoFiltro = action.replace('stock_', '');
+                sessionAttributes.lastIntent = 'stockIntent';
+                sessionAttributes.waitingFor = 'nombreFiltroStock';
+                sessionAttributes.savedContext = { tipoFiltro };
+                speakOutput = `Dime el nombre ${tipoFiltro === 'producto' ? 'del' : 'de la'} ${tipoFiltro} que quieres revisar.`;
+                datasource = resultPayload('Completar por voz', speakOutput, 'Di el nombre exacto para consultar el stock.');
+            } else if (action === 'pedidos_por_enviar') {
+                const totalPorEnviar = await Pedido.countDocuments({ estado: { $in: ['Pendiente', 'Pagado'] } });
+                sessionAttributes.lastIntent = 'estadoIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = `Actualmente hay ${totalPorEnviar} pedidos por enviar registrados en el sistema.`;
+                datasource = resultPayload('Pedidos por enviar', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+            } else if (action === 'pedidos_enviados') {
+                sessionAttributes.lastIntent = 'estadoIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = 'Selecciona el rango para consultar pedidos enviados.';
+                datasource = sectionPayload('pedidosEnviados');
+            } else if (action === 'pedidos_finalizados') {
+                sessionAttributes.lastIntent = 'estadoIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = 'Selecciona el rango para consultar pedidos finalizados.';
+                datasource = sectionPayload('pedidosFinalizados');
+            } else if (action.startsWith('pedidos_enviados_') && action !== 'pedidos_enviados_personalizado') {
+                const periodo = action.replace('pedidos_enviados_', '');
+                const totalPedidos = await consultarPedidosPorEstado('Enviado', periodo);
+                sessionAttributes.lastIntent = 'estadoIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = `Se encontraron ${totalPedidos} pedidos enviados ${textoPeriodoApl(periodo)}.`;
+                datasource = resultPayload('Pedidos enviados', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+            } else if (action.startsWith('pedidos_finalizados_') && action !== 'pedidos_finalizados_personalizado') {
+                const periodo = action.replace('pedidos_finalizados_', '');
+                const totalPedidos = await consultarPedidosPorEstado('Entregado', periodo);
+                sessionAttributes.lastIntent = 'estadoIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = `Se encontraron ${totalPedidos} pedidos finalizados ${textoPeriodoApl(periodo)}.`;
+                datasource = resultPayload('Pedidos finalizados', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+            } else if (action === 'pedidos_enviados_personalizado' || action === 'pedidos_finalizados_personalizado') {
+                const tipoEstado = action === 'pedidos_enviados_personalizado' ? 'enviados' : 'finalizados';
+                sessionAttributes.lastIntent = 'estadoIntent';
+                sessionAttributes.waitingFor = 'diasPersonalizadoEstado';
+                sessionAttributes.savedContext = { tipoEstado };
+                speakOutput = `Dime cuantos dias hacia atras quieres revisar los pedidos ${tipoEstado}.`;
+                datasource = resultPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
+            } else if (action === 'menu') {
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = 'Este es el menu principal. Puedes consultar ventas, stock, pedidos, ayuda o salir.';
+                datasource = menuPayload();
+            } else if (action === 'salir') {
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+                const responseBuilder = handlerInput.responseBuilder
+                    .speak('De acuerdo, cerrando el asistente de Panamericana. Hasta luego!')
+                    .withShouldEndSession(true);
+
+                return addAplDirective(handlerInput, responseBuilder, goodbyePayload(), 'goodbye-screen')
+                    .getResponse();
+            } else {
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = 'Volvemos al menu principal. Puedes consultar ventas, stock o pedidos.';
+                datasource = menuPayload();
+            }
+        } catch (error) {
+            console.error('Error en APL UserEvent:', error);
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            speakOutput = 'Hubo un problema al consultar la informacion. Intenta de nuevo.';
+            datasource = resultPayload('Consulta no disponible', speakOutput, 'Puedes volver al menu principal.');
+        }
+
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+        const responseBuilder = handlerInput.responseBuilder
+            .speak(speakOutput)
+            .reprompt('Que deseas consultar?')
+            .withShouldEndSession(false);
+
+        return addAplDirective(handlerInput, responseBuilder, datasource, `${action}-screen`)
+            .getResponse();
+    }
+};
+
+// Version anterior preservada como referencia, ya no se registra.
+const LegacyAplUserEventHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent';
     },
