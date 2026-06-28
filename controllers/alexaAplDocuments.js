@@ -181,7 +181,7 @@ function menuPayload() {
         subtitle: 'Consulta ventas, inventario y pedidos desde un solo lugar.',
         cards: [
             compactCard('Ventas', 'Ganancias del dia, semana, mes o mercancia vendida.', 'ventas', BEAUTY_THEME.primary),
-            compactCard('Stock', 'Stock general, por producto, familia o categoria.', 'stock', BEAUTY_THEME.secondary),
+            compactCard('Stock', 'Stock general, por producto, marca o familia.', 'stock', BEAUTY_THEME.secondary),
             compactCard('Pedidos', 'Pedidos por enviar, enviados o finalizados.', 'pedidos', BEAUTY_THEME.success),
             compactCard('Ayuda', 'Ver ejemplos de lo que puedes preguntar.', 'ayuda', BEAUTY_THEME.accent),
             compactCard('Salir', 'Cerrar el asistente con una despedida.', 'salir', BEAUTY_THEME.ink)
@@ -213,10 +213,10 @@ function sectionPayload(section) {
                 compactCard('General', 'Cuenta productos con stock bajo.', 'stock_general', BEAUTY_THEME.primary),
                 compactCard('Producto', 'Di el nombre del producto.', 'stock_producto', BEAUTY_THEME.secondary),
                 compactCard('Familia', 'Di el nombre de la familia.', 'stock_familia', BEAUTY_THEME.success),
-                compactCard('Categoria', 'Di el nombre de la categoria.', 'stock_categoria', BEAUTY_THEME.accent),
+                compactCard('Marca', 'Di el nombre de la marca.', 'stock_marca', BEAUTY_THEME.accent),
                 compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
             ],
-            footer: 'Para producto, familia o categoria, completa el nombre por voz.'
+            footer: 'Para producto, marca o familia, completa el nombre por voz.'
         },
         pedidos: {
             eyebrow: 'Estado de pedidos',

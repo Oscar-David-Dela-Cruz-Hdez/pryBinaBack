@@ -4,6 +4,7 @@ const { ExpressAdapter } = require('ask-sdk-express-adapter');
 const Pedido = require('../models/Pedido');
 const Producto = require('../models/Producto');
 const Familia = require('../models/Familia');
+const Marca = require('../models/Marca');
 const {
     createAplDocument,
     welcomePayload,
@@ -94,7 +95,7 @@ const LaunchRequestHandler = {
         sessionAttributes.savedContext = {};
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-        const speakOutput = '¡Hola! Bienvenido al asistente de Panamericana. Puedes consultar las ventas, revisar el stock o ver el estado de los pedidos. ¿Qué deseas hacer?';
+        const speakOutput = '¡Hola! Bienvenido al asistente de la Distribuidora Panamericana. Puedes consultar las ventas, revisar el stock o ver el estado de los pedidos. ¿Qué deseas hacer?';
         if (supportsAPL(handlerInput)) {
             const responseBuilder = handlerInput.responseBuilder
                 .speak(speakOutput)
@@ -158,7 +159,7 @@ const AplUserEventHandler = {
                 sessionAttributes.lastIntent = 'stockIntent';
                 sessionAttributes.waitingFor = 'tipoFiltroStock';
                 sessionAttributes.savedContext = {};
-                speakOutput = 'Abrimos inventario. Puedes elegir general, producto, familia o categoria.';
+                speakOutput = 'Abrimos inventario. Puedes elegir general, producto, marca o familia.';
                 datasource = sectionPayload('stock');
             } else if (action === 'pedidos') {
                 sessionAttributes.lastIntent = 'estadoIntent';
@@ -194,7 +195,7 @@ const AplUserEventHandler = {
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalBajos} productos con stock bajo en el almacen.`;
                 datasource = resultPayload('Stock general', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
-            } else if (action === 'stock_producto' || action === 'stock_familia' || action === 'stock_categoria') {
+            } else if (action === 'stock_producto' || action === 'stock_familia' || action === 'stock_marca') {
                 const tipoFiltro = action.replace('stock_', '');
                 sessionAttributes.lastIntent = 'stockIntent';
                 sessionAttributes.waitingFor = 'nombreFiltroStock';
@@ -628,16 +629,16 @@ const StockIntentHandler = {
                 sessionAttributes.savedContext = { nombreFiltro };
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return handlerInput.responseBuilder
-                    .speak(`¿Deseas ver el stock de ${nombreFiltro} por producto o por familia?`)
-                    .reprompt('¿Por producto o familia?')
+                    .speak(`Quieres ver el stock de ${nombreFiltro} por producto, marca o familia?`)
+                    .reprompt('Por producto, marca o familia?')
                     .withShouldEndSession(false)
                     .getResponse();
             } else {
                 sessionAttributes.waitingFor = 'tipoFiltroStock';
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return handlerInput.responseBuilder
-                    .speak('¿Deseas ver el stock por producto, familia, categoría o general?')
-                    .reprompt('¿Por producto, familia, categoría o general?')
+                    .speak('Quieres ver el stock por producto, marca, familia o general?')
+                    .reprompt('Por producto, marca, familia o general?')
                     .withShouldEndSession(false)
                     .getResponse();
             }
@@ -669,6 +670,19 @@ const StockIntentHandler = {
                     } else {
                         speakOutput = `No se encontró el producto ${nombreFiltro}. `;
                     }
+                } else if (tipoFiltro === 'marca') {
+                    const marca = await Marca.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
+                    if (marca) {
+                        const productosBajos = await Producto.find({ marca: marca._id, stock: { $lt: STOCK_MINIMO } });
+                        if (productosBajos.length > 0) {
+                            const nombres = productosBajos.map(p => p.nombre).join(', ');
+                            speakOutput = `En la marca ${marca.nombre}, detecte stock bajo en: ${nombres}. `;
+                        } else {
+                            speakOutput = `La marca ${marca.nombre} tiene niveles de stock normales. `;
+                        }
+                    } else {
+                        speakOutput = `No se encontro la marca ${nombreFiltro}. `;
+                    }
                 } else {
                     const familia = await Familia.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
                     if (familia) {
@@ -680,7 +694,7 @@ const StockIntentHandler = {
                             speakOutput = `La familia ${familia.nombre} tiene niveles de stock normales. `;
                         }
                     } else {
-                        speakOutput = `No se encontró la categoría ${nombreFiltro}. `;
+                        speakOutput = `No se encontro la familia ${nombreFiltro}. `;
                     }
                 }
             }
@@ -991,3 +1005,5 @@ const skill = skillBuilder.create();
 const adapter = new ExpressAdapter(skill, true, true);
 
 module.exports = { adapter };
+
+
