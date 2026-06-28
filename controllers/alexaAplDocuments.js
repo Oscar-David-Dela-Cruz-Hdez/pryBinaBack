@@ -14,7 +14,8 @@ function card(title, subtitle, action, color) {
         subtitle,
         action,
         color,
-        compact: false
+        compact: false,
+        quiet: false
     };
 }
 
@@ -48,6 +49,7 @@ function cardComponent(item) {
     const verticalPadding = item.compact ? '6dp' : '12dp';
     const cardSpacing = item.compact ? '7dp' : '14dp';
     const frameHeight = item.compact ? '60dp' : undefined;
+    const arrowText = item.quiet ? '' : '>';
 
     return {
         type: 'TouchWrapper',
@@ -90,7 +92,7 @@ function cardComponent(item) {
                             })
                         ]
                     },
-                    textBlock('>', '#FFFFFF', '30dp', {
+                    textBlock(arrowText, '#FFFFFF', '30dp', {
                         fontWeight: 'bold',
                         maxLines: 1
                     })
@@ -287,10 +289,26 @@ function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o d
         title,
         subtitle,
         cards: [
-            card('Ventas', 'Consultar ganancias o mercancia.', 'ventas', BEAUTY_THEME.primary),
-            card('Stock', 'Revisar inventario.', 'stock', BEAUTY_THEME.secondary),
-            card('Pedidos', 'Consultar estado de pedidos.', 'pedidos', BEAUTY_THEME.success),
-            card('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+            compactCard('Ventas', 'Consultar ganancias o mercancia.', 'ventas', BEAUTY_THEME.primary),
+            compactCard('Stock', 'Revisar inventario.', 'stock', BEAUTY_THEME.secondary),
+            compactCard('Pedidos', 'Consultar estado de pedidos.', 'pedidos', BEAUTY_THEME.success),
+            compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+        ],
+        footer
+    });
+}
+
+function promptPayload(title, subtitle, footer) {
+    return makePayload({
+        eyebrow: 'Completar por voz',
+        title,
+        subtitle,
+        cards: [
+            {
+                ...compactCard('Ejemplos', 'Di: 15 dias, treinta dias, o 100 dias.', 'noop', BEAUTY_THEME.primary),
+                quiet: true
+            },
+            compactCard('Menu principal', 'Cancelar y volver al menu.', 'menu', BEAUTY_THEME.ink)
         ],
         footer
     });
@@ -302,5 +320,6 @@ module.exports = {
     menuPayload,
     sectionPayload,
     goodbyePayload,
-    resultPayload
+    resultPayload,
+    promptPayload
 };

@@ -10,7 +10,8 @@ const {
     menuPayload,
     sectionPayload,
     goodbyePayload,
-    resultPayload
+    resultPayload,
+    promptPayload
 } = require('./alexaAplDocuments');
 
 function supportsAPL(handlerInput) {
@@ -168,6 +169,9 @@ const AplUserEventHandler = {
             } else if (action === 'ayuda') {
                 speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, stock o pedidos.';
                 datasource = sectionPayload('ayuda');
+            } else if (action === 'noop') {
+                speakOutput = 'Responde por voz con el numero de dias. Por ejemplo: quince dias, treinta dias, o cien dias.';
+                datasource = promptPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
             } else if (action.startsWith('ventas_ganancias_') && action !== 'ventas_ganancias_personalizado') {
                 const periodo = action.replace('ventas_ganancias_', '');
                 const totalGanancia = await consultarGanancias(periodo);
@@ -181,7 +185,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
                 sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
                 speakOutput = 'Claro, dime cuantos dias hacia atras quieres revisar las ganancias.';
-                datasource = resultPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
+                datasource = promptPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
             } else if (action === 'stock_general') {
                 const STOCK_MINIMO = 5;
                 const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
@@ -238,7 +242,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = 'diasPersonalizadoEstado';
                 sessionAttributes.savedContext = { tipoEstado };
                 speakOutput = `Dime cuantos dias hacia atras quieres revisar los pedidos ${tipoEstado}.`;
-                datasource = resultPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
+                datasource = promptPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
             } else if (action === 'menu') {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
