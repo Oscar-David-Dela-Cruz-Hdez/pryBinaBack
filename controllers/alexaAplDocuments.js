@@ -43,10 +43,11 @@ function textBlock(text, color, fontSize, extra = {}) {
 }
 
 function cardComponent(item) {
-    const titleSize = item.compact ? '24dp' : '26dp';
-    const subtitleSize = item.compact ? '17dp' : '19dp';
-    const verticalPadding = item.compact ? '9dp' : '12dp';
-    const cardSpacing = item.compact ? '10dp' : '14dp';
+    const titleSize = item.compact ? '22dp' : '26dp';
+    const subtitleSize = item.compact ? '15dp' : '19dp';
+    const verticalPadding = item.compact ? '6dp' : '12dp';
+    const cardSpacing = item.compact ? '7dp' : '14dp';
+    const frameHeight = item.compact ? '60dp' : undefined;
 
     return {
         type: 'TouchWrapper',
@@ -61,6 +62,7 @@ function cardComponent(item) {
         item: {
         type: 'Frame',
         width: '100%',
+        height: frameHeight,
         backgroundColor: item.color,
         borderRadius: '8dp',
         paddingLeft: '18dp',
@@ -83,8 +85,8 @@ function cardComponent(item) {
                             }),
                             textBlock(item.subtitle, '#FFFFFF', subtitleSize, {
                                 opacity: 0.82,
-                                maxLines: 2,
-                                spacing: '4dp'
+                                maxLines: item.compact ? 1 : 2,
+                                spacing: item.compact ? '2dp' : '4dp'
                             })
                         ]
                     },
@@ -117,8 +119,8 @@ function createAplDocument(payload) {
                     height: '100%',
                     paddingLeft: '44dp',
                     paddingRight: '44dp',
-                    paddingTop: '28dp',
-                    paddingBottom: '20dp',
+                    paddingTop: '24dp',
+                    paddingBottom: '18dp',
                     justifyContent: 'spaceBetween',
                     items: [
                         {
@@ -128,12 +130,12 @@ function createAplDocument(payload) {
                                     fontWeight: 'bold',
                                     maxLines: 1
                                 }),
-                                textBlock(screen.title, theme.ink, '42dp', {
+                                textBlock(screen.title, theme.ink, '38dp', {
                                     fontWeight: 'bold',
                                     maxLines: 2,
                                     spacing: '8dp'
                                 }),
-                                textBlock(screen.subtitle, theme.muted, '23dp', {
+                                textBlock(screen.subtitle, theme.muted, '21dp', {
                                     maxLines: 2,
                                     spacing: '10dp'
                                 })
@@ -142,7 +144,7 @@ function createAplDocument(payload) {
                         {
                             type: 'Container',
                             width: '100%',
-                            height: '390dp',
+                            height: '350dp',
                             items: screen.cards.map(cardComponent)
                         },
                         textBlock(screen.footer, theme.muted, '20dp', {
