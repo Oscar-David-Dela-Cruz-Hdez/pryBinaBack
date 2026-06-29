@@ -1,5 +1,7 @@
 const BEAUTY_THEME = {
-    background: '#FFF7FA',
+    background: '#F8EAF1',
+    panel: '#FFFFFF',
+    panelDark: '#2D1B2F',
     primary: '#B83280',
     secondary: '#F472B6',
     accent: '#F8B84E',
@@ -44,11 +46,11 @@ function textBlock(text, color, fontSize, extra = {}) {
 }
 
 function cardComponent(item) {
-    const titleSize = item.compact ? '22dp' : '26dp';
-    const subtitleSize = item.compact ? '15dp' : '19dp';
-    const verticalPadding = item.compact ? '6dp' : '12dp';
-    const cardSpacing = item.compact ? '7dp' : '14dp';
-    const frameHeight = item.compact ? '60dp' : undefined;
+    const titleSize = item.compact ? '21dp' : '24dp';
+    const subtitleSize = item.compact ? '14dp' : '18dp';
+    const verticalPadding = item.compact ? '7dp' : '12dp';
+    const cardSpacing = item.compact ? '8dp' : '13dp';
+    const frameHeight = item.compact ? '58dp' : '76dp';
     const arrowText = item.quiet ? '' : '>';
 
     return {
@@ -62,15 +64,15 @@ function cardComponent(item) {
             }
         ],
         item: {
-        type: 'Frame',
-        width: '100%',
-        height: frameHeight,
-        backgroundColor: item.color,
-        borderRadius: '8dp',
-        paddingLeft: '18dp',
-        paddingRight: '18dp',
-        paddingTop: verticalPadding,
-        paddingBottom: verticalPadding,
+            type: 'Frame',
+            width: '100%',
+            height: frameHeight,
+            backgroundColor: item.color,
+            borderRadius: '8dp',
+            paddingLeft: '18dp',
+            paddingRight: '18dp',
+            paddingTop: verticalPadding,
+            paddingBottom: verticalPadding,
             item: {
                 type: 'Container',
                 direction: 'row',
@@ -102,8 +104,35 @@ function cardComponent(item) {
     };
 }
 
+function emptyState(theme, footer) {
+    return {
+        type: 'Frame',
+        width: '100%',
+        height: '100%',
+        backgroundColor: theme.panel,
+        borderRadius: '8dp',
+        paddingLeft: '28dp',
+        paddingRight: '28dp',
+        paddingTop: '28dp',
+        paddingBottom: '28dp',
+        item: {
+            type: 'Container',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            items: [
+                textBlock(footer, theme.muted, '24dp', {
+                    textAlign: 'center',
+                    maxLines: 3
+                })
+            ]
+        }
+    };
+}
+
 function createAplDocument(payload) {
     const { theme, screen } = payload;
+    const hasCards = screen.cards.length > 0;
 
     return {
         type: 'APL',
@@ -117,43 +146,79 @@ function createAplDocument(payload) {
                 backgroundColor: theme.background,
                 item: {
                     type: 'Container',
+                    direction: 'row',
                     width: '100%',
                     height: '100%',
-                    paddingLeft: '44dp',
-                    paddingRight: '44dp',
-                    paddingTop: '24dp',
-                    paddingBottom: '18dp',
-                    justifyContent: 'spaceBetween',
+                    paddingLeft: '32dp',
+                    paddingRight: '32dp',
+                    paddingTop: '30dp',
+                    paddingBottom: '30dp',
                     items: [
                         {
-                            type: 'Container',
-                            items: [
-                                textBlock(screen.eyebrow, theme.primary, '22dp', {
-                                    fontWeight: 'bold',
-                                    maxLines: 1
-                                }),
-                                textBlock(screen.title, theme.ink, '38dp', {
-                                    fontWeight: 'bold',
-                                    maxLines: 2,
-                                    spacing: '8dp'
-                                }),
-                                textBlock(screen.subtitle, theme.muted, '21dp', {
-                                    maxLines: 2,
-                                    spacing: '10dp'
-                                })
-                            ]
+                            type: 'Frame',
+                            width: '34%',
+                            height: '100%',
+                            backgroundColor: theme.panelDark,
+                            borderRadius: '8dp',
+                            paddingLeft: '26dp',
+                            paddingRight: '26dp',
+                            paddingTop: '28dp',
+                            paddingBottom: '24dp',
+                            item: {
+                                type: 'Container',
+                                height: '100%',
+                                justifyContent: 'spaceBetween',
+                                items: [
+                                    {
+                                        type: 'Container',
+                                        items: [
+                                            textBlock(screen.eyebrow, theme.accent, '20dp', {
+                                                fontWeight: 'bold',
+                                                maxLines: 2
+                                            }),
+                                            textBlock(screen.title, '#FFFFFF', '42dp', {
+                                                fontWeight: 'bold',
+                                                maxLines: 3,
+                                                spacing: '12dp'
+                                            }),
+                                            textBlock(screen.subtitle, '#F8DDE9', '21dp', {
+                                                maxLines: 4,
+                                                spacing: '14dp'
+                                            })
+                                        ]
+                                    },
+                                    textBlock(screen.footer, '#F8DDE9', '18dp', {
+                                        maxLines: 4
+                                    })
+                                ]
+                            }
                         },
                         {
                             type: 'Container',
-                            width: '100%',
-                            height: '350dp',
-                            items: screen.cards.map(cardComponent)
-                        },
-                        textBlock(screen.footer, theme.muted, '20dp', {
-                            textAlign: 'center',
-                            width: '100%',
-                            maxLines: 2
-                        })
+                            width: '66%',
+                            height: '100%',
+                            paddingLeft: '28dp',
+                            justifyContent: 'center',
+                            items: hasCards ? [
+                                {
+                                    type: 'Frame',
+                                    width: '100%',
+                                    backgroundColor: theme.panel,
+                                    borderRadius: '8dp',
+                                    paddingLeft: '26dp',
+                                    paddingRight: '26dp',
+                                    paddingTop: '24dp',
+                                    paddingBottom: '24dp',
+                                    item: {
+                                        type: 'Container',
+                                        width: '100%',
+                                        items: screen.cards.map(cardComponent)
+                                    }
+                                }
+                            ] : [
+                                emptyState(theme, screen.footer)
+                            ]
+                        }
                     ]
                 }
             }
