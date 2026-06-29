@@ -83,6 +83,39 @@ async function consultarPedidosPorEstado(tipoEstado, periodo, dias = null) {
     });
 }
 
+function escaparRegex(valor) {
+    return valor.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function filtroNombreExacto(nombre) {
+    return { $regex: `^${escaparRegex(nombre.trim())}$`, $options: 'i' };
+}
+
+async function inferirTipoFiltroStock(nombreFiltro) {
+    const nombre = nombreFiltro?.trim();
+    if (!nombre) return null;
+
+    const productoExacto = await Producto.findOne({ nombre: filtroNombreExacto(nombre) });
+    if (productoExacto) return 'producto';
+
+    const marcaExacta = await Marca.findOne({ nombre: filtroNombreExacto(nombre) });
+    if (marcaExacta) return 'marca';
+
+    const familiaExacta = await Familia.findOne({ nombre: filtroNombreExacto(nombre) });
+    if (familiaExacta) return 'familia';
+
+    const productoParcial = await Producto.findOne({ nombre: { $regex: escaparRegex(nombre), $options: 'i' } });
+    if (productoParcial) return 'producto';
+
+    const marcaParcial = await Marca.findOne({ nombre: { $regex: escaparRegex(nombre), $options: 'i' } });
+    if (marcaParcial) return 'marca';
+
+    const familiaParcial = await Familia.findOne({ nombre: { $regex: escaparRegex(nombre), $options: 'i' } });
+    if (familiaParcial) return 'familia';
+
+    return null;
+}
+
 // 1. Manejador para LaunchRequest
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -171,8 +204,8 @@ const AplUserEventHandler = {
                 speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, stock o pedidos.';
                 datasource = sectionPayload('ayuda');
             } else if (action === 'noop') {
-                speakOutput = 'Responde por voz con el numero de dias. Por ejemplo: quince dias, treinta dias, o cien dias.';
-                datasource = promptPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
+                speakOutput = 'Responde con una frase como: de hace quince dias, o hace cien dias.';
+                datasource = promptPayload('Rango personalizado', speakOutput, 'Usa una frase compatible con tus utterances.');
             } else if (action.startsWith('ventas_ganancias_') && action !== 'ventas_ganancias_personalizado') {
                 const periodo = action.replace('ventas_ganancias_', '');
                 const totalGanancia = await consultarGanancias(periodo);
@@ -185,8 +218,13 @@ const AplUserEventHandler = {
                 sessionAttributes.lastIntent = 'ventasIntent';
                 sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
                 sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
-                speakOutput = 'Claro, dime cuantos dias hacia atras quieres revisar las ganancias.';
-                datasource = promptPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
+                speakOutput = 'Claro, dime el rango con una frase como: de hace quince dias, o hace cien dias.';
+                datasource = promptPayload(
+                    'Rango personalizado',
+                    speakOutput,
+                    'Usa: de hace 15 dias, o hace cien dias.',
+                    'Di: de hace 15 dias, o hace cien dias.'
+                );
             } else if (action === 'stock_general') {
                 const STOCK_MINIMO = 5;
                 const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
@@ -242,8 +280,13 @@ const AplUserEventHandler = {
                 sessionAttributes.lastIntent = 'estadoIntent';
                 sessionAttributes.waitingFor = 'diasPersonalizadoEstado';
                 sessionAttributes.savedContext = { tipoEstado };
-                speakOutput = `Dime cuantos dias hacia atras quieres revisar los pedidos ${tipoEstado}.`;
-                datasource = promptPayload('Rango personalizado', speakOutput, 'Responde por voz con el numero de dias.');
+                speakOutput = `Dime una frase como: dime los pedidos ${tipoEstado} de hace quince dias.`;
+                datasource = promptPayload(
+                    'Rango personalizado',
+                    speakOutput,
+                    `Usa: pedidos ${tipoEstado} de hace 15 dias.`,
+                    `Di: pedidos ${tipoEstado} de hace 15 dias.`
+                );
             } else if (action === 'menu') {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
@@ -625,6 +668,10 @@ const StockIntentHandler = {
 
         if (!tipoFiltro) {
             if (nombreFiltro) {
+                tipoFiltro = await inferirTipoFiltroStock(nombreFiltro);
+            }
+
+            if (!tipoFiltro && nombreFiltro) {
                 sessionAttributes.waitingFor = 'tipoFiltroStock';
                 sessionAttributes.savedContext = { nombreFiltro };
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
@@ -938,8 +985,8 @@ const FallbackIntentHandler = {
         }
         if (waitingFor === 'diasPersonalizadoVentas' || waitingFor === 'diasPersonalizadoEstado') {
             return handlerInput.responseBuilder
-                .speak('No entendí el número. Por favor dime cuántos días, por ejemplo: veinte días, o quince días.')
-                .reprompt('¿De cuántos días?')
+                .speak('No entendí el rango. Para ganancias puedes decir: de hace quince días. Para pedidos puedes decir: pedidos enviados de hace quince días.')
+                .reprompt('Di una frase como: de hace quince días, o pedidos enviados de hace quince días.')
                 .withShouldEndSession(false)
                 .getResponse();
         }

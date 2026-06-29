@@ -298,14 +298,14 @@ function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o d
     });
 }
 
-function promptPayload(title, subtitle, footer) {
+function promptPayload(title, subtitle, footer, examples = 'Di: de hace 15 dias, o hace cien dias.') {
     return makePayload({
         eyebrow: 'Completar por voz',
         title,
         subtitle,
         cards: [
             {
-                ...compactCard('Ejemplos', 'Di: 15 dias, treinta dias, o 100 dias.', 'noop', BEAUTY_THEME.primary),
+                ...compactCard('Ejemplos', examples, 'noop', BEAUTY_THEME.primary),
                 quiet: true
             },
             compactCard('Menu principal', 'Cancelar y volver al menu.', 'menu', BEAUTY_THEME.ink)
