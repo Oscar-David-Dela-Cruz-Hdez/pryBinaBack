@@ -230,7 +230,7 @@ function welcomePayload() {
     return makePayload({
         eyebrow: 'Distribuidora Panamericana',
         title: 'Bienvenida',
-        subtitle: 'Tu asistente para ventas, inventario y pedidos de belleza.',
+        subtitle: 'Tu asistente para ventas, inventario y pedidos.',
         cards: [
             card('Ir al menu', 'Ver ventas, stock, pedidos, ayuda y salida.', 'menu', BEAUTY_THEME.primary),
             card('Salir', 'Cerrar el asistente con una despedida.', 'salir', BEAUTY_THEME.ink)
@@ -242,7 +242,7 @@ function welcomePayload() {
 function menuPayload() {
     return makePayload({
         eyebrow: 'Distribuidora Panamericana',
-        title: 'Menu de belleza',
+        title: 'Menu',
         subtitle: 'Consulta ventas, inventario y pedidos desde un solo lugar.',
         cards: [
             compactCard('Ventas', 'Ganancias del dia, semana, mes o mercancia vendida.', 'ventas', BEAUTY_THEME.primary),
@@ -344,7 +344,7 @@ function goodbyePayload() {
         title: 'Hasta luego',
         subtitle: 'Tu asistente queda listo para la siguiente consulta.',
         cards: [],
-        footer: 'Gracias por usar el asistente de Panamericana.'
+        footer: 'Gracias por usar el asistente de la Distribuidora Panamericana.'
     });
 }
 
