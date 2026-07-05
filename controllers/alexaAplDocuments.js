@@ -46,6 +46,39 @@ function toImageListItems(cards) {
     }));
 }
 
+function createHeadlineDocument(payload) {
+    const { screen } = payload;
+
+    return {
+        type: 'APL',
+        version: '2024.3',
+        theme: 'dark',
+        import: [
+            {
+                name: 'alexa-layouts',
+                version: '1.7.0'
+            }
+        ],
+        mainTemplate: {
+            parameters: ['payload'],
+            items: [
+                {
+                    type: 'AlexaHeadline',
+                    id: 'panamericanaHeadline',
+                    headerTitle: screen.eyebrow,
+                    headerAttributionImage: screen.logoUrl,
+                    primaryText: screen.title,
+                    secondaryText: screen.subtitle,
+                    footerHintText: screen.footer,
+                    backgroundImageSource: screen.backgroundImage,
+                    backgroundBlur: true,
+                    backgroundColorOverlay: true
+                }
+            ]
+        }
+    };
+}
+
 function createTextListDocument(payload) {
     const { screen } = payload;
 
@@ -74,6 +107,42 @@ function createTextListDocument(payload) {
                     backgroundColorOverlay: true,
                     listItems: toTextListItems(screen.cards),
                     touchForward: true,
+                    footerHintText: screen.footer
+                }
+            ]
+        }
+    };
+}
+
+function createGridListDocument(payload) {
+    const { screen } = payload;
+
+    return {
+        type: 'APL',
+        version: '2024.3',
+        theme: 'dark',
+        import: [
+            {
+                name: 'alexa-layouts',
+                version: '1.7.0'
+            }
+        ],
+        mainTemplate: {
+            parameters: ['payload'],
+            items: [
+                {
+                    type: 'AlexaGridList',
+                    id: 'panamericanaGridList',
+                    headerTitle: screen.title,
+                    headerSubtitle: screen.eyebrow,
+                    headerBackButton: false,
+                    headerAttributionImage: screen.logoUrl,
+                    backgroundImageSource: screen.backgroundImage,
+                    backgroundBlur: true,
+                    backgroundColorOverlay: true,
+                    listItems: toImageListItems(screen.cards),
+                    imageAspectRatio: 'square',
+                    imageScale: 'best-fill',
                     footerHintText: screen.footer
                 }
             ]
@@ -113,6 +182,176 @@ function createPaginatedListDocument(payload) {
                     footerHintText: screen.footer
                 }
             ]
+        }
+    };
+}
+
+function choiceComponent(item, index) {
+    return {
+        type: 'TouchWrapper',
+        width: '${viewport.width < 900 ? "100%" : "48%"}',
+        minHeight: '${viewport.height < 620 ? "82dp" : "96dp"}',
+        spacing: '12dp',
+        onPress: [
+            {
+                type: 'SendEvent',
+                arguments: [item.action]
+            }
+        ],
+        item: {
+            type: 'Frame',
+            width: '100%',
+            height: '100%',
+            borderRadius: '8dp',
+            borderColor: index === 0 ? BEAUTY_THEME.accent : BEAUTY_THEME.secondary,
+            borderWidth: '2dp',
+            backgroundColor: 'rgba(255,255,255,0.10)',
+            item: {
+                type: 'Container',
+                direction: 'row',
+                width: '100%',
+                height: '100%',
+                alignItems: 'center',
+                paddingLeft: '${viewport.width < 900 ? "14dp" : "18dp"}',
+                paddingRight: '${viewport.width < 900 ? "14dp" : "18dp"}',
+                paddingTop: '12dp',
+                paddingBottom: '12dp',
+                items: [
+                    {
+                        type: 'Frame',
+                        width: '${viewport.height < 620 ? "38dp" : "46dp"}',
+                        height: '${viewport.height < 620 ? "38dp" : "46dp"}',
+                        borderRadius: '23dp',
+                        backgroundColor: index === 0 ? BEAUTY_THEME.accent : BEAUTY_THEME.primary,
+                        item: {
+                            type: 'Text',
+                            text: `${index + 1}`,
+                            color: '#FFFFFF',
+                            fontSize: '${viewport.height < 620 ? "20dp" : "24dp"}',
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            textAlignVertical: 'center'
+                        }
+                    },
+                    {
+                        type: 'Container',
+                        grow: 1,
+                        spacing: '12dp',
+                        items: [
+                            {
+                                type: 'Text',
+                                text: item.title,
+                                color: '#FFFFFF',
+                                fontSize: '${viewport.height < 620 ? "21dp" : "26dp"}',
+                                fontWeight: 'bold',
+                                maxLines: 1
+                            },
+                            {
+                                type: 'Text',
+                                text: item.subtitle,
+                                color: '#F8DDE9',
+                                fontSize: '${viewport.height < 620 ? "15dp" : "18dp"}',
+                                maxLines: 2,
+                                spacing: '2dp'
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    };
+}
+
+function createMultipleChoiceDocument(payload) {
+    const { screen } = payload;
+
+    return {
+        type: 'APL',
+        version: '2024.3',
+        theme: 'dark',
+        mainTemplate: {
+            parameters: ['payload'],
+            item: {
+                type: 'Frame',
+                width: '100vw',
+                height: '100vh',
+                backgroundColor: BEAUTY_THEME.background,
+                item: {
+                    type: 'Container',
+                    width: '100%',
+                    height: '100%',
+                    items: [
+                        {
+                            type: 'Image',
+                            source: screen.backgroundImage,
+                            width: '100%',
+                            height: '100%',
+                            scale: 'best-fill',
+                            opacity: 0.2,
+                            position: 'absolute'
+                        },
+                        {
+                            type: 'Container',
+                            width: '100%',
+                            height: '100%',
+                            paddingLeft: '${viewport.width < 900 ? "32dp" : "64dp"}',
+                            paddingRight: '${viewport.width < 900 ? "32dp" : "64dp"}',
+                            paddingTop: '${viewport.height < 620 ? "24dp" : "42dp"}',
+                            paddingBottom: '${viewport.height < 620 ? "22dp" : "34dp"}',
+                            items: [
+                                {
+                                    type: 'Text',
+                                    text: screen.eyebrow,
+                                    color: BEAUTY_THEME.accent,
+                                    fontSize: '${viewport.height < 620 ? "17dp" : "21dp"}',
+                                    fontWeight: 'bold',
+                                    maxLines: 1
+                                },
+                                {
+                                    type: 'Text',
+                                    text: screen.title,
+                                    color: '#FFFFFF',
+                                    fontSize: '${viewport.height < 620 ? "34dp" : "46dp"}',
+                                    fontWeight: 'bold',
+                                    maxLines: 2,
+                                    spacing: '6dp'
+                                },
+                                {
+                                    type: 'Text',
+                                    text: screen.subtitle,
+                                    color: '#F8DDE9',
+                                    fontSize: '${viewport.height < 620 ? "18dp" : "23dp"}',
+                                    maxLines: 2,
+                                    spacing: '6dp'
+                                },
+                                {
+                                    type: 'ScrollView',
+                                    grow: 1,
+                                    spacing: '${viewport.height < 620 ? "16dp" : "26dp"}',
+                                    item: {
+                                        type: 'Container',
+                                        direction: 'row',
+                                        wrap: 'wrap',
+                                        width: '100%',
+                                        justifyContent: 'spaceBetween',
+                                        items: screen.cards.map(choiceComponent)
+                                    }
+                                },
+                                {
+                                    type: 'Text',
+                                    text: screen.footer,
+                                    color: '#F8DDE9',
+                                    fontSize: '${viewport.height < 620 ? "15dp" : "18dp"}',
+                                    maxLines: 2,
+                                    textAlign: 'center',
+                                    width: '100%',
+                                    spacing: '12dp'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
         }
     };
 }
@@ -262,15 +501,18 @@ function createCardsLayoutDocument(payload) {
 }
 
 function createAplDocument(payload) {
+    if (payload.template === 'headline') return createHeadlineDocument(payload);
+    if (payload.template === 'multipleChoice') return createMultipleChoiceDocument(payload);
+    if (payload.template === 'gridList') return createGridListDocument(payload);
     if (payload.template === 'paginatedList') return createPaginatedListDocument(payload);
     if (payload.template === 'cardsLayout') return createCardsLayoutDocument(payload);
     return createTextListDocument(payload);
 }
 
 function welcomePayload() {
-    return makePayload('cardsLayout', {
+    return makePayload('headline', {
         eyebrow: 'Distribuidora Panamericana',
-        title: 'Bienvenida',
+        title: 'Bienvenida a Panamericana',
         subtitle: 'Asistente de ventas, inventario y pedidos.',
         cards: [
             option('Ir al menu', 'Ver las consultas disponibles.', 'menu', BEAUTY_THEME.primary),
@@ -300,6 +542,7 @@ function menuPayload() {
 function sectionPayload(section) {
     const sections = {
         ventas: {
+            template: 'multipleChoice',
             eyebrow: 'Consulta de ventas',
             title: 'Ventas',
             subtitle: 'Selecciona el rango de ganancias.',
@@ -338,6 +581,7 @@ function sectionPayload(section) {
             footer: 'Enviados y finalizados permiten rangos.'
         },
         pedidosEnviados: {
+            template: 'multipleChoice',
             eyebrow: 'Pedidos enviados',
             title: 'Rango',
             subtitle: 'Selecciona el periodo que quieres revisar.',
@@ -351,6 +595,7 @@ function sectionPayload(section) {
             footer: 'Ejemplo: pedidos enviados de hace 15 dias.'
         },
         pedidosFinalizados: {
+            template: 'multipleChoice',
             eyebrow: 'Pedidos finalizados',
             title: 'Rango',
             subtitle: 'Selecciona el periodo que quieres revisar.',
@@ -377,11 +622,12 @@ function sectionPayload(section) {
         }
     };
 
-    return makePayload('textList', sections[section] || sections.ayuda);
+    const selectedSection = sections[section] || sections.ayuda;
+    return makePayload(selectedSection.template || 'textList', selectedSection);
 }
 
 function goodbyePayload() {
-    return makePayload('textList', {
+    return makePayload('headline', {
         eyebrow: 'Distribuidora Panamericana',
         title: 'Hasta luego',
         subtitle: 'Sesion finalizada.',
@@ -429,7 +675,7 @@ function productListPayload(title, subtitle, products, footer = 'Toca menu princ
 
     cards.push(option('Menu principal', 'Volver al inicio.', 'menu', BEAUTY_THEME.ink, FALLBACK_PRODUCT_IMAGE));
 
-    return makePayload('paginatedList', {
+    return makePayload('gridList', {
         eyebrow: 'Inventario',
         title,
         subtitle,
