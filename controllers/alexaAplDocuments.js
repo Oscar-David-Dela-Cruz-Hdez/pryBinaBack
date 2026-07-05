@@ -572,6 +572,7 @@ function sectionPayload(section) {
             footer: 'Para producto, marca o familia, completa el nombre por voz.'
         },
         pedidos: {
+            template: 'multipleChoice',
             eyebrow: 'Estado de pedidos',
             title: 'Pedidos',
             subtitle: 'Consulta el estado operativo.',
@@ -612,9 +613,10 @@ function sectionPayload(section) {
             footer: 'Ejemplo: pedidos finalizados de hace 15 dias.'
         },
         ayuda: {
+            template: 'cardsLayout',
             eyebrow: 'Ayuda',
             title: 'Frases utiles',
-            subtitle: 'Prueba una de estas rutas.',
+            subtitle: 'Elige una ruta o usa una frase de ejemplo.',
             cards: [
                 option('Ventas', 'Checa las ganancias del mes.', 'ventas'),
                 option('Stock', 'Consulta el stock de 4x4.', 'stock'),

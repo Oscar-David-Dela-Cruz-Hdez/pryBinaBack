@@ -33,11 +33,29 @@ function addAplDirective(handlerInput, responseBuilder, datasource, token = 'pan
     });
 }
 
+function normalizeAplAction(args) {
+    const firstArg = args[0];
+    if (typeof firstArg === 'string') return firstArg;
+    if (firstArg?.token) return firstArg.token;
+    if (firstArg?.listItem?.token) return firstArg.listItem.token;
+    if (typeof args[1] === 'string') return args[1];
+    return 'menu';
+}
+
+function responseWithApl(handlerInput, speakOutput, datasource, token, reprompt = 'Que deseas consultar?') {
+    const responseBuilder = handlerInput.responseBuilder
+        .speak(speakOutput)
+        .reprompt(reprompt)
+        .withShouldEndSession(false);
+
+    return addAplDirective(handlerInput, responseBuilder, datasource, token).getResponse();
+}
+
 // Normaliza el periodo para aceptar variantes como "del mes", "mensual", etc.
 function normalizarPeriodo(valor) {
     if (!valor) return null;
     const v = valor.toLowerCase().trim();
-    if (v.includes('día') || v.includes('dia') || v === 'hoy' || v === 'diario' || v === 'al día') return 'día';
+    if (v.includes('dia') || v.includes('día') || v === 'hoy' || v === 'diario' || v === 'al dia' || v === 'al día') return 'dia';
     if (v.includes('semana') || v === 'semanal' || v === 'esta semana') return 'semana';
     if (v.includes('mes') || v === 'mensual' || v === 'este mes') return 'mes';
     if (v.includes('personalizado') || v.includes('custom')) return 'personalizado';
@@ -61,7 +79,7 @@ function obtenerRangoFechas(periodo, diasPersonalizados = 0) {
 }
 
 function textoPeriodoApl(periodo) {
-    if (periodo === 'dÃ­a' || periodo === 'dia') return 'de hoy';
+    if (periodo === 'dia' || periodo === 'día') return 'de hoy';
     if (periodo === 'semana') return 'de la ultima semana';
     if (periodo === 'mes') return 'del ultimo mes';
     return `de los ultimos ${periodo} dias`;
@@ -177,7 +195,7 @@ const AplUserEventHandler = {
     async handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const args = handlerInput.requestEnvelope.request.arguments || [];
-        const action = args[0] || 'menu';
+        const action = normalizeAplAction(args);
 
         let speakOutput = '';
         let datasource = menuPayload();
@@ -246,7 +264,12 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = 'nombreFiltroStock';
                 sessionAttributes.savedContext = { tipoFiltro };
                 speakOutput = `Dime el nombre ${tipoFiltro === 'producto' ? 'del' : 'de la'} ${tipoFiltro} que quieres revisar.`;
-                datasource = resultPayload('Completar por voz', speakOutput, 'Di el nombre exacto para consultar el stock.');
+                datasource = promptPayload(
+                    `Stock por ${tipoFiltro}`,
+                    speakOutput,
+                    `Di una frase como: consulta el stock de ${tipoFiltro === 'producto' ? '4x4 Pomada azul 100g' : tipoFiltro === 'familia' ? 'Barberia' : 'Andis'}.`,
+                    `Di: consulta el stock de ${tipoFiltro === 'familia' ? 'Barberia' : tipoFiltro === 'marca' ? 'Andis' : '4x4 Pomada azul 100g'}.`
+                );
             } else if (action === 'pedidos_por_enviar') {
                 const totalPorEnviar = await Pedido.countDocuments({ estado: { $in: ['Pendiente', 'Pagado'] } });
                 sessionAttributes.lastIntent = 'estadoIntent';
@@ -510,11 +533,13 @@ const VentasIntentHandler = {
             else {
                 sessionAttributes.waitingFor = 'tipoConsultaVentas';
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                return handlerInput.responseBuilder
-                    .speak('¿Qué deseas consultar, las ganancias o la mercancía?')
-                    .reprompt('¿Deseas ver ganancias o mercancía?')
-                    .withShouldEndSession(false)
-                    .getResponse();
+                return responseWithApl(
+                    handlerInput,
+                    '¿Qué deseas consultar, las ganancias o la mercancía?',
+                    sectionPayload('ventas'),
+                    'ventas-options',
+                    '¿Deseas ver ganancias por día, semana, mes o personalizado?'
+                );
             }
         }
 
@@ -528,22 +553,31 @@ const VentasIntentHandler = {
                     sessionAttributes.waitingFor = 'periodoGanancia';
                     sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                    return handlerInput.responseBuilder
-                        .speak('¿De qué periodo? Puedes decir: del día, de la semana, del mes o personalizado.')
-                        .reprompt('¿Del día, de la semana, del mes o personalizado?')
-                        .withShouldEndSession(false)
-                        .getResponse();
+                    return responseWithApl(
+                        handlerInput,
+                        '¿De qué periodo? Puedes decir: del día, de la semana, del mes o personalizado.',
+                        sectionPayload('ventas'),
+                        'ventas-periodo',
+                        '¿Del día, de la semana, del mes o personalizado?'
+                    );
                 }
 
                 if (periodo === 'personalizado' && !dias) {
                     sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
                     sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                    return handlerInput.responseBuilder
-                        .speak('¿De cuántos días atrás quieres revisar las ganancias?')
-                        .reprompt('¿De cuántos días?')
-                        .withShouldEndSession(false)
-                        .getResponse();
+                    return responseWithApl(
+                        handlerInput,
+                        '¿De cuántos días atrás quieres revisar las ganancias?',
+                        promptPayload(
+                            'Rango personalizado',
+                            'Di una frase como: dime las ganancias de hace 15 días.',
+                            'Usa un número de días para completar la consulta.',
+                            'Di: dime las ganancias de hace 15 días.'
+                        ),
+                        'ventas-personalizado',
+                        '¿De cuántos días?'
+                    );
                 }
 
                 const rangoFechas = obtenerRangoFechas(periodo, dias);
@@ -563,21 +597,35 @@ const VentasIntentHandler = {
                 if (!tipoMercancia && !nombreMercancia) {
                     sessionAttributes.waitingFor = 'tipoMercancia';
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                    return handlerInput.responseBuilder
-                        .speak('¿Sobre qué deseas consultar? producto, familia o categoría.')
-                        .reprompt('¿Producto, familia o categoría?')
-                        .withShouldEndSession(false)
-                        .getResponse();
+                    return responseWithApl(
+                        handlerInput,
+                        '¿Sobre qué deseas consultar? producto, familia o categoría.',
+                        promptPayload(
+                            'Ventas por mercancía',
+                            'Elige si quieres consultar producto, familia o categoría.',
+                            'También puedes decir: checa las ventas de Barbería.',
+                            'Di: producto, familia o categoría.'
+                        ),
+                        'ventas-mercancia-tipo',
+                        '¿Producto, familia o categoría?'
+                    );
                 }
                 if (!nombreMercancia) {
                     sessionAttributes.waitingFor = 'nombreMercancia';
                     sessionAttributes.savedContext = { tipoMercancia };
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                    return handlerInput.responseBuilder
-                        .speak('¿Cuál es el nombre exacto que buscas?')
-                        .reprompt('¿Cuál es el nombre?')
-                        .withShouldEndSession(false)
-                        .getResponse();
+                    return responseWithApl(
+                        handlerInput,
+                        '¿Cuál es el nombre exacto que buscas?',
+                        promptPayload(
+                            'Nombre de mercancía',
+                            'Di el producto, familia o categoría que quieres revisar.',
+                            'Ejemplo: checa las ventas de Barbería.',
+                            'Di: checa las ventas de Barbería.'
+                        ),
+                        'ventas-mercancia-nombre',
+                        '¿Cuál es el nombre?'
+                    );
                 }
 
                 let totalVendido = 0;
@@ -682,19 +730,23 @@ const StockIntentHandler = {
                 sessionAttributes.waitingFor = 'tipoFiltroStock';
                 sessionAttributes.savedContext = { nombreFiltro };
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                return handlerInput.responseBuilder
-                    .speak(`Quieres ver el stock de ${nombreFiltro} por producto, marca o familia?`)
-                    .reprompt('Por producto, marca o familia?')
-                    .withShouldEndSession(false)
-                    .getResponse();
+                return responseWithApl(
+                    handlerInput,
+                    `Quieres ver el stock de ${nombreFiltro} por producto, marca o familia?`,
+                    sectionPayload('stock'),
+                    'stock-tipo-filtro',
+                    'Por producto, marca o familia?'
+                );
             } else {
                 sessionAttributes.waitingFor = 'tipoFiltroStock';
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                return handlerInput.responseBuilder
-                    .speak('Quieres ver el stock por producto, marca, familia o general?')
-                    .reprompt('Por producto, marca, familia o general?')
-                    .withShouldEndSession(false)
-                    .getResponse();
+                return responseWithApl(
+                    handlerInput,
+                    'Quieres ver el stock por producto, marca, familia o general?',
+                    sectionPayload('stock'),
+                    'stock-options',
+                    'Por producto, marca, familia o general?'
+                );
             }
         }
 
@@ -715,11 +767,18 @@ const StockIntentHandler = {
                     sessionAttributes.waitingFor = 'nombreFiltroStock';
                     sessionAttributes.savedContext = { tipoFiltro };
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                    return handlerInput.responseBuilder
-                        .speak(`¿Cuál es el nombre de la ${tipoFiltro}?`)
-                        .reprompt('¿Cuál es el nombre exacto?')
-                        .withShouldEndSession(false)
-                        .getResponse();
+                    return responseWithApl(
+                        handlerInput,
+                        `¿Cuál es el nombre de ${tipoFiltro === 'producto' ? 'el producto' : 'la ' + tipoFiltro}?`,
+                        promptPayload(
+                            `Stock por ${tipoFiltro}`,
+                            'Di el nombre que quieres revisar.',
+                            'Ejemplo: consulta el stock de 4x4.',
+                            'Di: consulta el stock de 4x4.'
+                        ),
+                        'stock-nombre-filtro',
+                        '¿Cuál es el nombre exacto?'
+                    );
                 }
 
                 if (tipoFiltro === 'producto') {
@@ -826,11 +885,13 @@ const EstadoIntentHandler = {
         if (!tipoEstado) {
             sessionAttributes.waitingFor = 'tipoEstado';
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-            return handlerInput.responseBuilder
-                .speak('¿Deseas ver los pedidos por enviar, actuales, finalizados o enviados?')
-                .reprompt('¿Qué estado de pedidos te interesa?')
-                .withShouldEndSession(false)
-                .getResponse();
+            return responseWithApl(
+                handlerInput,
+                '¿Deseas ver los pedidos por enviar, enviados o finalizados?',
+                sectionPayload('pedidos'),
+                'pedidos-options',
+                '¿Qué estado de pedidos te interesa?'
+            );
         }
 
         let speakOutput = '';
@@ -843,22 +904,31 @@ const EstadoIntentHandler = {
                     sessionAttributes.waitingFor = 'periodoEstado';
                     sessionAttributes.savedContext = { tipoEstado };
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                    return handlerInput.responseBuilder
-                        .speak('¿De qué periodo? Puedes decir: del día, de la semana, del mes o personalizado.')
-                        .reprompt('¿Del día, de la semana, del mes o personalizado?')
-                        .withShouldEndSession(false)
-                        .getResponse();
+                    return responseWithApl(
+                        handlerInput,
+                        '¿De qué periodo? Puedes decir: del día, de la semana, del mes o personalizado.',
+                        sectionPayload(tipoEstado === 'enviados' ? 'pedidosEnviados' : 'pedidosFinalizados'),
+                        'pedidos-periodo',
+                        '¿Del día, de la semana, del mes o personalizado?'
+                    );
                 }
 
                 if (periodo === 'personalizado' && !dias) {
                     sessionAttributes.waitingFor = 'diasPersonalizadoEstado';
                     sessionAttributes.savedContext = { tipoEstado };
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                    return handlerInput.responseBuilder
-                        .speak('¿De cuántos días quieres revisar los pedidos?')
-                        .reprompt('¿De cuántos días?')
-                        .withShouldEndSession(false)
-                        .getResponse();
+                    return responseWithApl(
+                        handlerInput,
+                        '¿De cuántos días quieres revisar los pedidos?',
+                        promptPayload(
+                            'Rango personalizado',
+                            `Di una frase como: dime los pedidos ${tipoEstado} de hace 15 días.`,
+                            `Usa: pedidos ${tipoEstado} de hace 15 días.`,
+                            `Di: pedidos ${tipoEstado} de hace 15 días.`
+                        ),
+                        'pedidos-personalizado',
+                        '¿De cuántos días?'
+                    );
                 }
 
                 const rangoFechas = obtenerRangoFechas(periodo, dias);
@@ -1075,5 +1145,3 @@ const skill = skillBuilder.create();
 const adapter = new ExpressAdapter(skill, true, true);
 
 module.exports = { adapter };
-
-
