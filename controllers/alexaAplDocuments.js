@@ -143,6 +143,7 @@ function createGridListDocument(payload) {
                     listItems: toImageListItems(screen.cards),
                     imageAspectRatio: 'square',
                     imageScale: 'best-fill',
+                    touchForward: true,
                     footerHintText: screen.footer
                 }
             ]
@@ -179,6 +180,7 @@ function createPaginatedListDocument(payload) {
                     backgroundScale: 'best-fill',
                     backgroundAlign: 'center',
                     listItems: toImageListItems(screen.cards),
+                    touchForward: true,
                     footerHintText: screen.footer
                 }
             ]
@@ -510,9 +512,9 @@ function createAplDocument(payload) {
 }
 
 function welcomePayload() {
-    return makePayload('headline', {
+    return makePayload('cardsLayout', {
         eyebrow: 'Distribuidora Panamericana',
-        title: 'Bienvenida a Panamericana',
+        title: 'Bienvenida',
         subtitle: 'Asistente de ventas, inventario y pedidos.',
         cards: [
             option('Ir al menu', 'Ver las consultas disponibles.', 'menu', BEAUTY_THEME.primary),
@@ -556,6 +558,7 @@ function sectionPayload(section) {
             footer: 'Para rango personalizado di: de hace 15 dias.'
         },
         stock: {
+            template: 'gridList',
             eyebrow: 'Consulta de stock',
             title: 'Inventario',
             subtitle: 'Selecciona como quieres revisar el almacen.',
@@ -623,7 +626,8 @@ function sectionPayload(section) {
     };
 
     const selectedSection = sections[section] || sections.ayuda;
-    return makePayload(selectedSection.template || 'textList', selectedSection);
+    const { template = 'textList', ...screen } = selectedSection;
+    return makePayload(template, screen);
 }
 
 function goodbyePayload() {
@@ -665,7 +669,9 @@ function promptPayload(title, subtitle, footer, examples = 'Di: de hace 15 dias,
 }
 
 function productListPayload(title, subtitle, products, footer = 'Toca menu principal o pide otra consulta.') {
-    const cards = products.slice(0, 12).map((product) => option(
+    const visibleProducts = products.slice(0, 12);
+    const template = visibleProducts.length > 6 ? 'paginatedList' : 'gridList';
+    const cards = visibleProducts.map((product) => option(
         product.nombre,
         `Stock: ${product.stock ?? 0}${product.marca?.nombre ? ` | ${product.marca.nombre}` : ''}`,
         'noop',
@@ -675,7 +681,7 @@ function productListPayload(title, subtitle, products, footer = 'Toca menu princ
 
     cards.push(option('Menu principal', 'Volver al inicio.', 'menu', BEAUTY_THEME.ink, FALLBACK_PRODUCT_IMAGE));
 
-    return makePayload('gridList', {
+    return makePayload(template, {
         eyebrow: 'Inventario',
         title,
         subtitle,
