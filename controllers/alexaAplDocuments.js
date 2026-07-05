@@ -1,62 +1,128 @@
 const BEAUTY_THEME = {
-    background: '#F8EAF1',
-    panel: '#FFFFFF',
-    panelDark: '#2D1B2F',
+    background: '#2D1B2F',
     primary: '#B83280',
     secondary: '#F472B6',
     accent: '#F8B84E',
     ink: '#2D1B2F',
     muted: '#765568',
-    success: '#2F9E7E'
+    success: '#2F9E7E',
+    light: '#FFF7FA'
 };
 
-function card(title, subtitle, action, color) {
-    return {
-        title,
-        subtitle,
-        action,
-        color,
-        compact: false,
-        quiet: false
-    };
+const BACKGROUND_IMAGE = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1600&q=80';
+const FALLBACK_PRODUCT_IMAGE = 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80';
+const LOGO_IMAGE = '';
+
+function option(title, subtitle, action, color = BEAUTY_THEME.primary, imageSource = null) {
+    return { title, subtitle, action, color, imageSource };
 }
 
-function compactCard(title, subtitle, action, color) {
+function makePayload(template, screen) {
     return {
-        ...card(title, subtitle, action, color),
-        compact: true
-    };
-}
-
-function makePayload(screen) {
-    return {
+        template,
         theme: BEAUTY_THEME,
-        screen
+        screen: {
+            backgroundImage: BACKGROUND_IMAGE,
+            logoUrl: LOGO_IMAGE,
+            ...screen
+        }
     };
 }
 
-function textBlock(text, color, fontSize, extra = {}) {
+function toTextListItems(cards) {
+    return cards.map((item) => ({
+        primaryText: item.title,
+        secondaryText: item.subtitle,
+        token: item.action
+    }));
+}
+
+function toImageListItems(cards) {
+    return cards.map((item) => ({
+        primaryText: item.title,
+        secondaryText: item.subtitle,
+        imageSource: item.imageSource || FALLBACK_PRODUCT_IMAGE,
+        token: item.action
+    }));
+}
+
+function createTextListDocument(payload) {
+    const { screen } = payload;
+
     return {
-        type: 'Text',
-        text,
-        color,
-        fontSize,
-        ...extra
+        type: 'APL',
+        version: '2024.3',
+        theme: 'dark',
+        import: [
+            {
+                name: 'alexa-layouts',
+                version: '1.7.0'
+            }
+        ],
+        mainTemplate: {
+            parameters: ['payload'],
+            items: [
+                {
+                    type: 'AlexaTextList',
+                    id: 'panamericanaTextList',
+                    headerTitle: screen.title,
+                    headerSubtitle: screen.eyebrow,
+                    headerBackButton: false,
+                    headerAttributionImage: screen.logoUrl,
+                    backgroundImageSource: screen.backgroundImage,
+                    backgroundBlur: true,
+                    backgroundColorOverlay: true,
+                    listItems: toTextListItems(screen.cards),
+                    touchForward: true,
+                    footerHintText: screen.footer
+                }
+            ]
+        }
+    };
+}
+
+function createPaginatedListDocument(payload) {
+    const { screen } = payload;
+
+    return {
+        type: 'APL',
+        version: '2024.3',
+        theme: 'dark',
+        import: [
+            {
+                name: 'alexa-layouts',
+                version: '1.7.0'
+            }
+        ],
+        mainTemplate: {
+            parameters: ['payload'],
+            items: [
+                {
+                    type: 'AlexaPaginatedList',
+                    id: 'panamericanaPaginatedList',
+                    headerTitle: screen.title,
+                    headerSubtitle: screen.eyebrow,
+                    headerBackButton: false,
+                    headerAttributionImage: screen.logoUrl,
+                    backgroundImageSource: screen.backgroundImage,
+                    backgroundBlur: true,
+                    backgroundColorOverlay: true,
+                    backgroundScale: 'best-fill',
+                    backgroundAlign: 'center',
+                    listItems: toImageListItems(screen.cards),
+                    footerHintText: screen.footer
+                }
+            ]
+        }
     };
 }
 
 function cardComponent(item) {
-    const titleSize = item.compact ? '21dp' : '24dp';
-    const subtitleSize = item.compact ? '14dp' : '18dp';
-    const verticalPadding = item.compact ? '7dp' : '12dp';
-    const cardSpacing = item.compact ? '8dp' : '13dp';
-    const frameHeight = item.compact ? '58dp' : '76dp';
-    const arrowText = item.quiet ? '' : '>';
-
     return {
         type: 'TouchWrapper',
-        width: '100%',
-        spacing: cardSpacing,
+        width: '${viewport.width < 900 ? "100%" : "31%"}',
+        height: '${viewport.height < 620 ? "118dp" : "148dp"}',
+        spacing: '14dp',
         onPress: [
             {
                 type: 'SendEvent',
@@ -66,157 +132,126 @@ function cardComponent(item) {
         item: {
             type: 'Frame',
             width: '100%',
-            height: frameHeight,
-            backgroundColor: item.color,
+            height: '100%',
             borderRadius: '8dp',
-            paddingLeft: '18dp',
-            paddingRight: '18dp',
-            paddingTop: verticalPadding,
-            paddingBottom: verticalPadding,
+            backgroundColor: item.color,
             item: {
                 type: 'Container',
-                direction: 'row',
-                alignItems: 'center',
+                width: '100%',
+                height: '100%',
+                paddingLeft: '18dp',
+                paddingRight: '18dp',
+                paddingTop: '16dp',
+                paddingBottom: '14dp',
                 justifyContent: 'spaceBetween',
                 items: [
                     {
-                        type: 'Container',
-                        width: '86%',
-                        items: [
-                            textBlock(item.title, '#FFFFFF', titleSize, {
-                                fontWeight: 'bold',
-                                maxLines: 1
-                            }),
-                            textBlock(item.subtitle, '#FFFFFF', subtitleSize, {
-                                opacity: 0.82,
-                                maxLines: item.compact ? 1 : 2,
-                                spacing: item.compact ? '2dp' : '4dp'
-                            })
-                        ]
-                    },
-                    textBlock(arrowText, '#FFFFFF', '30dp', {
+                        type: 'Text',
+                        text: item.title,
+                        color: '#FFFFFF',
+                        fontSize: '${viewport.height < 620 ? "24dp" : "28dp"}',
                         fontWeight: 'bold',
-                        maxLines: 1
-                    })
+                        maxLines: 2
+                    },
+                    {
+                        type: 'Text',
+                        text: item.subtitle,
+                        color: '#FFFFFF',
+                        fontSize: '${viewport.height < 620 ? "15dp" : "18dp"}',
+                        maxLines: 2,
+                        opacity: 0.86
+                    }
                 ]
             }
         }
     };
 }
 
-function emptyState(theme, footer) {
-    return {
-        type: 'Frame',
-        width: '100%',
-        height: '100%',
-        backgroundColor: theme.panel,
-        borderRadius: '8dp',
-        paddingLeft: '28dp',
-        paddingRight: '28dp',
-        paddingTop: '28dp',
-        paddingBottom: '28dp',
-        item: {
-            type: 'Container',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            items: [
-                textBlock(footer, theme.muted, '24dp', {
-                    textAlign: 'center',
-                    maxLines: 3
-                })
-            ]
-        }
-    };
-}
-
-function createAplDocument(payload) {
-    const { theme, screen } = payload;
-    const hasCards = screen.cards.length > 0;
+function createCardsLayoutDocument(payload) {
+    const { screen } = payload;
 
     return {
         type: 'APL',
-        version: '1.7',
+        version: '2024.3',
+        theme: 'dark',
         mainTemplate: {
             parameters: ['payload'],
             item: {
                 type: 'Frame',
                 width: '100vw',
                 height: '100vh',
-                backgroundColor: theme.background,
+                backgroundColor: BEAUTY_THEME.background,
                 item: {
                     type: 'Container',
-                    direction: 'row',
                     width: '100%',
                     height: '100%',
-                    paddingLeft: '32dp',
-                    paddingRight: '32dp',
-                    paddingTop: '30dp',
-                    paddingBottom: '30dp',
                     items: [
                         {
-                            type: 'Frame',
-                            width: '34%',
+                            type: 'Image',
+                            source: screen.backgroundImage,
+                            width: '100%',
                             height: '100%',
-                            backgroundColor: theme.panelDark,
-                            borderRadius: '8dp',
-                            paddingLeft: '26dp',
-                            paddingRight: '26dp',
-                            paddingTop: '28dp',
-                            paddingBottom: '24dp',
-                            item: {
-                                type: 'Container',
-                                height: '100%',
-                                justifyContent: 'spaceBetween',
-                                items: [
-                                    {
-                                        type: 'Container',
-                                        items: [
-                                            textBlock(screen.eyebrow, theme.accent, '20dp', {
-                                                fontWeight: 'bold',
-                                                maxLines: 2
-                                            }),
-                                            textBlock(screen.title, '#FFFFFF', '42dp', {
-                                                fontWeight: 'bold',
-                                                maxLines: 3,
-                                                spacing: '12dp'
-                                            }),
-                                            textBlock(screen.subtitle, '#F8DDE9', '21dp', {
-                                                maxLines: 4,
-                                                spacing: '14dp'
-                                            })
-                                        ]
-                                    },
-                                    textBlock(screen.footer, '#F8DDE9', '18dp', {
-                                        maxLines: 4
-                                    })
-                                ]
-                            }
+                            scale: 'best-fill',
+                            opacity: 0.28,
+                            position: 'absolute'
                         },
                         {
                             type: 'Container',
-                            width: '66%',
+                            width: '100%',
                             height: '100%',
-                            paddingLeft: '28dp',
-                            justifyContent: 'center',
-                            items: hasCards ? [
+                            paddingLeft: '${viewport.width < 900 ? "36dp" : "64dp"}',
+                            paddingRight: '${viewport.width < 900 ? "36dp" : "64dp"}',
+                            paddingTop: '${viewport.height < 620 ? "28dp" : "46dp"}',
+                            paddingBottom: '${viewport.height < 620 ? "24dp" : "34dp"}',
+                            justifyContent: 'spaceBetween',
+                            items: [
                                 {
-                                    type: 'Frame',
+                                    type: 'Container',
+                                    items: [
+                                        {
+                                            type: 'Text',
+                                            text: screen.eyebrow,
+                                            color: BEAUTY_THEME.accent,
+                                            fontSize: '${viewport.height < 620 ? "18dp" : "22dp"}',
+                                            fontWeight: 'bold',
+                                            maxLines: 1
+                                        },
+                                        {
+                                            type: 'Text',
+                                            text: screen.title,
+                                            color: '#FFFFFF',
+                                            fontSize: '${viewport.height < 620 ? "38dp" : "50dp"}',
+                                            fontWeight: 'bold',
+                                            maxLines: 2,
+                                            spacing: '8dp'
+                                        },
+                                        {
+                                            type: 'Text',
+                                            text: screen.subtitle,
+                                            color: '#F8DDE9',
+                                            fontSize: '${viewport.height < 620 ? "19dp" : "24dp"}',
+                                            maxLines: 2,
+                                            spacing: '8dp'
+                                        }
+                                    ]
+                                },
+                                {
+                                    type: 'Container',
+                                    direction: 'row',
+                                    wrap: 'wrap',
                                     width: '100%',
-                                    backgroundColor: theme.panel,
-                                    borderRadius: '8dp',
-                                    paddingLeft: '26dp',
-                                    paddingRight: '26dp',
-                                    paddingTop: '24dp',
-                                    paddingBottom: '24dp',
-                                    item: {
-                                        type: 'Container',
-                                        width: '100%',
-                                        items: screen.cards.map(cardComponent)
-                                    }
+                                    justifyContent: 'spaceBetween',
+                                    items: screen.cards.map(cardComponent)
+                                },
+                                {
+                                    type: 'Text',
+                                    text: screen.footer,
+                                    color: '#F8DDE9',
+                                    fontSize: '${viewport.height < 620 ? "16dp" : "19dp"}',
+                                    maxLines: 2,
+                                    textAlign: 'center',
+                                    width: '100%'
                                 }
-                            ] : [
-                                emptyState(theme, screen.footer)
                             ]
                         }
                     ]
@@ -226,32 +261,39 @@ function createAplDocument(payload) {
     };
 }
 
+function createAplDocument(payload) {
+    if (payload.template === 'paginatedList') return createPaginatedListDocument(payload);
+    if (payload.template === 'cardsLayout') return createCardsLayoutDocument(payload);
+    return createTextListDocument(payload);
+}
+
 function welcomePayload() {
-    return makePayload({
+    return makePayload('cardsLayout', {
         eyebrow: 'Distribuidora Panamericana',
         title: 'Bienvenida',
-        subtitle: 'Tu asistente para ventas, inventario y pedidos.',
+        subtitle: 'Asistente de ventas, inventario y pedidos.',
         cards: [
-            card('Ir al menu', 'Ver ventas, stock, pedidos, ayuda y salida.', 'menu', BEAUTY_THEME.primary),
-            card('Salir', 'Cerrar el asistente con una despedida.', 'salir', BEAUTY_THEME.ink)
+            option('Ir al menu', 'Ver las consultas disponibles.', 'menu', BEAUTY_THEME.primary),
+            option('Ayuda', 'Escuchar ejemplos rapidos.', 'ayuda', BEAUTY_THEME.secondary),
+            option('Salir', 'Cerrar el asistente.', 'salir', BEAUTY_THEME.ink)
         ],
-        footer: 'Toca Ir al menu o dime que quieres consultar.'
+        footer: 'Toca una opcion o responde por voz.'
     });
 }
 
 function menuPayload() {
-    return makePayload({
-        eyebrow: 'Distribuidora Panamericana',
-        title: 'Menu',
-        subtitle: 'Consulta ventas, inventario y pedidos desde un solo lugar.',
+    return makePayload('cardsLayout', {
+        eyebrow: 'Menu principal',
+        title: 'Panamericana',
+        subtitle: 'Elige una consulta administrativa.',
         cards: [
-            compactCard('Ventas', 'Ganancias del dia, semana, mes o mercancia vendida.', 'ventas', BEAUTY_THEME.primary),
-            compactCard('Stock', 'Stock general, por producto, marca o familia.', 'stock', BEAUTY_THEME.secondary),
-            compactCard('Pedidos', 'Pedidos por enviar, enviados o finalizados.', 'pedidos', BEAUTY_THEME.success),
-            compactCard('Ayuda', 'Ver ejemplos de lo que puedes preguntar.', 'ayuda', BEAUTY_THEME.accent),
-            compactCard('Salir', 'Cerrar el asistente con una despedida.', 'salir', BEAUTY_THEME.ink)
+            option('Ventas', 'Ganancias y mercancia.', 'ventas', BEAUTY_THEME.primary),
+            option('Stock', 'Inventario por producto, marca o familia.', 'stock', BEAUTY_THEME.secondary),
+            option('Pedidos', 'Por enviar, enviados y finalizados.', 'pedidos', BEAUTY_THEME.success),
+            option('Ayuda', 'Frases de ejemplo.', 'ayuda', BEAUTY_THEME.accent),
+            option('Salir', 'Terminar sesion.', 'salir', BEAUTY_THEME.ink)
         ],
-        footer: 'Toca una opcion o dime que quieres consultar.'
+        footer: 'Tambien puedes decir ventas, stock, pedidos, ayuda o salir.'
     });
 }
 
@@ -259,122 +301,139 @@ function sectionPayload(section) {
     const sections = {
         ventas: {
             eyebrow: 'Consulta de ventas',
-            title: 'Ventas y ganancias',
-            subtitle: 'Toca una opcion para consultar al momento.',
+            title: 'Ventas',
+            subtitle: 'Selecciona el rango de ganancias.',
             cards: [
-                compactCard('Por dia', 'Ganancias de hoy.', 'ventas_ganancias_dia', BEAUTY_THEME.primary),
-                compactCard('Por semana', 'Ganancias de la ultima semana.', 'ventas_ganancias_semana', BEAUTY_THEME.secondary),
-                compactCard('Por mes', 'Ganancias del ultimo mes.', 'ventas_ganancias_mes', BEAUTY_THEME.success),
-                compactCard('Personalizado', 'Di cuantos dias quieres revisar.', 'ventas_ganancias_personalizado', BEAUTY_THEME.accent),
-                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                option('Por dia', 'Ganancias de hoy.', 'ventas_ganancias_dia'),
+                option('Por semana', 'Ultimos 7 dias.', 'ventas_ganancias_semana'),
+                option('Por mes', 'Ultimos 30 dias.', 'ventas_ganancias_mes'),
+                option('Personalizado', 'Responder rango por voz.', 'ventas_ganancias_personalizado'),
+                option('Menu principal', 'Volver al inicio.', 'menu')
             ],
-            footer: 'Para mercancia especifica, dime el producto o categoria por voz.'
+            footer: 'Para rango personalizado di: de hace 15 dias.'
         },
         stock: {
             eyebrow: 'Consulta de stock',
             title: 'Inventario',
-            subtitle: 'Toca una opcion para revisar inventario.',
+            subtitle: 'Selecciona como quieres revisar el almacen.',
             cards: [
-                compactCard('General', 'Cuenta productos con stock bajo.', 'stock_general', BEAUTY_THEME.primary),
-                compactCard('Producto', 'Di el nombre del producto.', 'stock_producto', BEAUTY_THEME.secondary),
-                compactCard('Familia', 'Di el nombre de la familia.', 'stock_familia', BEAUTY_THEME.success),
-                compactCard('Marca', 'Di el nombre de la marca.', 'stock_marca', BEAUTY_THEME.accent),
-                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                option('General', 'Productos con stock bajo.', 'stock_general'),
+                option('Producto', 'Completar nombre por voz.', 'stock_producto'),
+                option('Familia', 'Completar familia por voz.', 'stock_familia'),
+                option('Marca', 'Completar marca por voz.', 'stock_marca'),
+                option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Para producto, marca o familia, completa el nombre por voz.'
         },
         pedidos: {
             eyebrow: 'Estado de pedidos',
             title: 'Pedidos',
-            subtitle: 'Toca una opcion para consultar pedidos.',
+            subtitle: 'Consulta el estado operativo.',
             cards: [
-                compactCard('Por enviar', 'Cuenta pedidos pendientes o pagados.', 'pedidos_por_enviar', BEAUTY_THEME.primary),
-                compactCard('Enviados', 'Elegir rango para pedidos enviados.', 'pedidos_enviados', BEAUTY_THEME.success),
-                compactCard('Finalizados', 'Elegir rango para pedidos finalizados.', 'pedidos_finalizados', BEAUTY_THEME.secondary),
-                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                option('Por enviar', 'Pendientes o pagados.', 'pedidos_por_enviar'),
+                option('Enviados', 'Elegir rango.', 'pedidos_enviados'),
+                option('Finalizados', 'Elegir rango.', 'pedidos_finalizados'),
+                option('Menu principal', 'Volver al inicio.', 'menu')
             ],
-            footer: 'Los enviados y finalizados se pueden filtrar por rango.'
+            footer: 'Enviados y finalizados permiten rangos.'
         },
         pedidosEnviados: {
             eyebrow: 'Pedidos enviados',
-            title: 'Rango de enviados',
+            title: 'Rango',
             subtitle: 'Selecciona el periodo que quieres revisar.',
             cards: [
-                compactCard('Por dia', 'Enviados de hoy.', 'pedidos_enviados_dia', BEAUTY_THEME.primary),
-                compactCard('Por semana', 'Enviados de la ultima semana.', 'pedidos_enviados_semana', BEAUTY_THEME.secondary),
-                compactCard('Por mes', 'Enviados del ultimo mes.', 'pedidos_enviados_mes', BEAUTY_THEME.success),
-                compactCard('Personalizado', 'Di cuantos dias quieres revisar.', 'pedidos_enviados_personalizado', BEAUTY_THEME.accent),
-                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                option('Por dia', 'Enviados de hoy.', 'pedidos_enviados_dia'),
+                option('Por semana', 'Ultimos 7 dias.', 'pedidos_enviados_semana'),
+                option('Por mes', 'Ultimos 30 dias.', 'pedidos_enviados_mes'),
+                option('Personalizado', 'Responder rango por voz.', 'pedidos_enviados_personalizado'),
+                option('Menu principal', 'Volver al inicio.', 'menu')
             ],
-            footer: 'Tambien puedes decir: pedidos enviados de la semana.'
+            footer: 'Ejemplo: pedidos enviados de hace 15 dias.'
         },
         pedidosFinalizados: {
             eyebrow: 'Pedidos finalizados',
-            title: 'Rango de finalizados',
+            title: 'Rango',
             subtitle: 'Selecciona el periodo que quieres revisar.',
             cards: [
-                compactCard('Por dia', 'Finalizados de hoy.', 'pedidos_finalizados_dia', BEAUTY_THEME.primary),
-                compactCard('Por semana', 'Finalizados de la ultima semana.', 'pedidos_finalizados_semana', BEAUTY_THEME.secondary),
-                compactCard('Por mes', 'Finalizados del ultimo mes.', 'pedidos_finalizados_mes', BEAUTY_THEME.success),
-                compactCard('Personalizado', 'Di cuantos dias quieres revisar.', 'pedidos_finalizados_personalizado', BEAUTY_THEME.accent),
-                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                option('Por dia', 'Finalizados de hoy.', 'pedidos_finalizados_dia'),
+                option('Por semana', 'Ultimos 7 dias.', 'pedidos_finalizados_semana'),
+                option('Por mes', 'Ultimos 30 dias.', 'pedidos_finalizados_mes'),
+                option('Personalizado', 'Responder rango por voz.', 'pedidos_finalizados_personalizado'),
+                option('Menu principal', 'Volver al inicio.', 'menu')
             ],
-            footer: 'Tambien puedes decir: pedidos finalizados del mes.'
+            footer: 'Ejemplo: pedidos finalizados de hace 15 dias.'
         },
         ayuda: {
             eyebrow: 'Ayuda',
-            title: 'Que puedes preguntar',
-            subtitle: 'Usa frases naturales para moverte por el asistente.',
+            title: 'Frases utiles',
+            subtitle: 'Prueba una de estas rutas.',
             cards: [
-                compactCard('Ventas', 'Checa las ganancias del mes.', 'ventas', BEAUTY_THEME.primary),
-                compactCard('Stock', 'Consulta el stock general.', 'stock', BEAUTY_THEME.secondary),
-                compactCard('Pedidos', 'Dime los pedidos por enviar.', 'pedidos', BEAUTY_THEME.success),
-                compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+                option('Ventas', 'Checa las ganancias del mes.', 'ventas'),
+                option('Stock', 'Consulta el stock de 4x4.', 'stock'),
+                option('Pedidos', 'Dime los pedidos por enviar.', 'pedidos'),
+                option('Menu principal', 'Volver al inicio.', 'menu')
             ],
-            footer: 'Tambien puedes decir: menu principal, ayuda o salir.'
+            footer: 'Tambien puedes decir menu principal o salir.'
         }
     };
 
-    return makePayload(sections[section] || sections.ayuda);
+    return makePayload('textList', sections[section] || sections.ayuda);
 }
 
 function goodbyePayload() {
-    return makePayload({
+    return makePayload('textList', {
         eyebrow: 'Distribuidora Panamericana',
         title: 'Hasta luego',
-        subtitle: 'Tu asistente queda listo para la siguiente consulta.',
+        subtitle: 'Sesion finalizada.',
         cards: [],
-        footer: 'Gracias por usar el asistente de la Distribuidora Panamericana.'
+        footer: 'Gracias por usar el asistente.'
     });
 }
 
 function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o decir salir.') {
-    return makePayload({
+    return makePayload('textList', {
         eyebrow: 'Resultado',
         title,
         subtitle,
         cards: [
-            compactCard('Ventas', 'Consultar ganancias o mercancia.', 'ventas', BEAUTY_THEME.primary),
-            compactCard('Stock', 'Revisar inventario.', 'stock', BEAUTY_THEME.secondary),
-            compactCard('Pedidos', 'Consultar estado de pedidos.', 'pedidos', BEAUTY_THEME.success),
-            compactCard('Menu principal', 'Volver a las opciones principales.', 'menu', BEAUTY_THEME.ink)
+            option('Ventas', 'Consultar ganancias o mercancia.', 'ventas'),
+            option('Stock', 'Revisar inventario.', 'stock'),
+            option('Pedidos', 'Consultar estado de pedidos.', 'pedidos'),
+            option('Menu principal', 'Volver al inicio.', 'menu')
         ],
         footer
     });
 }
 
 function promptPayload(title, subtitle, footer, examples = 'Di: de hace 15 dias, o hace cien dias.') {
-    return makePayload({
+    return makePayload('textList', {
         eyebrow: 'Completar por voz',
         title,
         subtitle,
         cards: [
-            {
-                ...compactCard('Ejemplos', examples, 'noop', BEAUTY_THEME.primary),
-                quiet: true
-            },
-            compactCard('Menu principal', 'Cancelar y volver al menu.', 'menu', BEAUTY_THEME.ink)
+            option('Ejemplo 1', examples, 'noop'),
+            option('Menu principal', 'Cancelar y volver al menu.', 'menu')
         ],
+        footer
+    });
+}
+
+function productListPayload(title, subtitle, products, footer = 'Toca menu principal o pide otra consulta.') {
+    const cards = products.slice(0, 12).map((product) => option(
+        product.nombre,
+        `Stock: ${product.stock ?? 0}${product.marca?.nombre ? ` | ${product.marca.nombre}` : ''}`,
+        'noop',
+        BEAUTY_THEME.primary,
+        product.imagenUrl || FALLBACK_PRODUCT_IMAGE
+    ));
+
+    cards.push(option('Menu principal', 'Volver al inicio.', 'menu', BEAUTY_THEME.ink, FALLBACK_PRODUCT_IMAGE));
+
+    return makePayload('paginatedList', {
+        eyebrow: 'Inventario',
+        title,
+        subtitle,
+        cards,
         footer
     });
 }
@@ -386,5 +445,6 @@ module.exports = {
     sectionPayload,
     goodbyePayload,
     resultPayload,
-    promptPayload
+    promptPayload,
+    productListPayload
 };

@@ -12,7 +12,8 @@ const {
     sectionPayload,
     goodbyePayload,
     resultPayload,
-    promptPayload
+    promptPayload,
+    productListPayload
 } = require('./alexaAplDocuments');
 
 function supportsAPL(handlerInput) {
@@ -227,12 +228,18 @@ const AplUserEventHandler = {
                 );
             } else if (action === 'stock_general') {
                 const STOCK_MINIMO = 5;
+                const productosBajos = await Producto.find({ stock: { $lt: STOCK_MINIMO } })
+                    .populate('marca')
+                    .sort({ stock: 1, nombre: 1 })
+                    .limit(12);
                 const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
                 sessionAttributes.lastIntent = 'stockIntent';
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalBajos} productos con stock bajo en el almacen.`;
-                datasource = resultPayload('Stock general', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+                datasource = productosBajos.length > 0
+                    ? productListPayload('Stock bajo', speakOutput, productosBajos, 'Lista paginada con los primeros productos criticos.')
+                    : resultPayload('Stock general', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
             } else if (action === 'stock_producto' || action === 'stock_familia' || action === 'stock_marca') {
                 const tipoFiltro = action.replace('stock_', '');
                 sessionAttributes.lastIntent = 'stockIntent';
@@ -692,11 +699,16 @@ const StockIntentHandler = {
         }
 
         let speakOutput = '';
+        let aplProducts = [];
         try {
             const STOCK_MINIMO = 5;
 
             if (tipoFiltro === 'general') {
                 const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
+                aplProducts = await Producto.find({ stock: { $lt: STOCK_MINIMO } })
+                    .populate('marca')
+                    .sort({ stock: 1, nombre: 1 })
+                    .limit(12);
                 speakOutput = `Se han encontrado ${totalBajos} artículos con stock bajo a nivel general en el almacén. `;
             } else {
                 if (!nombreFiltro) {
@@ -711,8 +723,9 @@ const StockIntentHandler = {
                 }
 
                 if (tipoFiltro === 'producto') {
-                    const producto = await Producto.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
+                    const producto = await Producto.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } }).populate('marca');
                     if (producto) {
+                        aplProducts = [producto];
                         speakOutput = `Revisando el stock del producto ${producto.nombre}, nos quedan solamente ${producto.stock} unidades. `;
                     } else {
                         speakOutput = `No se encontró el producto ${nombreFiltro}. `;
@@ -720,8 +733,12 @@ const StockIntentHandler = {
                 } else if (tipoFiltro === 'marca') {
                     const marca = await Marca.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
                     if (marca) {
-                        const productosBajos = await Producto.find({ marca: marca._id, stock: { $lt: STOCK_MINIMO } });
+                        const productosBajos = await Producto.find({ marca: marca._id, stock: { $lt: STOCK_MINIMO } })
+                            .populate('marca')
+                            .sort({ stock: 1, nombre: 1 })
+                            .limit(12);
                         if (productosBajos.length > 0) {
+                            aplProducts = productosBajos;
                             const nombres = productosBajos.map(p => p.nombre).join(', ');
                             speakOutput = `En la marca ${marca.nombre}, detecte stock bajo en: ${nombres}. `;
                         } else {
@@ -733,8 +750,12 @@ const StockIntentHandler = {
                 } else {
                     const familia = await Familia.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
                     if (familia) {
-                        const productosBajos = await Producto.find({ familia: familia._id, stock: { $lt: STOCK_MINIMO } });
+                        const productosBajos = await Producto.find({ familia: familia._id, stock: { $lt: STOCK_MINIMO } })
+                            .populate('marca')
+                            .sort({ stock: 1, nombre: 1 })
+                            .limit(12);
                         if (productosBajos.length > 0) {
+                            aplProducts = productosBajos;
                             const nombres = productosBajos.map(p => p.nombre).join(', ');
                             speakOutput = `En la familia ${familia.nombre}, detecté stock bajo en: ${nombres}. `;
                         } else {
@@ -760,7 +781,9 @@ const StockIntentHandler = {
             return addAplDirective(
                 handlerInput,
                 responseBuilder,
-                resultPayload('Stock', speakOutput),
+                aplProducts.length > 0
+                    ? productListPayload('Stock', speakOutput, aplProducts)
+                    : resultPayload('Stock', speakOutput),
                 'stock-result'
             ).getResponse();
         }
