@@ -46,6 +46,21 @@ function toImageListItems(cards) {
     }));
 }
 
+function backButtonProps(screen) {
+    if (screen.showBackButton === false) {
+        return { headerBackButton: false };
+    }
+
+    return {
+        headerBackButton: true,
+        headerBackButtonCommand: {
+            type: 'SendEvent',
+            arguments: ['menu']
+        },
+        headerBackButtonAccessibilityLabel: 'Volver al menu'
+    };
+}
+
 function createHeadlineDocument(payload) {
     const { screen } = payload;
 
@@ -66,6 +81,7 @@ function createHeadlineDocument(payload) {
                     type: 'AlexaHeadline',
                     id: 'panamericanaHeadline',
                     headerTitle: screen.eyebrow,
+                    ...backButtonProps(screen),
                     headerAttributionImage: screen.logoUrl,
                     primaryText: screen.title,
                     secondaryText: screen.subtitle,
@@ -100,7 +116,7 @@ function createTextListDocument(payload) {
                     id: 'panamericanaTextList',
                     headerTitle: screen.title,
                     headerSubtitle: screen.eyebrow,
-                    headerBackButton: false,
+                    ...backButtonProps(screen),
                     headerAttributionImage: screen.logoUrl,
                     backgroundImageSource: screen.backgroundImage,
                     backgroundBlur: true,
@@ -135,7 +151,7 @@ function createGridListDocument(payload) {
                     id: 'panamericanaGridList',
                     headerTitle: screen.title,
                     headerSubtitle: screen.eyebrow,
-                    headerBackButton: false,
+                    ...backButtonProps(screen),
                     headerAttributionImage: screen.logoUrl,
                     backgroundImageSource: screen.backgroundImage,
                     backgroundBlur: true,
@@ -172,7 +188,7 @@ function createPaginatedListDocument(payload) {
                     id: 'panamericanaPaginatedList',
                     headerTitle: screen.title,
                     headerSubtitle: screen.eyebrow,
-                    headerBackButton: false,
+                    ...backButtonProps(screen),
                     headerAttributionImage: screen.logoUrl,
                     backgroundImageSource: screen.backgroundImage,
                     backgroundBlur: true,
@@ -264,8 +280,117 @@ function choiceComponent(item, index) {
     };
 }
 
+function menuButtonComponent() {
+    return {
+        type: 'TouchWrapper',
+        position: 'absolute',
+        top: '${viewport.height < 620 ? "18dp" : "30dp"}',
+        right: '${viewport.width < 900 ? "28dp" : "56dp"}',
+        width: '${viewport.width < 900 ? "116dp" : "132dp"}',
+        height: '${viewport.height < 620 ? "42dp" : "48dp"}',
+        onPress: [
+            {
+                type: 'SendEvent',
+                arguments: ['menu']
+            }
+        ],
+        item: {
+            type: 'Frame',
+            width: '100%',
+            height: '100%',
+            borderRadius: '8dp',
+            backgroundColor: BEAUTY_THEME.ink,
+            borderColor: BEAUTY_THEME.accent,
+            borderWidth: '2dp',
+            item: {
+                type: 'Text',
+                text: 'Menu',
+                color: '#FFFFFF',
+                fontSize: '${viewport.height < 620 ? "17dp" : "19dp"}',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                textAlignVertical: 'center'
+            }
+        }
+    };
+}
+
 function createMultipleChoiceDocument(payload) {
     const { screen } = payload;
+    const items = [
+        {
+            type: 'Image',
+            source: screen.backgroundImage,
+            width: '100%',
+            height: '100%',
+            scale: 'best-fill',
+            opacity: 0.2,
+            position: 'absolute'
+        },
+        {
+            type: 'Container',
+            width: '100%',
+            height: '100%',
+            paddingLeft: '${viewport.width < 900 ? "32dp" : "64dp"}',
+            paddingRight: '${viewport.width < 900 ? "32dp" : "64dp"}',
+            paddingTop: '${viewport.height < 620 ? "24dp" : "42dp"}',
+            paddingBottom: '${viewport.height < 620 ? "22dp" : "34dp"}',
+            items: [
+                {
+                    type: 'Text',
+                    text: screen.eyebrow,
+                    color: BEAUTY_THEME.accent,
+                    fontSize: '${viewport.height < 620 ? "17dp" : "21dp"}',
+                    fontWeight: 'bold',
+                    maxLines: 1
+                },
+                {
+                    type: 'Text',
+                    text: screen.title,
+                    color: '#FFFFFF',
+                    fontSize: '${viewport.height < 620 ? "34dp" : "46dp"}',
+                    fontWeight: 'bold',
+                    maxLines: 2,
+                    spacing: '6dp'
+                },
+                {
+                    type: 'Text',
+                    text: screen.subtitle,
+                    color: '#F8DDE9',
+                    fontSize: '${viewport.height < 620 ? "18dp" : "23dp"}',
+                    maxLines: 2,
+                    spacing: '6dp'
+                },
+                {
+                    type: 'ScrollView',
+                    grow: 1,
+                    spacing: '${viewport.height < 620 ? "16dp" : "26dp"}',
+                    item: {
+                        type: 'Container',
+                        direction: 'row',
+                        wrap: 'wrap',
+                        width: '100%',
+                        justifyContent: 'spaceBetween',
+                        items: screen.cards.map(choiceComponent)
+                    }
+                },
+                {
+                    type: 'Text',
+                    text: screen.footer,
+                    color: '#F8DDE9',
+                    fontSize: '${viewport.height < 620 ? "15dp" : "18dp"}',
+                    maxLines: 2,
+                    textAlign: 'center',
+                    width: '100%',
+                    spacing: '12dp'
+                }
+            ]
+        }
+    ];
+
+    if (screen.showBackButton !== false) {
+        items.push(menuButtonComponent());
+    }
 
     return {
         type: 'APL',
@@ -282,76 +407,7 @@ function createMultipleChoiceDocument(payload) {
                     type: 'Container',
                     width: '100%',
                     height: '100%',
-                    items: [
-                        {
-                            type: 'Image',
-                            source: screen.backgroundImage,
-                            width: '100%',
-                            height: '100%',
-                            scale: 'best-fill',
-                            opacity: 0.2,
-                            position: 'absolute'
-                        },
-                        {
-                            type: 'Container',
-                            width: '100%',
-                            height: '100%',
-                            paddingLeft: '${viewport.width < 900 ? "32dp" : "64dp"}',
-                            paddingRight: '${viewport.width < 900 ? "32dp" : "64dp"}',
-                            paddingTop: '${viewport.height < 620 ? "24dp" : "42dp"}',
-                            paddingBottom: '${viewport.height < 620 ? "22dp" : "34dp"}',
-                            items: [
-                                {
-                                    type: 'Text',
-                                    text: screen.eyebrow,
-                                    color: BEAUTY_THEME.accent,
-                                    fontSize: '${viewport.height < 620 ? "17dp" : "21dp"}',
-                                    fontWeight: 'bold',
-                                    maxLines: 1
-                                },
-                                {
-                                    type: 'Text',
-                                    text: screen.title,
-                                    color: '#FFFFFF',
-                                    fontSize: '${viewport.height < 620 ? "34dp" : "46dp"}',
-                                    fontWeight: 'bold',
-                                    maxLines: 2,
-                                    spacing: '6dp'
-                                },
-                                {
-                                    type: 'Text',
-                                    text: screen.subtitle,
-                                    color: '#F8DDE9',
-                                    fontSize: '${viewport.height < 620 ? "18dp" : "23dp"}',
-                                    maxLines: 2,
-                                    spacing: '6dp'
-                                },
-                                {
-                                    type: 'ScrollView',
-                                    grow: 1,
-                                    spacing: '${viewport.height < 620 ? "16dp" : "26dp"}',
-                                    item: {
-                                        type: 'Container',
-                                        direction: 'row',
-                                        wrap: 'wrap',
-                                        width: '100%',
-                                        justifyContent: 'spaceBetween',
-                                        items: screen.cards.map(choiceComponent)
-                                    }
-                                },
-                                {
-                                    type: 'Text',
-                                    text: screen.footer,
-                                    color: '#F8DDE9',
-                                    fontSize: '${viewport.height < 620 ? "15dp" : "18dp"}',
-                                    maxLines: 2,
-                                    textAlign: 'center',
-                                    width: '100%',
-                                    spacing: '12dp'
-                                }
-                            ]
-                        }
-                    ]
+                    items
                 }
             }
         }
@@ -637,6 +693,7 @@ function goodbyePayload() {
         eyebrow: 'Distribuidora Panamericana',
         title: 'Hasta luego',
         subtitle: 'Sesion finalizada.',
+        showBackButton: false,
         cards: [],
         footer: 'Gracias por usar el asistente.'
     });
