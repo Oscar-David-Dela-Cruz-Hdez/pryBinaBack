@@ -313,6 +313,21 @@ const AplUserEventHandler = {
             } else if (action === 'noop') {
                 speakOutput = 'Responde con una frase como: de hace quince dias, o hace cien dias.';
                 datasource = promptPayload('Rango personalizado', speakOutput, 'Usa una frase compatible con tus utterances.');
+            } else if (action.startsWith('stock_detalle:')) {
+                const productId = action.replace('stock_detalle:', '');
+                const producto = await Producto.findById(productId).populate('marca');
+
+                sessionAttributes.lastIntent = 'stockIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+
+                if (producto) {
+                    speakOutput = `El producto ${producto.nombre} tiene ${producto.stock} unidades disponibles.`;
+                    datasource = productListPayload('Detalle de stock', speakOutput, [producto], 'Toca menu principal o pide otro stock.');
+                } else {
+                    speakOutput = 'No pude encontrar el producto seleccionado.';
+                    datasource = resultPayload('Producto no encontrado', speakOutput, 'Puedes volver al menu principal.');
+                }
             } else if (action.startsWith('ventas_ganancias_') && action !== 'ventas_ganancias_personalizado') {
                 const periodo = action.replace('ventas_ganancias_', '');
                 const totalGanancia = await consultarGanancias(periodo);

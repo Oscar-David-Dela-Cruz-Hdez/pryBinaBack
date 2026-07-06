@@ -33,7 +33,13 @@ function toTextListItems(cards) {
     return cards.map((item) => ({
         primaryText: item.title,
         secondaryText: item.subtitle,
-        token: item.action
+        token: item.action,
+        primaryAction: [
+            {
+                type: 'SendEvent',
+                arguments: [item.action]
+            }
+        ]
     }));
 }
 
@@ -42,7 +48,13 @@ function toImageListItems(cards) {
         primaryText: item.title,
         secondaryText: item.subtitle,
         imageSource: item.imageSource || FALLBACK_PRODUCT_IMAGE,
-        token: item.action
+        token: item.action,
+        primaryAction: [
+            {
+                type: 'SendEvent',
+                arguments: [item.action]
+            }
+        ]
     }));
 }
 
@@ -733,7 +745,7 @@ function productListPayload(title, subtitle, products, footer = 'Toca menu princ
     const cards = visibleProducts.map((product) => option(
         product.nombre,
         `Stock: ${product.stock ?? 0}${product.marca?.nombre ? ` | ${product.marca.nombre}` : ''}`,
-        'noop',
+        `stock_detalle:${product._id}`,
         BEAUTY_THEME.primary,
         product.imagenUrl || FALLBACK_PRODUCT_IMAGE
     ));
