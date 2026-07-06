@@ -72,7 +72,7 @@ function extraerTokenAlexa(handlerInput) {
     return limpiarTokenAlexa(valores.join(' '));
 }
 
-function respuestaSolicitarToken(handlerInput, mensaje = 'Bienvenido al asistente de Panamericana. Para continuar, dime tu token de administrador de cinco digitos.') {
+function respuestaSolicitarToken(handlerInput, mensaje = 'Bienvenido al asistente de Panamericana. Para continuar, dime tu token de administrador de cinco dígitos.') {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     sessionAttributes.alexaAuthenticated = false;
     sessionAttributes.waitingFor = 'alexaToken';
@@ -85,7 +85,7 @@ function respuestaSolicitarToken(handlerInput, mensaje = 'Bienvenido al asistent
         mensaje,
         authPayload(mensaje, sessionAttributes.alexaTokenInput),
         'alexa-token',
-        'Dime tu token de administrador de cinco digitos.'
+        'Dime tu token de administrador de cinco dígitos.'
     );
 }
 
@@ -295,7 +295,7 @@ const AplUserEventHandler = {
                 return responseWithApl(
                     handlerInput,
                     `Token con ${sessionAttributes.alexaTokenInput.length} digitos.`,
-                    authPayload('Toca Ingresar cuando termines los cinco digitos.', sessionAttributes.alexaTokenInput),
+                    authPayload('Toca Ingresar cuando termines los cinco dígitos.', sessionAttributes.alexaTokenInput),
                     'alexa-token',
                     'Toca Ingresar cuando termines.'
                 );
@@ -307,10 +307,10 @@ const AplUserEventHandler = {
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                     return responseWithApl(
                         handlerInput,
-                        'El token debe tener cinco digitos.',
-                        authPayload('Completa los cinco digitos antes de ingresar.', tokenInput),
+                        'El token debe tener cinco dígitos.',
+                        authPayload('Completa los cinco dígitos antes de ingresar.', tokenInput),
                         'alexa-token',
-                        'Completa los cinco digitos.'
+                        'Completa los cinco dígitos.'
                     );
                 }
 
@@ -335,7 +335,7 @@ const AplUserEventHandler = {
 
                     sessionAttributes.alexaTokenInput = '';
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                    return respuestaSolicitarToken(handlerInput, 'Token no valido. Intenta ingresar nuevamente los cinco digitos.');
+                    return respuestaSolicitarToken(handlerInput, 'Token no valido. Intenta ingresar nuevamente los cinco dígitos.');
                 } catch (error) {
                     console.error('Error al validar token desde APL:', error);
                     sessionAttributes.alexaTokenInput = '';
@@ -349,10 +349,10 @@ const AplUserEventHandler = {
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return responseWithApl(
                     handlerInput,
-                    'Quite el ultimo digito.',
-                    authPayload('Continua tocando los digitos del token.', sessionAttributes.alexaTokenInput),
+                    'Quite el ultimo dígito.',
+                    authPayload('Continua tocando los dígitos del token.', sessionAttributes.alexaTokenInput),
                     'alexa-token',
-                    'Continua con el siguiente digito.'
+                    'Continua con el siguiente dígito.'
                 );
             }
 
@@ -361,8 +361,8 @@ const AplUserEventHandler = {
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return responseWithApl(
                     handlerInput,
-                    'Token limpiado. Ingresa nuevamente los cinco digitos.',
-                    authPayload('Ingresa nuevamente los cinco digitos.', sessionAttributes.alexaTokenInput),
+                    'Token limpiado. Ingresa nuevamente los cinco dígitos.',
+                    authPayload('Ingresa nuevamente los cinco dígitos.', sessionAttributes.alexaTokenInput),
                     'alexa-token',
                     'Ingresa nuevamente el token.'
                 );
@@ -375,7 +375,7 @@ const AplUserEventHandler = {
                     'Por voz puedes decir: mi token es uno dos tres cuatro cinco.',
                     authPayload('Tambien puedes decir el token por voz.', sessionAttributes.alexaTokenInput || ''),
                     'alexa-token',
-                    'Di tu token de administrador de cinco digitos.'
+                    'Di tu token de administrador de cinco dígitos.'
                 );
             }
 
@@ -543,7 +543,7 @@ const AplUserEventHandler = {
             console.error('Error en APL UserEvent:', error);
             sessionAttributes.waitingFor = null;
             sessionAttributes.savedContext = {};
-            speakOutput = 'Hubo un problema al consultar la informacion. Intenta de nuevo.';
+            speakOutput = 'Hubo un problema al consultar la información. Intenta de nuevo.';
             datasource = resultPayload('Consulta no disponible', speakOutput, 'Puedes volver al menu principal.');
         }
 
@@ -670,7 +670,7 @@ const LegacyAplUserEventHandler = {
             console.error('Error en APL UserEvent:', error);
             sessionAttributes.waitingFor = null;
             sessionAttributes.savedContext = {};
-            speakOutput = 'Hubo un problema al consultar la informacion. Intenta de nuevo.';
+            speakOutput = 'Hubo un problema al consultar la información. Intenta de nuevo.';
             datasource = resultPayload('Consulta no disponible', speakOutput, 'Puedes volver al menu principal.');
         }
 
