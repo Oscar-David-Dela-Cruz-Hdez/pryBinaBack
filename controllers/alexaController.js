@@ -71,7 +71,7 @@ function extraerTokenAlexa(handlerInput) {
     return limpiarTokenAlexa(valores.join(' '));
 }
 
-function respuestaSolicitarToken(handlerInput, mensaje = 'Bienvenido al asistente de Panamericana. Para continuar, dime tu token de administrador de seis digitos.') {
+function respuestaSolicitarToken(handlerInput, mensaje = 'Bienvenido al asistente de Panamericana. Para continuar, dime tu token de administrador de cinco digitos.') {
     const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
     sessionAttributes.alexaAuthenticated = false;
     sessionAttributes.waitingFor = 'alexaToken';
@@ -81,14 +81,14 @@ function respuestaSolicitarToken(handlerInput, mensaje = 'Bienvenido al asistent
     return responseWithApl(
         handlerInput,
         mensaje,
-        promptPayload('Acceso administrador', mensaje, 'Di el token de 6 digitos generado en el panel.', 'Di tu token de administrador.'),
+        promptPayload('Acceso administrador', mensaje, 'Di el token de 5 digitos generado en el panel.', 'Di tu token de administrador.'),
         'alexa-token',
-        'Dime tu token de administrador de seis digitos.'
+        'Dime tu token de administrador de cinco digitos.'
     );
 }
 
 async function validarTokenAlexa(tokenPlano) {
-    if (!tokenPlano || tokenPlano.length !== 6) return null;
+    if (!tokenPlano || tokenPlano.length !== 5) return null;
 
     const admins = await Usuario.find({
         rol: 'admin',
@@ -223,7 +223,7 @@ const AlexaTokenIntentHandler = {
         try {
             const admin = await validarTokenAlexa(tokenAlexa);
             if (!admin) {
-                return respuestaSolicitarToken(handlerInput, 'Token no valido. Por favor dime el token de administrador de seis digitos.');
+                return respuestaSolicitarToken(handlerInput, 'Token no valido. Por favor dime el token de administrador de cinco digitos.');
             }
 
             const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();

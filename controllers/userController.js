@@ -235,7 +235,7 @@ const updateRol = async (req, res) => {
   }
 };
 
-const generarAlexaTokenPlano = () => crypto.randomInt(100000, 1000000).toString();
+const generarAlexaTokenPlano = () => crypto.randomInt(10000, 100000).toString();
 
 const getAlexaAdmins = async (req, res) => {
   try {
