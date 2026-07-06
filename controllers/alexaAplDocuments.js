@@ -220,8 +220,7 @@ function keypadButton(label, action, width = '30%', accent = false) {
     return {
         type: 'TouchWrapper',
         width,
-        height: '${viewport.height < 620 ? "58dp" : "72dp"}',
-        spacing: '10dp',
+        height: '${viewport.height < 620 ? "52dp" : "64dp"}',
         onPress: [
             {
                 type: 'SendEvent',
@@ -233,20 +232,31 @@ function keypadButton(label, action, width = '30%', accent = false) {
             width: '100%',
             height: '100%',
             borderRadius: '8dp',
-            backgroundColor: accent ? BEAUTY_THEME.primary : 'rgba(255,255,255,0.16)',
-            borderColor: accent ? BEAUTY_THEME.secondary : 'rgba(255,255,255,0.34)',
-            borderWidth: '1dp',
+            backgroundColor: accent ? 'rgba(255,255,255,0.24)' : 'rgba(255,255,255,0.16)',
+            borderColor: accent ? '#FFFFFF' : 'rgba(255,255,255,0.34)',
+            borderWidth: accent ? '2dp' : '1dp',
             item: {
                 type: 'Text',
                 text: label,
                 color: '#FFFFFF',
-                fontSize: '${viewport.height < 620 ? "25dp" : "34dp"}',
+                fontSize: '${viewport.height < 620 ? "20dp" : "27dp"}',
                 fontWeight: 'bold',
                 textAlign: 'center',
                 textAlignVertical: 'center',
                 maxLines: 1
             }
         }
+    };
+}
+
+function keypadRow(items) {
+    return {
+        type: 'Container',
+        direction: 'row',
+        width: '100%',
+        justifyContent: 'spaceBetween',
+        spacing: '${viewport.height < 620 ? "8dp" : "12dp"}',
+        items
     };
 }
 
@@ -316,7 +326,7 @@ function createKeypadDocument(payload) {
                                 {
                                     type: 'Frame',
                                     width: '100%',
-                                    height: '${viewport.height < 620 ? "62dp" : "78dp"}',
+                                    height: '${viewport.height < 620 ? "54dp" : "66dp"}',
                                     backgroundColor: 'rgba(0,0,0,0.28)',
                                     borderColor: BEAUTY_THEME.accent,
                                     borderWidth: '1dp',
@@ -335,24 +345,29 @@ function createKeypadDocument(payload) {
                                 },
                                 {
                                     type: 'Container',
-                                    direction: 'row',
-                                    wrap: 'wrap',
                                     width: '100%',
-                                    justifyContent: 'spaceBetween',
-                                    spacing: '${viewport.height < 620 ? "12dp" : "18dp"}',
+                                    spacing: '${viewport.height < 620 ? "8dp" : "12dp"}',
                                     items: [
-                                        keypadButton('1', 'token_digit:1'),
-                                        keypadButton('2', 'token_digit:2'),
-                                        keypadButton('3', 'token_digit:3'),
-                                        keypadButton('4', 'token_digit:4'),
-                                        keypadButton('5', 'token_digit:5'),
-                                        keypadButton('6', 'token_digit:6'),
-                                        keypadButton('7', 'token_digit:7'),
-                                        keypadButton('8', 'token_digit:8'),
-                                        keypadButton('9', 'token_digit:9'),
-                                        keypadButton('Borrar', 'token_backspace'),
-                                        keypadButton('0', 'token_digit:0'),
-                                        keypadButton('Limpiar', 'token_clear')
+                                        keypadRow([
+                                            keypadButton('1', 'token_digit:1'),
+                                            keypadButton('2', 'token_digit:2'),
+                                            keypadButton('3', 'token_digit:3')
+                                        ]),
+                                        keypadRow([
+                                            keypadButton('4', 'token_digit:4'),
+                                            keypadButton('5', 'token_digit:5'),
+                                            keypadButton('6', 'token_digit:6')
+                                        ]),
+                                        keypadRow([
+                                            keypadButton('7', 'token_digit:7'),
+                                            keypadButton('8', 'token_digit:8'),
+                                            keypadButton('9', 'token_digit:9')
+                                        ]),
+                                        keypadRow([
+                                            keypadButton('Borrar', 'token_backspace'),
+                                            keypadButton('0', 'token_digit:0'),
+                                            keypadButton('Limpiar', 'token_clear')
+                                        ])
                                     ]
                                 },
                                 {
@@ -360,7 +375,7 @@ function createKeypadDocument(payload) {
                                     direction: 'row',
                                     width: '100%',
                                     justifyContent: 'spaceBetween',
-                                    spacing: '${viewport.height < 620 ? "12dp" : "18dp"}',
+                                    spacing: '${viewport.height < 620 ? "8dp" : "12dp"}',
                                     items: [
                                         keypadButton('Ingresar', 'token_submit', '64%', true),
                                         keypadButton('Voz', 'noop', '32%')
