@@ -580,39 +580,43 @@ function createAplDocument(payload) {
 }
 
 function welcomePayload() {
-    return makePayload('cardsLayout', {
-        eyebrow: 'Distribuidora Panamericana',
-        title: 'Bienvenida',
-        subtitle: 'Asistente de ventas, inventario y pedidos.',
-        cards: [
-            option('Ir al menu', 'Ver las consultas disponibles.', 'menu', BEAUTY_THEME.primary),
-            option('Ayuda', 'Escuchar ejemplos rapidos.', 'ayuda', BEAUTY_THEME.secondary),
-            option('Salir', 'Cerrar el asistente.', 'salir', BEAUTY_THEME.ink)
-        ],
-        footer: 'Toca una opcion o responde por voz.'
-    });
-}
-
-function menuPayload() {
-    return makePayload('cardsLayout', {
+    return makePayload('textList', {
         eyebrow: 'Menu principal',
         title: 'Panamericana',
         subtitle: 'Elige una consulta administrativa.',
         cards: [
-            option('Ventas', 'Ganancias y mercancia.', 'ventas', BEAUTY_THEME.primary),
-            option('Stock', 'Inventario por producto, marca o familia.', 'stock', BEAUTY_THEME.secondary),
-            option('Pedidos', 'Por enviar, enviados y finalizados.', 'pedidos', BEAUTY_THEME.success),
-            option('Ayuda', 'Frases de ejemplo.', 'ayuda', BEAUTY_THEME.accent),
-            option('Salir', 'Terminar sesion.', 'salir', BEAUTY_THEME.ink)
+            option('Ventas', 'Consultar ganancias o mercancia.', 'ventas'),
+            option('Stock', 'Revisar inventario.', 'stock'),
+            option('Pedidos', 'Consultar estado de pedidos.', 'pedidos'),
+            option('Ayuda', 'Frases de ejemplo.', 'ayuda'),
+            option('Salir', 'Terminar sesion.', 'salir')
         ],
-        footer: 'Tambien puedes decir ventas, stock, pedidos, ayuda o salir.'
+        footer: 'Tambien puedes decir ventas, stock, pedidos, ayuda o salir.',
+        showBackButton: false
+    });
+}
+
+function menuPayload() {
+    return makePayload('textList', {
+        eyebrow: 'Menu principal',
+        title: 'Panamericana',
+        subtitle: 'Elige una consulta administrativa.',
+        cards: [
+            option('Ventas', 'Consultar ganancias o mercancia.', 'ventas'),
+            option('Stock', 'Revisar inventario.', 'stock'),
+            option('Pedidos', 'Consultar estado de pedidos.', 'pedidos'),
+            option('Ayuda', 'Frases de ejemplo.', 'ayuda'),
+            option('Salir', 'Terminar sesion.', 'salir')
+        ],
+        footer: 'Tambien puedes decir ventas, stock, pedidos, ayuda o salir.',
+        showBackButton: false
     });
 }
 
 function sectionPayload(section) {
     const sections = {
         ventas: {
-            template: 'multipleChoice',
+            template: 'textList',
             eyebrow: 'Consulta de ventas',
             title: 'Ventas',
             subtitle: 'Selecciona el rango de ganancias.',
@@ -626,7 +630,7 @@ function sectionPayload(section) {
             footer: 'Para rango personalizado di: de hace 15 dias.'
         },
         stock: {
-            template: 'gridList',
+            template: 'textList',
             eyebrow: 'Consulta de stock',
             title: 'Inventario',
             subtitle: 'Selecciona como quieres revisar el almacen.',
@@ -640,7 +644,7 @@ function sectionPayload(section) {
             footer: 'Para producto, marca o familia, completa el nombre por voz.'
         },
         pedidos: {
-            template: 'multipleChoice',
+            template: 'textList',
             eyebrow: 'Estado de pedidos',
             title: 'Pedidos',
             subtitle: 'Consulta el estado operativo.',
@@ -653,7 +657,7 @@ function sectionPayload(section) {
             footer: 'Enviados y finalizados permiten rangos.'
         },
         pedidosEnviados: {
-            template: 'multipleChoice',
+            template: 'textList',
             eyebrow: 'Pedidos enviados',
             title: 'Rango',
             subtitle: 'Selecciona el periodo que quieres revisar.',
@@ -667,7 +671,7 @@ function sectionPayload(section) {
             footer: 'Ejemplo: pedidos enviados de hace 15 dias.'
         },
         pedidosFinalizados: {
-            template: 'multipleChoice',
+            template: 'textList',
             eyebrow: 'Pedidos finalizados',
             title: 'Rango',
             subtitle: 'Selecciona el periodo que quieres revisar.',
@@ -681,7 +685,7 @@ function sectionPayload(section) {
             footer: 'Ejemplo: pedidos finalizados de hace 15 dias.'
         },
         ayuda: {
-            template: 'cardsLayout',
+            template: 'textList',
             eyebrow: 'Ayuda',
             title: 'Frases utiles',
             subtitle: 'Elige una ruta o usa una frase de ejemplo.',
