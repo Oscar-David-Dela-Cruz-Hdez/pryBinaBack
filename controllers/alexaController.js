@@ -291,46 +291,57 @@ const AplUserEventHandler = {
             if (action.startsWith('token_digit:')) {
                 const digit = action.replace('token_digit:', '');
                 sessionAttributes.alexaTokenInput = `${sessionAttributes.alexaTokenInput || ''}${digit}`.slice(0, 5);
-
-                if (sessionAttributes.alexaTokenInput.length === 5) {
-                    try {
-                        const admin = await validarTokenAlexa(sessionAttributes.alexaTokenInput);
-                        if (admin) {
-                            sessionAttributes.alexaAuthenticated = true;
-                            sessionAttributes.alexaAdminId = admin._id.toString();
-                            sessionAttributes.waitingFor = null;
-                            sessionAttributes.savedContext = {};
-                            sessionAttributes.alexaTokenInput = '';
-                            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-
-                            return responseWithApl(
-                                handlerInput,
-                                `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, stock o pedidos.`,
-                                menuPayload(),
-                                'main-menu',
-                                'Quieres consultar ventas, stock o pedidos?'
-                            );
-                        }
-
-                        sessionAttributes.alexaTokenInput = '';
-                        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                        return respuestaSolicitarToken(handlerInput, 'Token no valido. Intenta ingresar nuevamente los cinco digitos.');
-                    } catch (error) {
-                        console.error('Error al validar token desde APL:', error);
-                        sessionAttributes.alexaTokenInput = '';
-                        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-                        return respuestaSolicitarToken(handlerInput, 'No pude validar el token en este momento. Intenta nuevamente.');
-                    }
-                }
-
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return responseWithApl(
                     handlerInput,
-                    `Digito ${sessionAttributes.alexaTokenInput.length} recibido.`,
-                    authPayload('Continua tocando los digitos del token.', sessionAttributes.alexaTokenInput),
+                    `Token con ${sessionAttributes.alexaTokenInput.length} digitos.`,
+                    authPayload('Toca Ingresar cuando termines los cinco digitos.', sessionAttributes.alexaTokenInput),
                     'alexa-token',
-                    'Continua con el siguiente digito.'
+                    'Toca Ingresar cuando termines.'
                 );
+            }
+
+            if (action === 'token_submit') {
+                const tokenInput = sessionAttributes.alexaTokenInput || '';
+                if (tokenInput.length !== 5) {
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                    return responseWithApl(
+                        handlerInput,
+                        'El token debe tener cinco digitos.',
+                        authPayload('Completa los cinco digitos antes de ingresar.', tokenInput),
+                        'alexa-token',
+                        'Completa los cinco digitos.'
+                    );
+                }
+
+                try {
+                    const admin = await validarTokenAlexa(tokenInput);
+                    if (admin) {
+                        sessionAttributes.alexaAuthenticated = true;
+                        sessionAttributes.alexaAdminId = admin._id.toString();
+                        sessionAttributes.waitingFor = null;
+                        sessionAttributes.savedContext = {};
+                        sessionAttributes.alexaTokenInput = '';
+                        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+                        return responseWithApl(
+                            handlerInput,
+                            `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, stock o pedidos.`,
+                            menuPayload(),
+                            'main-menu',
+                            'Quieres consultar ventas, stock o pedidos?'
+                        );
+                    }
+
+                    sessionAttributes.alexaTokenInput = '';
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                    return respuestaSolicitarToken(handlerInput, 'Token no valido. Intenta ingresar nuevamente los cinco digitos.');
+                } catch (error) {
+                    console.error('Error al validar token desde APL:', error);
+                    sessionAttributes.alexaTokenInput = '';
+                    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                    return respuestaSolicitarToken(handlerInput, 'No pude validar el token en este momento. Intenta nuevamente.');
+                }
             }
 
             if (action === 'token_backspace') {
@@ -354,6 +365,17 @@ const AplUserEventHandler = {
                     authPayload('Ingresa nuevamente los cinco digitos.', sessionAttributes.alexaTokenInput),
                     'alexa-token',
                     'Ingresa nuevamente el token.'
+                );
+            }
+
+            if (action === 'noop') {
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                return responseWithApl(
+                    handlerInput,
+                    'Por voz puedes decir: mi token es uno dos tres cuatro cinco.',
+                    authPayload('Tambien puedes decir el token por voz.', sessionAttributes.alexaTokenInput || ''),
+                    'alexa-token',
+                    'Di tu token de administrador de cinco digitos.'
                 );
             }
 

@@ -216,6 +216,175 @@ function createPaginatedListDocument(payload) {
     };
 }
 
+function keypadButton(label, action, width = '30%', accent = false) {
+    return {
+        type: 'TouchWrapper',
+        width,
+        height: '${viewport.height < 620 ? "58dp" : "72dp"}',
+        spacing: '10dp',
+        onPress: [
+            {
+                type: 'SendEvent',
+                arguments: [action]
+            }
+        ],
+        item: {
+            type: 'Frame',
+            width: '100%',
+            height: '100%',
+            borderRadius: '8dp',
+            backgroundColor: accent ? BEAUTY_THEME.primary : 'rgba(255,255,255,0.16)',
+            borderColor: accent ? BEAUTY_THEME.secondary : 'rgba(255,255,255,0.34)',
+            borderWidth: '1dp',
+            item: {
+                type: 'Text',
+                text: label,
+                color: '#FFFFFF',
+                fontSize: '${viewport.height < 620 ? "25dp" : "34dp"}',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                textAlignVertical: 'center',
+                maxLines: 1
+            }
+        }
+    };
+}
+
+function createKeypadDocument(payload) {
+    const { screen } = payload;
+    const tokenInput = screen.tokenInput || '';
+
+    return {
+        type: 'APL',
+        version: '2024.3',
+        theme: 'dark',
+        mainTemplate: {
+            parameters: ['payload'],
+            item: {
+                type: 'Frame',
+                width: '100vw',
+                height: '100vh',
+                backgroundColor: BEAUTY_THEME.background,
+                item: {
+                    type: 'Container',
+                    width: '100%',
+                    height: '100%',
+                    items: [
+                        {
+                            type: 'Image',
+                            source: screen.backgroundImage,
+                            width: '100%',
+                            height: '100%',
+                            scale: 'best-fill',
+                            opacity: 0.22,
+                            position: 'absolute'
+                        },
+                        {
+                            type: 'Container',
+                            width: '100%',
+                            height: '100%',
+                            paddingLeft: '${viewport.width < 900 ? "38dp" : "72dp"}',
+                            paddingRight: '${viewport.width < 900 ? "38dp" : "72dp"}',
+                            paddingTop: '${viewport.height < 620 ? "28dp" : "46dp"}',
+                            paddingBottom: '${viewport.height < 620 ? "24dp" : "36dp"}',
+                            items: [
+                                {
+                                    type: 'Text',
+                                    text: screen.eyebrow,
+                                    color: BEAUTY_THEME.accent,
+                                    fontSize: '${viewport.height < 620 ? "18dp" : "22dp"}',
+                                    fontWeight: 'bold',
+                                    maxLines: 1
+                                },
+                                {
+                                    type: 'Text',
+                                    text: screen.title,
+                                    color: '#FFFFFF',
+                                    fontSize: '${viewport.height < 620 ? "34dp" : "46dp"}',
+                                    fontWeight: 'bold',
+                                    spacing: '6dp',
+                                    maxLines: 1
+                                },
+                                {
+                                    type: 'Text',
+                                    text: screen.subtitle,
+                                    color: '#F8DDE9',
+                                    fontSize: '${viewport.height < 620 ? "17dp" : "21dp"}',
+                                    spacing: '6dp',
+                                    maxLines: 2
+                                },
+                                {
+                                    type: 'Frame',
+                                    width: '100%',
+                                    height: '${viewport.height < 620 ? "62dp" : "78dp"}',
+                                    backgroundColor: 'rgba(0,0,0,0.28)',
+                                    borderColor: BEAUTY_THEME.accent,
+                                    borderWidth: '1dp',
+                                    borderRadius: '8dp',
+                                    spacing: '${viewport.height < 620 ? "12dp" : "20dp"}',
+                                    item: {
+                                        type: 'Text',
+                                        text: tokenInput || '_____',
+                                        color: '#FFFFFF',
+                                        fontSize: '${viewport.height < 620 ? "32dp" : "46dp"}',
+                                        fontWeight: 'bold',
+                                        textAlign: 'center',
+                                        textAlignVertical: 'center',
+                                        maxLines: 1
+                                    }
+                                },
+                                {
+                                    type: 'Container',
+                                    direction: 'row',
+                                    wrap: 'wrap',
+                                    width: '100%',
+                                    justifyContent: 'spaceBetween',
+                                    spacing: '${viewport.height < 620 ? "12dp" : "18dp"}',
+                                    items: [
+                                        keypadButton('1', 'token_digit:1'),
+                                        keypadButton('2', 'token_digit:2'),
+                                        keypadButton('3', 'token_digit:3'),
+                                        keypadButton('4', 'token_digit:4'),
+                                        keypadButton('5', 'token_digit:5'),
+                                        keypadButton('6', 'token_digit:6'),
+                                        keypadButton('7', 'token_digit:7'),
+                                        keypadButton('8', 'token_digit:8'),
+                                        keypadButton('9', 'token_digit:9'),
+                                        keypadButton('Borrar', 'token_backspace'),
+                                        keypadButton('0', 'token_digit:0'),
+                                        keypadButton('Limpiar', 'token_clear')
+                                    ]
+                                },
+                                {
+                                    type: 'Container',
+                                    direction: 'row',
+                                    width: '100%',
+                                    justifyContent: 'spaceBetween',
+                                    spacing: '${viewport.height < 620 ? "12dp" : "18dp"}',
+                                    items: [
+                                        keypadButton('Ingresar', 'token_submit', '64%', true),
+                                        keypadButton('Voz', 'noop', '32%')
+                                    ]
+                                },
+                                {
+                                    type: 'Text',
+                                    text: screen.footer,
+                                    color: '#F8DDE9',
+                                    fontSize: '${viewport.height < 620 ? "15dp" : "18dp"}',
+                                    maxLines: 2,
+                                    textAlign: 'center',
+                                    width: '100%',
+                                    spacing: '12dp'
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    };
+}
+
 function choiceComponent(item, index) {
     return {
         type: 'TouchWrapper',
@@ -571,6 +740,7 @@ function createCardsLayoutDocument(payload) {
 }
 
 function createAplDocument(payload) {
+    if (payload.template === 'keypad') return createKeypadDocument(payload);
     if (payload.template === 'headline') return createHeadlineDocument(payload);
     if (payload.template === 'multipleChoice') return createMultipleChoiceDocument(payload);
     if (payload.template === 'gridList') return createGridListDocument(payload);
@@ -749,25 +919,13 @@ function tokenMask(tokenInput = '') {
 }
 
 function authPayload(message = 'Para continuar, dime tu token de administrador de cinco digitos.', tokenInput = '') {
-    return makePayload('textList', {
+    return makePayload('keypad', {
         eyebrow: 'Acceso administrador',
-        title: `Token ${tokenMask(tokenInput)}`,
+        title: 'Ingresa tu token',
         subtitle: message,
-        cards: [
-            option('1', 'Tocar para ingresar el digito 1.', 'token_digit:1'),
-            option('2', 'Tocar para ingresar el digito 2.', 'token_digit:2'),
-            option('3', 'Tocar para ingresar el digito 3.', 'token_digit:3'),
-            option('4', 'Tocar para ingresar el digito 4.', 'token_digit:4'),
-            option('5', 'Tocar para ingresar el digito 5.', 'token_digit:5'),
-            option('6', 'Tocar para ingresar el digito 6.', 'token_digit:6'),
-            option('7', 'Tocar para ingresar el digito 7.', 'token_digit:7'),
-            option('8', 'Tocar para ingresar el digito 8.', 'token_digit:8'),
-            option('9', 'Tocar para ingresar el digito 9.', 'token_digit:9'),
-            option('0', 'Tocar para ingresar el digito 0.', 'token_digit:0'),
-            option('Borrar ultimo', 'Quitar el ultimo digito ingresado.', 'token_backspace'),
-            option('Limpiar token', 'Empezar de nuevo.', 'token_clear')
-        ],
-        footer: 'Toca 5 digitos o di el token por voz.',
+        tokenInput: tokenInput || tokenMask(''),
+        cards: [],
+        footer: 'Por voz di: mi token es uno dos tres cuatro cinco.',
         showBackButton: false
     });
 }
