@@ -18,6 +18,9 @@ const {
   checkUsername,
   checkEmail,
   checkPhone,
+  getAlexaAdmins,
+  generateAlexaToken,
+  revokeAlexaToken,
 } = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -47,5 +50,8 @@ router.put("/update-secret", authMiddleware(), updateSecret);
 router.get("/admin/usuarios", authMiddleware(["admin"]), getUsuarios);
 router.put("/admin/usuarios/:id/rol", authMiddleware(["admin"]), updateRol);
 router.delete("/admin/usuarios/:id", authMiddleware(["admin"]), deleteUsuario);
+router.get("/admin/alexa", authMiddleware(["admin"]), getAlexaAdmins);
+router.post("/admin/alexa/:id/token", authMiddleware(["admin"]), generateAlexaToken);
+router.delete("/admin/alexa/:id/token", authMiddleware(["admin"]), revokeAlexaToken);
 
 module.exports = router;

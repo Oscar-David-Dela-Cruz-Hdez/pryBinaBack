@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const SibApiV3Sdk = require("sib-api-v3-sdk");
 const { OAuth2Client } = require("google-auth-library");
+const crypto = require("crypto");
 
 const client = new OAuth2Client();
 let defaultClient = SibApiV3Sdk.ApiClient.instance;
@@ -234,6 +235,72 @@ const updateRol = async (req, res) => {
   }
 };
 
+const generarAlexaTokenPlano = () => crypto.randomInt(100000, 1000000).toString();
+
+const getAlexaAdmins = async (req, res) => {
+  try {
+    const admins = await Usuario.find({ rol: "admin" })
+      .select("nombre ap am email username rol alexaTokenLast4 alexaTokenUpdatedAt")
+      .sort({ nombre: 1, email: 1 });
+    res.json(admins);
+  } catch (error) {
+    console.error("Error al obtener administradores Alexa:", error);
+    res.status(500).json({ error: "Error al obtener administradores Alexa" });
+  }
+};
+
+const generateAlexaToken = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuario = await Usuario.findById(id);
+
+    if (!usuario) return res.status(404).json({ error: "Usuario no encontrado" });
+    if (usuario.rol !== "admin") {
+      return res.status(400).json({ error: "Solo los administradores pueden tener token de Alexa" });
+    }
+
+    const tokenAlexa = generarAlexaTokenPlano();
+    usuario.alexaTokenHash = await bcrypt.hash(tokenAlexa, 10);
+    usuario.alexaTokenLast4 = tokenAlexa.slice(-4);
+    usuario.alexaTokenUpdatedAt = new Date();
+    await usuario.save();
+
+    res.json({
+      mensaje: "Token de Alexa generado correctamente",
+      tokenAlexa,
+      usuario: {
+        _id: usuario._id,
+        nombre: usuario.nombre,
+        email: usuario.email,
+        alexaTokenLast4: usuario.alexaTokenLast4,
+        alexaTokenUpdatedAt: usuario.alexaTokenUpdatedAt
+      }
+    });
+  } catch (error) {
+    console.error("Error al generar token de Alexa:", error);
+    res.status(500).json({ error: "Error al generar token de Alexa" });
+  }
+};
+
+const revokeAlexaToken = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const usuario = await Usuario.findById(id);
+
+    if (!usuario) return res.status(404).json({ error: "Usuario no encontrado" });
+
+    usuario.alexaTokenHash = undefined;
+    usuario.alexaTokenLast4 = undefined;
+    usuario.alexaTokenUpdatedAt = undefined;
+    await usuario.save();
+
+    res.json({ mensaje: "Token de Alexa revocado correctamente" });
+  } catch (error) {
+    console.error("Error al revocar token de Alexa:", error);
+    res.status(500).json({ error: "Error al revocar token de Alexa" });
+  }
+};
+
 const deleteUsuario = async (req, res) => {
   try {
     const { id } = req.params;
@@ -425,5 +492,6 @@ const checkPhone = async (req, res) => {
 module.exports = {
   registerUser, loginUser, googleLogin, verifyLoginCode, getUsuarios, updateRol,
   deleteUsuario, verificarCorreo, obtenerPregunta, verificarRespuesta, cambiarContrasena,
-  getMiPerfil, updateMiPerfil, updatePassword, updateSecret, checkUsername, checkEmail, checkPhone
+  getMiPerfil, updateMiPerfil, updatePassword, updateSecret, checkUsername, checkEmail, checkPhone,
+  getAlexaAdmins, generateAlexaToken, revokeAlexaToken
 };

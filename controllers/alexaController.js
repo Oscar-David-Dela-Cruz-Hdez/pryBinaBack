@@ -5,6 +5,8 @@ const Pedido = require('../models/Pedido');
 const Producto = require('../models/Producto');
 const Familia = require('../models/Familia');
 const Marca = require('../models/Marca');
+const Usuario = require('../models/Usuario');
+const bcrypt = require('bcryptjs');
 const {
     createAplDocument,
     welcomePayload,
@@ -49,6 +51,62 @@ function responseWithApl(handlerInput, speakOutput, datasource, token, reprompt 
         .withShouldEndSession(false);
 
     return addAplDirective(handlerInput, responseBuilder, datasource, token).getResponse();
+}
+
+function limpiarTokenAlexa(valor = '') {
+    return String(valor).replace(/\D/g, '');
+}
+
+function extraerTokenAlexa(handlerInput) {
+    const request = handlerInput.requestEnvelope.request || {};
+    const slots = request.intent?.slots || {};
+    const valores = Object.values(slots)
+        .map((slot) => slot?.value)
+        .filter(Boolean);
+
+    if (request.intent?.name === 'AMAZON.FallbackIntent' && request.intent?.query) {
+        valores.push(request.intent.query);
+    }
+
+    return limpiarTokenAlexa(valores.join(' '));
+}
+
+function respuestaSolicitarToken(handlerInput, mensaje = 'Bienvenido al asistente de Panamericana. Para continuar, dime tu token de administrador de seis digitos.') {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    sessionAttributes.alexaAuthenticated = false;
+    sessionAttributes.waitingFor = 'alexaToken';
+    sessionAttributes.savedContext = {};
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+    return responseWithApl(
+        handlerInput,
+        mensaje,
+        promptPayload('Acceso administrador', mensaje, 'Di el token de 6 digitos generado en el panel.', 'Di tu token de administrador.'),
+        'alexa-token',
+        'Dime tu token de administrador de seis digitos.'
+    );
+}
+
+async function validarTokenAlexa(tokenPlano) {
+    if (!tokenPlano || tokenPlano.length !== 6) return null;
+
+    const admins = await Usuario.find({
+        rol: 'admin',
+        alexaTokenHash: { $exists: true, $ne: null }
+    }).select('nombre email alexaTokenHash');
+
+    for (const admin of admins) {
+        if (await bcrypt.compare(tokenPlano, admin.alexaTokenHash)) {
+            return admin;
+        }
+    }
+
+    return null;
+}
+
+function sesionAlexaAutorizada(handlerInput) {
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    return sessionAttributes.alexaAuthenticated === true;
 }
 
 // Normaliza el periodo para aceptar variantes como "del mes", "mensual", etc.
@@ -141,26 +199,52 @@ const LaunchRequestHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'LaunchRequest';
     },
     handle(handlerInput) {
-        // Limpiar sesión al iniciar
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        sessionAttributes.waitingFor = null;
+        sessionAttributes.alexaAuthenticated = false;
+        sessionAttributes.waitingFor = 'alexaToken';
         sessionAttributes.savedContext = {};
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-        const speakOutput = '¡Hola! Bienvenido al asistente de la Distribuidora Panamericana. Puedes consultar las ventas, revisar el stock o ver el estado de los pedidos. ¿Qué deseas hacer?';
-        if (supportsAPL(handlerInput)) {
+        return respuestaSolicitarToken(handlerInput);
+    }
+};
+
+const AlexaTokenIntentHandler = {
+    canHandle(handlerInput) {
+        const requestType = Alexa.getRequestType(handlerInput.requestEnvelope);
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+        return requestType === 'IntentRequest'
+            && (sessionAttributes.waitingFor === 'alexaToken' || sessionAttributes.alexaAuthenticated !== true);
+    },
+    async handle(handlerInput) {
+        const tokenAlexa = extraerTokenAlexa(handlerInput);
+
+        try {
+            const admin = await validarTokenAlexa(tokenAlexa);
+            if (!admin) {
+                return respuestaSolicitarToken(handlerInput, 'Token no valido. Por favor dime el token de administrador de seis digitos.');
+            }
+
+            const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+            sessionAttributes.alexaAuthenticated = true;
+            sessionAttributes.alexaAdminId = admin._id.toString();
+            sessionAttributes.waitingFor = null;
+            sessionAttributes.savedContext = {};
+            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+            const speakOutput = `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, stock o pedidos. Que deseas hacer?`;
             const responseBuilder = handlerInput.responseBuilder
                 .speak(speakOutput)
-                .reprompt('Que deseas consultar hoy?');
+                .reprompt('Quieres consultar ventas, stock o pedidos?')
+                .withShouldEndSession(false);
 
             return addAplDirective(handlerInput, responseBuilder, welcomePayload(), 'welcome-menu')
                 .getResponse();
+        } catch (error) {
+            console.error('Error al validar token de Alexa:', error);
+            return respuestaSolicitarToken(handlerInput, 'No pude validar el token en este momento. Intenta decirlo nuevamente.');
         }
-
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt('¿Qué deseas consultar hoy?')
-            .getResponse();
     }
 };
 
@@ -193,6 +277,10 @@ const AplUserEventHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent';
     },
     async handle(handlerInput) {
+        if (!sesionAlexaAutorizada(handlerInput)) {
+            return respuestaSolicitarToken(handlerInput);
+        }
+
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const args = handlerInput.requestEnvelope.request.arguments || [];
         const action = normalizeAplAction(args);
@@ -1127,6 +1215,7 @@ const ErrorHandler = {
 const skillBuilder = Alexa.SkillBuilders.custom()
     .addRequestHandlers(
         LaunchRequestHandler,
+        AlexaTokenIntentHandler,
         AplUserEventHandler,
         NavigateHomeIntentHandler,
         VentasIntentHandler,

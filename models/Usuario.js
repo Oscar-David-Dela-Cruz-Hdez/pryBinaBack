@@ -14,6 +14,9 @@ const usuarioSchema = new mongoose.Schema({
   rol: { type: String, enum: ["usuario", "admin"], default: "usuario" },
   loginCode: { type: String },
   loginCodeExpires: { type: Date },
+  alexaTokenHash: { type: String },
+  alexaTokenLast4: { type: String },
+  alexaTokenUpdatedAt: { type: Date },
   activeTokens: { type: [String], default: [] }
 });
 
@@ -26,6 +29,7 @@ usuarioSchema.set("toJSON", {
   transform: function (doc, ret) {
     delete ret.password;
     delete ret.activeTokens;
+    delete ret.alexaTokenHash;
     return ret;
   },
 });
