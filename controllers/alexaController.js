@@ -15,6 +15,7 @@ const {
     goodbyePayload,
     resultPayload,
     promptPayload,
+    authPayload,
     productListPayload
 } = require('./alexaAplDocuments');
 
@@ -76,12 +77,13 @@ function respuestaSolicitarToken(handlerInput, mensaje = 'Bienvenido al asistent
     sessionAttributes.alexaAuthenticated = false;
     sessionAttributes.waitingFor = 'alexaToken';
     sessionAttributes.savedContext = {};
+    sessionAttributes.alexaTokenInput = sessionAttributes.alexaTokenInput || '';
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     return responseWithApl(
         handlerInput,
         mensaje,
-        promptPayload('Acceso administrador', mensaje, 'Di el token de 5 digitos generado en el panel.', 'Di tu token de administrador.'),
+        authPayload(mensaje, sessionAttributes.alexaTokenInput),
         'alexa-token',
         'Dime tu token de administrador de cinco digitos.'
     );
@@ -223,6 +225,9 @@ const AlexaTokenIntentHandler = {
         try {
             const admin = await validarTokenAlexa(tokenAlexa);
             if (!admin) {
+                const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+                sessionAttributes.alexaTokenInput = '';
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return respuestaSolicitarToken(handlerInput, 'Token no valido. Por favor dime el token de administrador de cinco digitos.');
             }
 
@@ -231,6 +236,7 @@ const AlexaTokenIntentHandler = {
             sessionAttributes.alexaAdminId = admin._id.toString();
             sessionAttributes.waitingFor = null;
             sessionAttributes.savedContext = {};
+            sessionAttributes.alexaTokenInput = '';
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
             const speakOutput = `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, stock o pedidos. Que deseas hacer?`;
@@ -277,13 +283,82 @@ const AplUserEventHandler = {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'Alexa.Presentation.APL.UserEvent';
     },
     async handle(handlerInput) {
-        if (!sesionAlexaAutorizada(handlerInput)) {
-            return respuestaSolicitarToken(handlerInput);
-        }
-
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
         const args = handlerInput.requestEnvelope.request.arguments || [];
         const action = normalizeAplAction(args);
+
+        if (!sesionAlexaAutorizada(handlerInput)) {
+            if (action.startsWith('token_digit:')) {
+                const digit = action.replace('token_digit:', '');
+                sessionAttributes.alexaTokenInput = `${sessionAttributes.alexaTokenInput || ''}${digit}`.slice(0, 5);
+
+                if (sessionAttributes.alexaTokenInput.length === 5) {
+                    try {
+                        const admin = await validarTokenAlexa(sessionAttributes.alexaTokenInput);
+                        if (admin) {
+                            sessionAttributes.alexaAuthenticated = true;
+                            sessionAttributes.alexaAdminId = admin._id.toString();
+                            sessionAttributes.waitingFor = null;
+                            sessionAttributes.savedContext = {};
+                            sessionAttributes.alexaTokenInput = '';
+                            handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+                            return responseWithApl(
+                                handlerInput,
+                                `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, stock o pedidos.`,
+                                menuPayload(),
+                                'main-menu',
+                                'Quieres consultar ventas, stock o pedidos?'
+                            );
+                        }
+
+                        sessionAttributes.alexaTokenInput = '';
+                        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                        return respuestaSolicitarToken(handlerInput, 'Token no valido. Intenta ingresar nuevamente los cinco digitos.');
+                    } catch (error) {
+                        console.error('Error al validar token desde APL:', error);
+                        sessionAttributes.alexaTokenInput = '';
+                        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                        return respuestaSolicitarToken(handlerInput, 'No pude validar el token en este momento. Intenta nuevamente.');
+                    }
+                }
+
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                return responseWithApl(
+                    handlerInput,
+                    `Digito ${sessionAttributes.alexaTokenInput.length} recibido.`,
+                    authPayload('Continua tocando los digitos del token.', sessionAttributes.alexaTokenInput),
+                    'alexa-token',
+                    'Continua con el siguiente digito.'
+                );
+            }
+
+            if (action === 'token_backspace') {
+                sessionAttributes.alexaTokenInput = String(sessionAttributes.alexaTokenInput || '').slice(0, -1);
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                return responseWithApl(
+                    handlerInput,
+                    'Quite el ultimo digito.',
+                    authPayload('Continua tocando los digitos del token.', sessionAttributes.alexaTokenInput),
+                    'alexa-token',
+                    'Continua con el siguiente digito.'
+                );
+            }
+
+            if (action === 'token_clear') {
+                sessionAttributes.alexaTokenInput = '';
+                handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+                return responseWithApl(
+                    handlerInput,
+                    'Token limpiado. Ingresa nuevamente los cinco digitos.',
+                    authPayload('Ingresa nuevamente los cinco digitos.', sessionAttributes.alexaTokenInput),
+                    'alexa-token',
+                    'Ingresa nuevamente el token.'
+                );
+            }
+
+            return respuestaSolicitarToken(handlerInput);
+        }
 
         let speakOutput = '';
         let datasource = menuPayload();

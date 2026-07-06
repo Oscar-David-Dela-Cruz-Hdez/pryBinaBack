@@ -583,13 +583,13 @@ function welcomePayload() {
     return makePayload('textList', {
         eyebrow: 'Menu principal',
         title: 'Panamericana',
-        subtitle: 'Elige una consulta administrativa.',
+        subtitle: 'Toca una opcion o di una frase de ejemplo.',
         cards: [
-            option('Ventas', 'Consultar ganancias o mercancia.', 'ventas'),
-            option('Stock', 'Revisar inventario.', 'stock'),
-            option('Pedidos', 'Consultar estado de pedidos.', 'pedidos'),
-            option('Ayuda', 'Frases de ejemplo.', 'ayuda'),
-            option('Salir', 'Terminar sesion.', 'salir')
+            option('Ventas', 'Di: checa las ganancias del mes.', 'ventas'),
+            option('Stock', 'Di: consulta el stock de 4x4.', 'stock'),
+            option('Pedidos', 'Di: dime los pedidos por enviar.', 'pedidos'),
+            option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
+            option('Salir', 'Di: salir, cancelar o detener.', 'salir')
         ],
         footer: 'Tambien puedes decir ventas, stock, pedidos, ayuda o salir.',
         showBackButton: false
@@ -600,13 +600,13 @@ function menuPayload() {
     return makePayload('textList', {
         eyebrow: 'Menu principal',
         title: 'Panamericana',
-        subtitle: 'Elige una consulta administrativa.',
+        subtitle: 'Toca una opcion o di una frase de ejemplo.',
         cards: [
-            option('Ventas', 'Consultar ganancias o mercancia.', 'ventas'),
-            option('Stock', 'Revisar inventario.', 'stock'),
-            option('Pedidos', 'Consultar estado de pedidos.', 'pedidos'),
-            option('Ayuda', 'Frases de ejemplo.', 'ayuda'),
-            option('Salir', 'Terminar sesion.', 'salir')
+            option('Ventas', 'Di: checa las ganancias del mes.', 'ventas'),
+            option('Stock', 'Di: consulta el stock de 4x4.', 'stock'),
+            option('Pedidos', 'Di: dime los pedidos por enviar.', 'pedidos'),
+            option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
+            option('Salir', 'Di: salir, cancelar o detener.', 'salir')
         ],
         footer: 'Tambien puedes decir ventas, stock, pedidos, ayuda o salir.',
         showBackButton: false
@@ -619,12 +619,12 @@ function sectionPayload(section) {
             template: 'textList',
             eyebrow: 'Consulta de ventas',
             title: 'Ventas',
-            subtitle: 'Selecciona el rango de ganancias.',
+            subtitle: 'Elige un rango o usa una frase compatible.',
             cards: [
-                option('Por dia', 'Ganancias de hoy.', 'ventas_ganancias_dia'),
-                option('Por semana', 'Ultimos 7 dias.', 'ventas_ganancias_semana'),
-                option('Por mes', 'Ultimos 30 dias.', 'ventas_ganancias_mes'),
-                option('Personalizado', 'Responder rango por voz.', 'ventas_ganancias_personalizado'),
+                option('Por dia', 'Di: checa las ganancias del dia.', 'ventas_ganancias_dia'),
+                option('Por semana', 'Di: cuanto vendimos en la semana.', 'ventas_ganancias_semana'),
+                option('Por mes', 'Di: checa las ganancias del mes.', 'ventas_ganancias_mes'),
+                option('Personalizado', 'Di: de hace 15 dias.', 'ventas_ganancias_personalizado'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Para rango personalizado di: de hace 15 dias.'
@@ -633,12 +633,12 @@ function sectionPayload(section) {
             template: 'textList',
             eyebrow: 'Consulta de stock',
             title: 'Inventario',
-            subtitle: 'Selecciona como quieres revisar el almacen.',
+            subtitle: 'Elige como buscar o di el nombre directamente.',
             cards: [
-                option('General', 'Productos con stock bajo.', 'stock_general'),
-                option('Producto', 'Completar nombre por voz.', 'stock_producto'),
-                option('Familia', 'Completar familia por voz.', 'stock_familia'),
-                option('Marca', 'Completar marca por voz.', 'stock_marca'),
+                option('General', 'Di: consulta el stock general.', 'stock_general'),
+                option('Producto', 'Di: consulta el stock de 4x4 minoxidil.', 'stock_producto'),
+                option('Familia', 'Di: consulta el stock de Barberia.', 'stock_familia'),
+                option('Marca', 'Di: consulta el stock de Andis.', 'stock_marca'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Para producto, marca o familia, completa el nombre por voz.'
@@ -647,11 +647,11 @@ function sectionPayload(section) {
             template: 'textList',
             eyebrow: 'Estado de pedidos',
             title: 'Pedidos',
-            subtitle: 'Consulta el estado operativo.',
+            subtitle: 'Elige el estado que quieres consultar.',
             cards: [
-                option('Por enviar', 'Pendientes o pagados.', 'pedidos_por_enviar'),
-                option('Enviados', 'Elegir rango.', 'pedidos_enviados'),
-                option('Finalizados', 'Elegir rango.', 'pedidos_finalizados'),
+                option('Por enviar', 'Di: cuantos pedidos por enviar tenemos.', 'pedidos_por_enviar'),
+                option('Enviados', 'Di: pedidos enviados del mes.', 'pedidos_enviados'),
+                option('Finalizados', 'Di: pedidos finalizados de la semana.', 'pedidos_finalizados'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Enviados y finalizados permiten rangos.'
@@ -660,12 +660,12 @@ function sectionPayload(section) {
             template: 'textList',
             eyebrow: 'Pedidos enviados',
             title: 'Rango',
-            subtitle: 'Selecciona el periodo que quieres revisar.',
+            subtitle: 'Elige el periodo para pedidos enviados.',
             cards: [
-                option('Por dia', 'Enviados de hoy.', 'pedidos_enviados_dia'),
-                option('Por semana', 'Ultimos 7 dias.', 'pedidos_enviados_semana'),
-                option('Por mes', 'Ultimos 30 dias.', 'pedidos_enviados_mes'),
-                option('Personalizado', 'Responder rango por voz.', 'pedidos_enviados_personalizado'),
+                option('Por dia', 'Di: pedidos enviados del dia.', 'pedidos_enviados_dia'),
+                option('Por semana', 'Di: pedidos enviados de la semana.', 'pedidos_enviados_semana'),
+                option('Por mes', 'Di: pedidos enviados del mes.', 'pedidos_enviados_mes'),
+                option('Personalizado', 'Di: pedidos enviados de hace 15 dias.', 'pedidos_enviados_personalizado'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Ejemplo: pedidos enviados de hace 15 dias.'
@@ -674,12 +674,12 @@ function sectionPayload(section) {
             template: 'textList',
             eyebrow: 'Pedidos finalizados',
             title: 'Rango',
-            subtitle: 'Selecciona el periodo que quieres revisar.',
+            subtitle: 'Elige el periodo para pedidos finalizados.',
             cards: [
-                option('Por dia', 'Finalizados de hoy.', 'pedidos_finalizados_dia'),
-                option('Por semana', 'Ultimos 7 dias.', 'pedidos_finalizados_semana'),
-                option('Por mes', 'Ultimos 30 dias.', 'pedidos_finalizados_mes'),
-                option('Personalizado', 'Responder rango por voz.', 'pedidos_finalizados_personalizado'),
+                option('Por dia', 'Di: pedidos finalizados del dia.', 'pedidos_finalizados_dia'),
+                option('Por semana', 'Di: pedidos finalizados de la semana.', 'pedidos_finalizados_semana'),
+                option('Por mes', 'Di: pedidos finalizados del mes.', 'pedidos_finalizados_mes'),
+                option('Personalizado', 'Di: pedidos finalizados de hace 15 dias.', 'pedidos_finalizados_personalizado'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Ejemplo: pedidos finalizados de hace 15 dias.'
@@ -736,10 +736,39 @@ function promptPayload(title, subtitle, footer, examples = 'Di: de hace 15 dias,
         title,
         subtitle,
         cards: [
-            option('Ejemplo 1', examples, 'noop'),
+            option('Frase compatible', examples, 'noop'),
             option('Menu principal', 'Cancelar y volver al menu.', 'menu')
         ],
         footer
+    });
+}
+
+function tokenMask(tokenInput = '') {
+    const entered = String(tokenInput).slice(0, 5).length;
+    return `${'•'.repeat(entered)}${'_'.repeat(5 - entered)}`;
+}
+
+function authPayload(message = 'Para continuar, dime tu token de administrador de cinco digitos.', tokenInput = '') {
+    return makePayload('textList', {
+        eyebrow: 'Acceso administrador',
+        title: `Token ${tokenMask(tokenInput)}`,
+        subtitle: message,
+        cards: [
+            option('1', 'Tocar para ingresar el digito 1.', 'token_digit:1'),
+            option('2', 'Tocar para ingresar el digito 2.', 'token_digit:2'),
+            option('3', 'Tocar para ingresar el digito 3.', 'token_digit:3'),
+            option('4', 'Tocar para ingresar el digito 4.', 'token_digit:4'),
+            option('5', 'Tocar para ingresar el digito 5.', 'token_digit:5'),
+            option('6', 'Tocar para ingresar el digito 6.', 'token_digit:6'),
+            option('7', 'Tocar para ingresar el digito 7.', 'token_digit:7'),
+            option('8', 'Tocar para ingresar el digito 8.', 'token_digit:8'),
+            option('9', 'Tocar para ingresar el digito 9.', 'token_digit:9'),
+            option('0', 'Tocar para ingresar el digito 0.', 'token_digit:0'),
+            option('Borrar ultimo', 'Quitar el ultimo digito ingresado.', 'token_backspace'),
+            option('Limpiar token', 'Empezar de nuevo.', 'token_clear')
+        ],
+        footer: 'Toca 5 digitos o di el token por voz.',
+        showBackButton: false
     });
 }
 
@@ -773,5 +802,6 @@ module.exports = {
     goodbyePayload,
     resultPayload,
     promptPayload,
+    authPayload,
     productListPayload
 };
