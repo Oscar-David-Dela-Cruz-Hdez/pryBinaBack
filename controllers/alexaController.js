@@ -28,10 +28,12 @@ function supportsAPL(handlerInput) {
 
 function addAplDirective(handlerInput, responseBuilder, datasource, token = 'panamericana-apl') {
     if (!supportsAPL(handlerInput)) return responseBuilder;
+    const requestId = handlerInput.requestEnvelope.request?.requestId || Date.now();
+    const renderToken = `${token}-${String(requestId).slice(-8)}`;
 
     return responseBuilder.addDirective({
         type: 'Alexa.Presentation.APL.RenderDocument',
-        token,
+        token: renderToken,
         document: createAplDocument(datasource)
     });
 }
@@ -1194,10 +1196,21 @@ const CancelAndStopIntentHandler = {
                 speakOutput = 'Operación cancelada. ¿Deseas ver los pedidos por enviar, actuales, finalizados o enviados?';
             }
 
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt(speakOutput)
-                .getResponse();
+            const screen = lastIntent === 'ventasIntent'
+                ? sectionPayload('ventas')
+                : lastIntent === 'stockIntent'
+                    ? sectionPayload('stock')
+                    : lastIntent === 'estadoIntent'
+                        ? sectionPayload('pedidos')
+                        : menuPayload();
+
+            return responseWithApl(
+                handlerInput,
+                speakOutput,
+                screen,
+                'cancel-context',
+                speakOutput
+            );
         }
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
@@ -1300,6 +1313,68 @@ const FallbackIntentHandler = {
     }
 };
 
+const VoiceFallbackIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.FallbackIntent';
+    },
+    handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const waitingFor = sessionAttributes.waitingFor;
+
+        if (waitingFor === 'periodoGanancia' || waitingFor === 'periodoEstado') {
+            const speakOutput = 'No entendi bien el periodo. Por favor di: del dia, de la semana, del mes, o personalizado.';
+            return responseWithApl(
+                handlerInput,
+                speakOutput,
+                waitingFor === 'periodoGanancia' ? sectionPayload('ventas') : sectionPayload('pedidos'),
+                'fallback-periodo',
+                'Del dia, de la semana, del mes o personalizado?'
+            );
+        }
+
+        if (waitingFor === 'diasPersonalizadoVentas' || waitingFor === 'diasPersonalizadoEstado') {
+            const speakOutput = 'No entendi el rango. Para ganancias puedes decir: de hace quince dias. Para pedidos puedes decir: pedidos enviados de hace quince dias.';
+            return responseWithApl(
+                handlerInput,
+                speakOutput,
+                promptPayload(
+                    'Rango personalizado',
+                    speakOutput,
+                    'Usa una frase compatible con tus utterances.',
+                    waitingFor === 'diasPersonalizadoVentas'
+                        ? 'Di: de hace 15 dias.'
+                        : 'Di: pedidos enviados de hace 15 dias.'
+                ),
+                'fallback-personalizado',
+                'Di una frase como: de hace quince dias, o pedidos enviados de hace quince dias.'
+            );
+        }
+
+        if (waitingFor === 'nombreMercancia' || waitingFor === 'nombreFiltroStock') {
+            const speakOutput = 'No entendi el nombre. Por favor di el nombre completo, por ejemplo: Barberia, o Styling y Peinado.';
+            return responseWithApl(
+                handlerInput,
+                speakOutput,
+                waitingFor === 'nombreFiltroStock'
+                    ? sectionPayload('stock')
+                    : promptPayload('Nombre de mercancia', speakOutput, 'Ejemplo: checa las ventas de Barberia.', 'Di: checa las ventas de Barberia.'),
+                'fallback-nombre',
+                'Cual es el nombre exacto?'
+            );
+        }
+
+        const speakOutput = 'Lo siento, no tengo informacion sobre eso en los registros de Panamericana. Solo puedo consultar ventas, stock o pedidos. Que deseas hacer?';
+        return responseWithApl(
+            handlerInput,
+            speakOutput,
+            menuPayload(),
+            'fallback-menu',
+            'Deseas consultar ventas, stock o pedidos?'
+        );
+    }
+};
+
 // 8. Manejador para cierre de sesion
 const SessionEndedRequestHandler = {
     canHandle(handlerInput) {
@@ -1336,6 +1411,7 @@ const skillBuilder = Alexa.SkillBuilders.custom()
         CancelAndStopIntentHandler,
         HelpIntentHandler,
         SessionEndedRequestHandler,
+        VoiceFallbackIntentHandler,
         FallbackIntentHandler
     )
     .addErrorHandlers(
