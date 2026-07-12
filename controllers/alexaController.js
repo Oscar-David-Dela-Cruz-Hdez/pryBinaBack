@@ -384,12 +384,13 @@ const AplUserEventHandler = {
 
         let speakOutput = '';
         let datasource = menuPayload();
+        let shouldRenderApl = true;
 
         try {
             if (action === 'ventas') {
                 sessionAttributes.lastIntent = 'ventasIntent';
-                sessionAttributes.waitingFor = 'tipoConsultaVentas';
-                sessionAttributes.savedContext = {};
+                sessionAttributes.waitingFor = 'periodoGanancia';
+                sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
                 speakOutput = 'Abrimos ventas. Puedes elegir ganancias por dia, semana, mes o personalizado.';
                 datasource = sectionPayload('ventas');
             } else if (action === 'stock') {
@@ -432,7 +433,7 @@ const AplUserEventHandler = {
                 sessionAttributes.lastIntent = 'ventasIntent';
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
-                datasource = resultPayload('Ventas', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+                shouldRenderApl = false;
             } else if (action === 'ventas_ganancias_personalizado') {
                 sessionAttributes.lastIntent = 'ventasIntent';
                 sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
@@ -455,9 +456,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalBajos} productos con stock bajo en el almacen.`;
-                datasource = productosBajos.length > 0
-                    ? productListPayload('Stock bajo', speakOutput, productosBajos, 'Lista paginada con los primeros productos criticos.')
-                    : resultPayload('Stock general', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+                shouldRenderApl = false;
             } else if (action === 'stock_producto' || action === 'stock_familia' || action === 'stock_marca') {
                 const tipoFiltro = action.replace('stock_', '');
                 sessionAttributes.lastIntent = 'stockIntent';
@@ -476,7 +475,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Actualmente hay ${totalPorEnviar} pedidos por enviar registrados en el sistema.`;
-                datasource = resultPayload('Pedidos por enviar', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+                shouldRenderApl = false;
             } else if (action === 'pedidos_enviados') {
                 sessionAttributes.lastIntent = 'estadoIntent';
                 sessionAttributes.waitingFor = null;
@@ -496,7 +495,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalPedidos} pedidos enviados ${textoPeriodoApl(periodo)}.`;
-                datasource = resultPayload('Pedidos enviados', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+                shouldRenderApl = false;
             } else if (action.startsWith('pedidos_finalizados_') && action !== 'pedidos_finalizados_personalizado') {
                 const periodo = action.replace('pedidos_finalizados_', '');
                 const totalPedidos = await consultarPedidosPorEstado('Entregado', periodo);
@@ -504,7 +503,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalPedidos} pedidos finalizados ${textoPeriodoApl(periodo)}.`;
-                datasource = resultPayload('Pedidos finalizados', speakOutput, 'Puedes tocar otra opcion o volver al menu.');
+                shouldRenderApl = false;
             } else if (action === 'pedidos_enviados_personalizado' || action === 'pedidos_finalizados_personalizado') {
                 const tipoEstado = action === 'pedidos_enviados_personalizado' ? 'enviados' : 'finalizados';
                 sessionAttributes.lastIntent = 'estadoIntent';
@@ -552,6 +551,10 @@ const AplUserEventHandler = {
             .speak(speakOutput)
             .reprompt('Que deseas consultar?')
             .withShouldEndSession(false);
+
+        if (!shouldRenderApl) {
+            return responseBuilder.getResponse();
+        }
 
         return addAplDirective(handlerInput, responseBuilder, datasource, `${action}-screen`)
             .getResponse();
@@ -735,10 +738,10 @@ const VentasIntentHandler = {
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return responseWithApl(
                     handlerInput,
-                    '¿Qué deseas consultar, las ganancias o la mercancía?',
+                    'Abrimos ventas. Puedes elegir ganancias por dia, semana, mes o personalizado.',
                     sectionPayload('ventas'),
                     'ventas-options',
-                    '¿Deseas ver ganancias por día, semana, mes o personalizado?'
+                    'Deseas ver ganancias por dia, semana, mes o personalizado?'
                 );
             }
         }
@@ -880,19 +883,6 @@ const VentasIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas consultar algo más de ventas o terminamos?';
-        if (supportsAPL(handlerInput)) {
-            const responseBuilder = handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt('¿Deseas algo más?');
-
-            return addAplDirective(
-                handlerInput,
-                responseBuilder,
-                resultPayload('Ventas', speakOutput),
-                'ventas-result'
-            ).getResponse();
-        }
-
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas algo más?').getResponse();
     }
 };
@@ -1032,21 +1022,6 @@ const StockIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas revisar otro stock o terminamos?';
-        if (supportsAPL(handlerInput)) {
-            const responseBuilder = handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt('¿Deseas revisar algo más?');
-
-            return addAplDirective(
-                handlerInput,
-                responseBuilder,
-                aplProducts.length > 0
-                    ? productListPayload('Stock', speakOutput, aplProducts)
-                    : resultPayload('Stock', speakOutput),
-                'stock-result'
-            ).getResponse();
-        }
-
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas revisar algo más?').getResponse();
     }
 };
@@ -1148,19 +1123,6 @@ const EstadoIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas consultar otro estado o finalizamos?';
-        if (supportsAPL(handlerInput)) {
-            const responseBuilder = handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt('¿Deseas consultar algo más?');
-
-            return addAplDirective(
-                handlerInput,
-                responseBuilder,
-                resultPayload('Pedidos', speakOutput),
-                'pedidos-result'
-            ).getResponse();
-        }
-
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas consultar algo más?').getResponse();
     }
 };

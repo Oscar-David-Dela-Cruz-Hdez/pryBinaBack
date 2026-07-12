@@ -771,12 +771,12 @@ function welcomePayload() {
         subtitle: 'Toca una opcion o di una frase de ejemplo.',
         cards: [
             option('Ventas', 'Di: checa las ganancias del mes.', 'ventas'),
-            option('Stock', 'Di: consulta el stock de 4x4.', 'stock'),
+            option('Inventario', 'Di: consulta el inventario de 4x4.', 'stock'),
             option('Pedidos', 'Di: dime los pedidos por enviar.', 'pedidos'),
             option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
             option('Salir', 'Di: salir, cancelar o detener.', 'salir')
         ],
-        footer: 'Tambien puedes decir ventas, stock, pedidos, ayuda o salir.',
+        footer: 'Tambien puedes decir ventas, inventario, pedidos, ayuda o salir.',
         showBackButton: false
     });
 }
@@ -788,12 +788,12 @@ function menuPayload() {
         subtitle: 'Toca una opcion o di una frase de ejemplo.',
         cards: [
             option('Ventas', 'Di: checa las ganancias del mes.', 'ventas'),
-            option('Stock', 'Di: consulta el stock de 4x4.', 'stock'),
+            option('Inventario', 'Di: consulta el inventario de 4x4.', 'stock'),
             option('Pedidos', 'Di: dime los pedidos por enviar.', 'pedidos'),
             option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
             option('Salir', 'Di: salir, cancelar o detener.', 'salir')
         ],
-        footer: 'Tambien puedes decir ventas, stock, pedidos, ayuda o salir.',
+        footer: 'Tambien puedes decir ventas, inventario, pedidos, ayuda o salir.',
         showBackButton: false
     });
 }
@@ -876,7 +876,7 @@ function sectionPayload(section) {
             subtitle: 'Elige una ruta o usa una frase de ejemplo.',
             cards: [
                 option('Ventas', 'Checa las ganancias del mes.', 'ventas'),
-                option('Stock', 'Consulta el stock de 4x4.', 'stock'),
+                option('Inventario', 'Consulta el inventario de 4x4.', 'stock'),
                 option('Pedidos', 'Dime los pedidos por enviar.', 'pedidos'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
@@ -907,7 +907,7 @@ function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o d
         subtitle,
         cards: [
             option('Ventas', 'Consultar ganancias o mercancia.', 'ventas'),
-            option('Stock', 'Revisar inventario.', 'stock'),
+            option('Inventario', 'Revisar productos, marcas o familias.', 'stock'),
             option('Pedidos', 'Consultar estado de pedidos.', 'pedidos'),
             option('Menu principal', 'Volver al inicio.', 'menu')
         ],
