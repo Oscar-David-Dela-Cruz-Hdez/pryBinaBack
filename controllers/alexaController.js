@@ -397,7 +397,6 @@ const AplUserEventHandler = {
 
         let speakOutput = '';
         let datasource = menuPayload();
-        let shouldRenderApl = true;
 
         try {
             if (action === 'ventas') {
@@ -449,7 +448,11 @@ const AplUserEventHandler = {
                 sessionAttributes.lastIntent = 'ventasIntent';
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
-                shouldRenderApl = false;
+                datasource = resultPayload(
+                    'Resultado de ventas',
+                    speakOutput,
+                    'Puedes decir menu principal, abrir inventario, abrir pedidos o salir.'
+                );
             } else if (action === 'ventas_ganancias_personalizado') {
                 sessionAttributes.lastIntent = 'ventasIntent';
                 sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
@@ -472,7 +475,9 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalBajos} productos con stock bajo en el almacen.`;
-                shouldRenderApl = false;
+                datasource = productosBajos.length > 0
+                    ? productListPayload('Inventario general', speakOutput, productosBajos, 'Puedes decir menu principal, pedir otro inventario o salir.')
+                    : resultPayload('Inventario general', speakOutput, 'Puedes decir menu principal, pedir otro inventario o salir.');
             } else if (action === 'stock_producto' || action === 'stock_familia' || action === 'stock_marca') {
                 const tipoFiltro = action.replace('stock_', '');
                 sessionAttributes.lastIntent = 'stockIntent';
@@ -491,7 +496,11 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Actualmente hay ${totalPorEnviar} pedidos por enviar registrados en el sistema.`;
-                shouldRenderApl = false;
+                datasource = resultPayload(
+                    'Pedidos por enviar',
+                    speakOutput,
+                    'Puedes decir menu principal, consultar enviados, finalizados o salir.'
+                );
             } else if (action === 'pedidos_enviados') {
                 sessionAttributes.lastIntent = 'estadoIntent';
                 sessionAttributes.waitingFor = null;
@@ -511,7 +520,11 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalPedidos} pedidos enviados ${textoPeriodoApl(periodo)}.`;
-                shouldRenderApl = false;
+                datasource = resultPayload(
+                    'Pedidos enviados',
+                    speakOutput,
+                    'Puedes decir menu principal, consultar otro rango o salir.'
+                );
             } else if (action.startsWith('pedidos_finalizados_') && action !== 'pedidos_finalizados_personalizado') {
                 const periodo = action.replace('pedidos_finalizados_', '');
                 const totalPedidos = await consultarPedidosPorEstado('Entregado', periodo);
@@ -519,7 +532,11 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalPedidos} pedidos finalizados ${textoPeriodoApl(periodo)}.`;
-                shouldRenderApl = false;
+                datasource = resultPayload(
+                    'Pedidos finalizados',
+                    speakOutput,
+                    'Puedes decir menu principal, consultar otro rango o salir.'
+                );
             } else if (action === 'pedidos_enviados_personalizado' || action === 'pedidos_finalizados_personalizado') {
                 const tipoEstado = action === 'pedidos_enviados_personalizado' ? 'enviados' : 'finalizados';
                 sessionAttributes.lastIntent = 'estadoIntent';
@@ -569,10 +586,6 @@ const AplUserEventHandler = {
             .speak(speakOutput)
             .reprompt('Que deseas consultar?')
             .withShouldEndSession(false);
-
-        if (!shouldRenderApl) {
-            return responseBuilder.getResponse();
-        }
 
         return addAplDirective(handlerInput, responseBuilder, datasource, `${action}-screen`)
             .getResponse();
@@ -902,6 +915,20 @@ const VentasIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas consultar algo más de ventas o terminamos?';
+        if (supportsAPL(handlerInput)) {
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt('Puedes decir menu principal, abrir inventario, abrir pedidos o salir.')
+                .withShouldEndSession(false);
+
+            return addAplDirective(
+                handlerInput,
+                responseBuilder,
+                resultPayload('Resultado de ventas', speakOutput, 'Puedes decir menu principal, abrir inventario, abrir pedidos o salir.'),
+                'ventas-result'
+            ).getResponse();
+        }
+
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas algo más?').getResponse();
     }
 };
@@ -1051,14 +1078,40 @@ const StockIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         if (sessionAttributes.waitingFor === 'nombreFiltroStock') {
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt('Di otro nombre o di menu principal.')
-                .withShouldEndSession(false)
-                .getResponse();
+            const retryPayload = promptPayload(
+                'No encontrado',
+                speakOutput,
+                'Puedes intentar otro nombre o decir menu principal.',
+                'Di otro nombre de producto, marca o familia.'
+            );
+            return addAplDirective(
+                handlerInput,
+                handlerInput.responseBuilder
+                    .speak(speakOutput)
+                    .reprompt('Di otro nombre o di menu principal.')
+                    .withShouldEndSession(false),
+                retryPayload,
+                'stock-not-found'
+            ).getResponse();
         }
 
         speakOutput += 'Quieres revisar otro inventario o terminamos?';
+        if (supportsAPL(handlerInput)) {
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt('Puedes decir menu principal, pedir otro inventario o salir.')
+                .withShouldEndSession(false);
+            const title = tipoFiltro === 'general'
+                ? 'Inventario general'
+                : `Inventario por ${tipoFiltro}`;
+            const datasource = aplProducts.length > 0
+                ? productListPayload(title, speakOutput, aplProducts, 'Puedes decir menu principal, pedir otro inventario o salir.')
+                : resultPayload(title, speakOutput, 'Puedes decir menu principal, pedir otro inventario o salir.');
+
+            return addAplDirective(handlerInput, responseBuilder, datasource, 'stock-result')
+                .getResponse();
+        }
+
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('Quieres revisar algo mas?').getResponse();
     }
 };
@@ -1160,6 +1213,23 @@ const EstadoIntentHandler = {
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
         speakOutput += '¿Deseas consultar otro estado o finalizamos?';
+        if (supportsAPL(handlerInput)) {
+            const responseBuilder = handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt('Puedes decir menu principal, abrir ventas, abrir inventario o salir.')
+                .withShouldEndSession(false);
+            const resultTitle = tipoEstado === 'por enviar' || tipoEstado === 'actuales'
+                ? 'Pedidos por enviar'
+                : `Pedidos ${tipoEstado}`;
+
+            return addAplDirective(
+                handlerInput,
+                responseBuilder,
+                resultPayload(resultTitle, speakOutput, 'Puedes decir menu principal, consultar otro estado o salir.'),
+                'pedidos-result'
+            ).getResponse();
+        }
+
         return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas consultar algo más?').getResponse();
     }
 };
