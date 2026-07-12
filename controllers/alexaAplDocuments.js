@@ -816,14 +816,14 @@ function sectionPayload(section) {
         },
         stock: {
             template: 'textList',
-            eyebrow: 'Consulta de stock',
+            eyebrow: 'Consulta de inventario',
             title: 'Inventario',
             subtitle: 'Elige como buscar o di el nombre directamente.',
             cards: [
-                option('General', 'Di: consulta el stock general.', 'stock_general'),
-                option('Producto', 'Di: consulta el stock de 4x4 minoxidil.', 'stock_producto'),
-                option('Familia', 'Di: consulta el stock de Barberia.', 'stock_familia'),
-                option('Marca', 'Di: consulta el stock de Andis.', 'stock_marca'),
+                option('General', 'Di: consulta inventario general.', 'stock_general'),
+                option('Producto', 'Di: consulta inventario de 4x4 minoxidil.', 'stock_producto'),
+                option('Familia', 'Di: consulta inventario de Barberia.', 'stock_familia'),
+                option('Marca', 'Di: consulta inventario de Andis.', 'stock_marca'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Para producto, marca o familia, completa el nombre por voz.'

@@ -170,6 +170,18 @@ function filtroNombreExacto(nombre) {
     return { $regex: `^${escaparRegex(nombre.trim())}$`, $options: 'i' };
 }
 
+function normalizarTipoFiltroStock(valor) {
+    const texto = valor?.toLowerCase().trim();
+    if (!texto) return null;
+
+    if (texto.includes('general')) return 'general';
+    if (texto.includes('producto')) return 'producto';
+    if (texto.includes('marca')) return 'marca';
+    if (texto.includes('familia')) return 'familia';
+
+    return null;
+}
+
 async function inferirTipoFiltroStock(nombreFiltro) {
     const nombre = nombreFiltro?.trim();
     if (!nombre) return null;
@@ -239,10 +251,10 @@ const AlexaTokenIntentHandler = {
             sessionAttributes.alexaTokenInput = '';
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-            const speakOutput = `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, stock o pedidos. Que deseas hacer?`;
+            const speakOutput = `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, inventario o pedidos. Que deseas hacer?`;
             const responseBuilder = handlerInput.responseBuilder
                 .speak(speakOutput)
-                .reprompt('Quieres consultar ventas, stock o pedidos?')
+                .reprompt('Quieres consultar ventas, inventario o pedidos?')
                 .withShouldEndSession(false);
 
             return addAplDirective(handlerInput, responseBuilder, welcomePayload(), 'welcome-menu')
@@ -262,14 +274,15 @@ const NavigateHomeIntentHandler = {
     },
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        sessionAttributes.lastIntent = null;
         sessionAttributes.waitingFor = null;
         sessionAttributes.savedContext = {};
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-        const speakOutput = 'Claro, volvemos al menu principal. Puedes consultar ventas, stock o pedidos.';
+        const speakOutput = 'Claro, volvemos al menu principal. Puedes consultar ventas, inventario o pedidos.';
         const responseBuilder = handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt('Quieres consultar ventas, stock o pedidos?')
+            .reprompt('Quieres consultar ventas, inventario o pedidos?')
             .withShouldEndSession(false);
 
         return addAplDirective(handlerInput, responseBuilder, menuPayload(), 'main-menu')
@@ -326,10 +339,10 @@ const AplUserEventHandler = {
 
                         return responseWithApl(
                             handlerInput,
-                            `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, stock o pedidos.`,
+                            `Acceso autorizado. Hola ${admin.nombre}. Puedes consultar ventas, inventario o pedidos.`,
                             menuPayload(),
                             'main-menu',
-                            'Quieres consultar ventas, stock o pedidos?'
+                            'Quieres consultar ventas, inventario o pedidos?'
                         );
                     }
 
@@ -406,7 +419,10 @@ const AplUserEventHandler = {
                 speakOutput = 'Abrimos pedidos. Puedes consultar por enviar, enviados o finalizados.';
                 datasource = sectionPayload('pedidos');
             } else if (action === 'ayuda') {
-                speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, stock o pedidos.';
+                sessionAttributes.lastIntent = null;
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, inventario o pedidos.';
                 datasource = sectionPayload('ayuda');
             } else if (action === 'noop') {
                 speakOutput = 'Responde con una frase como: de hace quince dias, o hace cien dias.';
@@ -517,9 +533,10 @@ const AplUserEventHandler = {
                     `Di: pedidos ${tipoEstado} de hace 15 dias.`
                 );
             } else if (action === 'menu') {
+                sessionAttributes.lastIntent = null;
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
-                speakOutput = 'Este es el menu principal. Puedes consultar ventas, stock, pedidos, ayuda o salir.';
+                speakOutput = 'Este es el menu principal. Puedes consultar ventas, inventario, pedidos, ayuda o salir.';
                 datasource = menuPayload();
             } else if (action === 'salir') {
                 sessionAttributes.waitingFor = null;
@@ -535,7 +552,8 @@ const AplUserEventHandler = {
             } else {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
-                speakOutput = 'Volvemos al menu principal. Puedes consultar ventas, stock o pedidos.';
+                sessionAttributes.lastIntent = null;
+                speakOutput = 'Volvemos al menu principal. Puedes consultar ventas, inventario o pedidos.';
                 datasource = menuPayload();
             }
         } catch (error) {
@@ -734,7 +752,8 @@ const VentasIntentHandler = {
             if (periodo || dias) tipoConsulta = 'ganancia';
             else if (tipoMercancia || nombreMercancia) tipoConsulta = 'mercancía';
             else {
-                sessionAttributes.waitingFor = 'tipoConsultaVentas';
+                sessionAttributes.waitingFor = 'periodoGanancia';
+                sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return responseWithApl(
                     handlerInput,
@@ -898,14 +917,18 @@ const StockIntentHandler = {
         sessionAttributes.lastIntent = 'stockIntent';
 
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
-        let tipoFiltro = slots.tipoFiltroStock?.value?.toLowerCase() || null;
+        const tipoFiltroSlot = slots.tipoFiltroStock?.value || null;
+        let tipoFiltro = normalizarTipoFiltroStock(tipoFiltroSlot);
         let nombreFiltro = slots.nombreFiltro?.value || null;
 
         const ctx = sessionAttributes.savedContext || {};
         if (sessionAttributes.waitingFor === 'tipoFiltroStock') {
             nombreFiltro = ctx.nombreFiltro || nombreFiltro;
         } else if (sessionAttributes.waitingFor === 'nombreFiltroStock') {
-            tipoFiltro = ctx.tipoFiltro || tipoFiltro;
+            tipoFiltro = normalizarTipoFiltroStock(ctx.tipoFiltro) || tipoFiltro;
+            nombreFiltro = nombreFiltro || (normalizarTipoFiltroStock(tipoFiltroSlot) ? null : tipoFiltroSlot);
+        } else if (!tipoFiltro && !nombreFiltro && tipoFiltroSlot) {
+            nombreFiltro = tipoFiltroSlot;
         }
 
         sessionAttributes.waitingFor = null;
@@ -977,7 +1000,9 @@ const StockIntentHandler = {
                         aplProducts = [producto];
                         speakOutput = `Revisando el stock del producto ${producto.nombre}, nos quedan solamente ${producto.stock} unidades. `;
                     } else {
-                        speakOutput = `No se encontró el producto ${nombreFiltro}. `;
+                        sessionAttributes.waitingFor = 'nombreFiltroStock';
+                        sessionAttributes.savedContext = { tipoFiltro: 'producto' };
+                        speakOutput = `No encontre el producto ${nombreFiltro}. Puedes intentar con otro nombre de producto o decir menu principal. `;
                     }
                 } else if (tipoFiltro === 'marca') {
                     const marca = await Marca.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
@@ -994,7 +1019,9 @@ const StockIntentHandler = {
                             speakOutput = `La marca ${marca.nombre} tiene niveles de stock normales. `;
                         }
                     } else {
-                        speakOutput = `No se encontro la marca ${nombreFiltro}. `;
+                        sessionAttributes.waitingFor = 'nombreFiltroStock';
+                        sessionAttributes.savedContext = { tipoFiltro: 'marca' };
+                        speakOutput = `No encontre la marca ${nombreFiltro}. Puedes intentar con otro nombre de marca o decir menu principal. `;
                     }
                 } else {
                     const familia = await Familia.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
@@ -1011,7 +1038,9 @@ const StockIntentHandler = {
                             speakOutput = `La familia ${familia.nombre} tiene niveles de stock normales. `;
                         }
                     } else {
-                        speakOutput = `No se encontro la familia ${nombreFiltro}. `;
+                        sessionAttributes.waitingFor = 'nombreFiltroStock';
+                        sessionAttributes.savedContext = { tipoFiltro: 'familia' };
+                        speakOutput = `No encontre la familia ${nombreFiltro}. Puedes intentar con otro nombre de familia o decir menu principal. `;
                     }
                 }
             }
@@ -1021,8 +1050,16 @@ const StockIntentHandler = {
         }
 
         handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
-        speakOutput += '¿Deseas revisar otro stock o terminamos?';
-        return handlerInput.responseBuilder.speak(speakOutput).reprompt('¿Deseas revisar algo más?').getResponse();
+        if (sessionAttributes.waitingFor === 'nombreFiltroStock') {
+            return handlerInput.responseBuilder
+                .speak(speakOutput)
+                .reprompt('Di otro nombre o di menu principal.')
+                .withShouldEndSession(false)
+                .getResponse();
+        }
+
+        speakOutput += 'Quieres revisar otro inventario o terminamos?';
+        return handlerInput.responseBuilder.speak(speakOutput).reprompt('Quieres revisar algo mas?').getResponse();
     }
 };
 
@@ -1137,28 +1174,23 @@ const CancelAndStopIntentHandler = {
     handle(handlerInput) {
         const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        const lastIntent = sessionAttributes.lastIntent;
 
         // Limpiar estado de espera siempre que se cancele
         sessionAttributes.waitingFor = null;
         sessionAttributes.savedContext = {};
+        sessionAttributes.lastIntent = null;
 
-        if (intentName === 'AMAZON.CancelIntent' && lastIntent) {
+        if (intentName === 'AMAZON.CancelIntent') {
             sessionAttributes.lastIntent = null;
             handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-            let speakOutput = '';
-            if (lastIntent === 'ventasIntent') {
-                speakOutput = 'Búsqueda cancelada. ¿Qué deseas consultar, ganancias o mercancía?';
-            } else if (lastIntent === 'stockIntent') {
-                speakOutput = 'Operación cancelada. ¿Deseas ver el stock por producto, familia, categoría o general?';
-            } else if (lastIntent === 'estadoIntent') {
-                speakOutput = 'Operación cancelada. ¿Deseas ver los pedidos por enviar, actuales, finalizados o enviados?';
-            }
+            const cancelOutput = 'Operacion cancelada. Volvemos al menu principal. Puedes consultar ventas, inventario o pedidos.';
+            const cancelResponseBuilder = handlerInput.responseBuilder
+                .speak(cancelOutput)
+                .reprompt('Quieres consultar ventas, inventario o pedidos?')
+                .withShouldEndSession(false);
 
-            return handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt(speakOutput)
+            return addAplDirective(handlerInput, cancelResponseBuilder, menuPayload(), 'main-menu')
                 .getResponse();
         }
 
@@ -1185,37 +1217,18 @@ const HelpIntentHandler = {
     },
     handle(handlerInput) {
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
-        const lastIntent = sessionAttributes.lastIntent;
+        sessionAttributes.lastIntent = null;
+        sessionAttributes.waitingFor = null;
+        sessionAttributes.savedContext = {};
+        handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
-        let speakOutput = 'Puedes preguntarme por las ventas de algún producto, revisar el stock disponible o consultar el estado de los pedidos. ¿En qué te puedo ayudar?';
+        const generalHelpOutput = 'Estas son algunas frases utiles. Puedes decir: checa las ganancias del mes, consulta inventario general, dime los pedidos por enviar, menu principal o salir.';
+        const generalHelpResponseBuilder = handlerInput.responseBuilder
+            .speak(generalHelpOutput)
+            .reprompt('Puedes decir ventas, inventario, pedidos, menu principal o salir.')
+            .withShouldEndSession(false);
 
-        if (lastIntent === 'ventasIntent') {
-            speakOutput = 'Para consultar ventas, puedes decir "las ganancias del mes" o pedir información de mercancía como "ventas de Barbería". ¿Qué te gustaría intentar?';
-        } else if (lastIntent === 'stockIntent') {
-            speakOutput = 'Para revisar el inventario, puedes pedir "stock general" o "consulta el stock de Barbería". ¿Qué deseas buscar?';
-        } else if (lastIntent === 'estadoIntent') {
-            speakOutput = 'Para revisar los pedidos, puedes decir "pedidos por enviar" o "pedidos enviados de este mes". ¿Qué deseas consultar?';
-        }
-
-        if (supportsAPL(handlerInput)) {
-            const helpSection = lastIntent === 'ventasIntent'
-                ? 'ventas'
-                : lastIntent === 'stockIntent'
-                    ? 'stock'
-                    : lastIntent === 'estadoIntent'
-                        ? 'pedidos'
-                        : 'ayuda';
-            const responseBuilder = handlerInput.responseBuilder
-                .speak(speakOutput)
-                .reprompt(speakOutput);
-
-            return addAplDirective(handlerInput, responseBuilder, sectionPayload(helpSection), 'help-screen')
-                .getResponse();
-        }
-
-        return handlerInput.responseBuilder
-            .speak(speakOutput)
-            .reprompt(speakOutput)
+        return addAplDirective(handlerInput, generalHelpResponseBuilder, sectionPayload('ayuda'), 'help-screen')
             .getResponse();
     }
 };
@@ -1254,10 +1267,10 @@ const FallbackIntentHandler = {
         }
 
         // Respuesta general si no había contexto
-        const speakOutput = 'Lo siento, no tengo información sobre eso en los registros de Panamericana. Solo puedo consultar ventas, stock o pedidos. ¿Qué deseas hacer?';
+        const speakOutput = 'Lo siento, no tengo informacion sobre eso en los registros de Panamericana. Solo puedo consultar ventas, inventario o pedidos. Que deseas hacer?';
         return handlerInput.responseBuilder
             .speak(speakOutput)
-            .reprompt('¿Deseas consultar ventas, stock o pedidos?')
+            .reprompt('Deseas consultar ventas, inventario o pedidos?')
             .getResponse();
     }
 };
