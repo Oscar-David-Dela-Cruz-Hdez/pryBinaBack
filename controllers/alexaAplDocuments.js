@@ -220,7 +220,7 @@ function keypadButton(label, action, width = '30%', accent = false) {
     return {
         type: 'TouchWrapper',
         width,
-        height: '${viewport.height < 620 ? "52dp" : "64dp"}',
+        height: '${viewport.height < 620 ? "46dp" : "54dp"}',
         onPress: [
             {
                 type: 'SendEvent',
@@ -237,9 +237,11 @@ function keypadButton(label, action, width = '30%', accent = false) {
             borderWidth: accent ? '2dp' : '1dp',
             item: {
                 type: 'Text',
+                width: '100%',
+                height: '100%',
                 text: label,
                 color: '#FFFFFF',
-                fontSize: '${viewport.height < 620 ? "20dp" : "27dp"}',
+                fontSize: '${viewport.height < 620 ? "19dp" : "23dp"}',
                 fontWeight: 'bold',
                 textAlign: 'center',
                 textAlignVertical: 'center',
@@ -255,7 +257,7 @@ function keypadRow(items) {
         direction: 'row',
         width: '100%',
         justifyContent: 'spaceBetween',
-        spacing: '${viewport.height < 620 ? "8dp" : "12dp"}',
+        spacing: '${viewport.height < 620 ? "7dp" : "10dp"}',
         items
     };
 }
@@ -293,13 +295,15 @@ function createKeypadDocument(payload) {
                             type: 'Container',
                             width: '100%',
                             height: '100%',
+                            alignItems: 'center',
                             paddingLeft: '${viewport.width < 900 ? "38dp" : "72dp"}',
                             paddingRight: '${viewport.width < 900 ? "38dp" : "72dp"}',
-                            paddingTop: '${viewport.height < 620 ? "28dp" : "46dp"}',
-                            paddingBottom: '${viewport.height < 620 ? "24dp" : "36dp"}',
+                            paddingTop: '${viewport.height < 620 ? "22dp" : "32dp"}',
+                            paddingBottom: '${viewport.height < 620 ? "18dp" : "26dp"}',
                             items: [
                                 {
                                     type: 'Text',
+                                    width: '${viewport.width < 900 ? "92%" : "620dp"}',
                                     text: screen.eyebrow,
                                     color: BEAUTY_THEME.accent,
                                     fontSize: '${viewport.height < 620 ? "18dp" : "22dp"}',
@@ -308,6 +312,7 @@ function createKeypadDocument(payload) {
                                 },
                                 {
                                     type: 'Text',
+                                    width: '${viewport.width < 900 ? "92%" : "620dp"}',
                                     text: screen.title,
                                     color: '#FFFFFF',
                                     fontSize: '${viewport.height < 620 ? "34dp" : "46dp"}',
@@ -317,6 +322,7 @@ function createKeypadDocument(payload) {
                                 },
                                 {
                                     type: 'Text',
+                                    width: '${viewport.width < 900 ? "92%" : "620dp"}',
                                     text: screen.subtitle,
                                     color: '#F8DDE9',
                                     fontSize: '${viewport.height < 620 ? "17dp" : "21dp"}',
@@ -325,15 +331,17 @@ function createKeypadDocument(payload) {
                                 },
                                 {
                                     type: 'Frame',
-                                    width: '100%',
-                                    height: '${viewport.height < 620 ? "54dp" : "66dp"}',
+                                    width: '${viewport.width < 900 ? "92%" : "620dp"}',
+                                    height: '${viewport.height < 620 ? "48dp" : "56dp"}',
                                     backgroundColor: 'rgba(0,0,0,0.28)',
                                     borderColor: BEAUTY_THEME.accent,
                                     borderWidth: '1dp',
                                     borderRadius: '8dp',
-                                    spacing: '${viewport.height < 620 ? "12dp" : "20dp"}',
+                                    spacing: '${viewport.height < 620 ? "10dp" : "14dp"}',
                                     item: {
                                         type: 'Text',
+                                        width: '100%',
+                                        height: '100%',
                                         text: tokenInput || '_____',
                                         color: '#FFFFFF',
                                         fontSize: '${viewport.height < 620 ? "32dp" : "46dp"}',
@@ -345,8 +353,8 @@ function createKeypadDocument(payload) {
                                 },
                                 {
                                     type: 'Container',
-                                    width: '100%',
-                                    spacing: '${viewport.height < 620 ? "8dp" : "12dp"}',
+                                    width: '${viewport.width < 900 ? "92%" : "620dp"}',
+                                    spacing: '${viewport.height < 620 ? "7dp" : "10dp"}',
                                     items: [
                                         keypadRow([
                                             keypadButton('1', 'token_digit:1'),
@@ -373,23 +381,23 @@ function createKeypadDocument(payload) {
                                 {
                                     type: 'Container',
                                     direction: 'row',
-                                    width: '100%',
+                                    width: '${viewport.width < 900 ? "92%" : "620dp"}',
                                     justifyContent: 'spaceBetween',
-                                    spacing: '${viewport.height < 620 ? "8dp" : "12dp"}',
+                                    spacing: '${viewport.height < 620 ? "7dp" : "10dp"}',
                                     items: [
-                                        keypadButton('Ingresar', 'token_submit', '64%', true),
-                                        keypadButton('Voz', 'noop', '32%')
+                                        keypadButton('Ingresar', 'token_submit', '65%', true),
+                                        keypadButton('Voz', 'noop', '31.5%')
                                     ]
                                 },
                                 {
                                     type: 'Text',
+                                    width: '${viewport.width < 900 ? "92%" : "620dp"}',
                                     text: screen.footer,
                                     color: '#F8DDE9',
                                     fontSize: '${viewport.height < 620 ? "15dp" : "18dp"}',
                                     maxLines: 2,
                                     textAlign: 'center',
-                                    width: '100%',
-                                    spacing: '12dp'
+                                    spacing: '10dp'
                                 }
                             ]
                         }
