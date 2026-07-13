@@ -382,6 +382,7 @@ function createKeypadDocument(payload) {
                                     type: 'Container',
                                     direction: 'row',
                                     width: '${viewport.width < 900 ? "92%" : "620dp"}',
+                                    spacing: '${viewport.height < 620 ? "7dp" : "10dp"}',
                                     items: [
                                         keypadButton('Ingresar', 'token_submit', '100%', true)
                                     ]
