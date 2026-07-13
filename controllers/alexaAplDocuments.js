@@ -382,11 +382,8 @@ function createKeypadDocument(payload) {
                                     type: 'Container',
                                     direction: 'row',
                                     width: '${viewport.width < 900 ? "92%" : "620dp"}',
-                                    justifyContent: 'spaceBetween',
-                                    spacing: '${viewport.height < 620 ? "7dp" : "10dp"}',
                                     items: [
-                                        keypadButton('Ingresar', 'token_submit', '65%', true),
-                                        keypadButton('Voz', 'noop', '31.5%')
+                                        keypadButton('Ingresar', 'token_submit', '100%', true)
                                     ]
                                 },
                                 {
@@ -948,7 +945,7 @@ function authPayload(message = 'Para continuar, dime tu token de administrador d
         subtitle: message,
         tokenInput: tokenInput || tokenMask(''),
         cards: [],
-        footer: 'Por voz di: mi token es uno dos tres cuatro cinco.',
+        footer: 'Por voz di el numero completo. Ejemplo: mi token es sesenta y seis mil ciento veintitres.',
         showBackButton: false
     });
 }
