@@ -182,8 +182,37 @@ function normalizarTipoFiltroStock(valor) {
     return null;
 }
 
+function obtenerValorSlot(slots, ...nombres) {
+    for (const nombre of nombres) {
+        const valor = slots[nombre]?.value;
+        if (valor !== undefined && valor !== null && String(valor).trim() !== '') {
+            return valor;
+        }
+    }
+    return null;
+}
+
+function normalizarNombreConsultado(valor) {
+    if (!valor) return valor;
+
+    return String(valor)
+        .trim()
+        .replace(/\b(cuatro|4)\s+(?:por|x)\s+(cuatro|4)\b/gi, '4x4');
+}
+
+function normalizarTipoEstado(valor) {
+    if (!valor) return null;
+    const texto = String(valor).toLowerCase().trim();
+
+    if (texto.includes('por enviar') || texto.includes('pendiente') || texto.includes('actual')) return 'por enviar';
+    if (texto.includes('enviado')) return 'enviados';
+    if (texto.includes('finalizado') || texto.includes('entregado') || texto.includes('terminado')) return 'finalizados';
+
+    return texto;
+}
+
 async function inferirTipoFiltroStock(nombreFiltro) {
-    const nombre = nombreFiltro?.trim();
+    const nombre = normalizarNombreConsultado(nombreFiltro)?.trim();
     if (!nombre) return null;
 
     const productoExacto = await Producto.findOne({ nombre: filtroNombreExacto(nombre) });
@@ -227,8 +256,13 @@ const AlexaTokenIntentHandler = {
     canHandle(handlerInput) {
         const requestType = Alexa.getRequestType(handlerInput.requestEnvelope);
         const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const intentName = requestType === 'IntentRequest'
+            ? Alexa.getIntentName(handlerInput.requestEnvelope)
+            : null;
+        const esIntentSalida = intentName === 'AMAZON.StopIntent' || intentName === 'SalirIntent';
 
         return requestType === 'IntentRequest'
+            && !esIntentSalida
             && (sessionAttributes.waitingFor === 'alexaToken' || sessionAttributes.alexaAuthenticated !== true);
     },
     async handle(handlerInput) {
@@ -732,7 +766,7 @@ const VentasIntentHandler = {
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
         let tipoConsulta = slots.tipoConsulta?.value?.toLowerCase() || null;
         let periodo = normalizarPeriodo(slots.periodoGanancia?.value);
-        let dias = slots.diasPersonalizado?.value || null;
+        let dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias');
         let tipoMercancia = slots.tipoMercancia?.value?.toLowerCase() || null;
         let nombreMercancia = slots.nombreMercancia?.value || null;
 
@@ -753,7 +787,7 @@ const VentasIntentHandler = {
         } else if (sessionAttributes.waitingFor === 'diasPersonalizadoVentas') {
             tipoConsulta = ctx.tipoConsulta || 'ganancia';
             periodo = 'personalizado';
-            dias = slots.diasPersonalizado?.value || slots.tipoConsulta?.value || null;
+            dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias', 'tipoConsulta');
         }
 
         // Limpiar estado de espera
@@ -946,7 +980,7 @@ const StockIntentHandler = {
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
         const tipoFiltroSlot = slots.tipoFiltroStock?.value || null;
         let tipoFiltro = normalizarTipoFiltroStock(tipoFiltroSlot);
-        let nombreFiltro = slots.nombreFiltro?.value || null;
+        let nombreFiltro = normalizarNombreConsultado(slots.nombreFiltro?.value || null);
 
         const ctx = sessionAttributes.savedContext || {};
         if (sessionAttributes.waitingFor === 'tipoFiltroStock') {
@@ -958,6 +992,8 @@ const StockIntentHandler = {
             nombreFiltro = tipoFiltroSlot;
         }
 
+        nombreFiltro = normalizarNombreConsultado(nombreFiltro);
+
         sessionAttributes.waitingFor = null;
         sessionAttributes.savedContext = {};
 
@@ -967,15 +1003,20 @@ const StockIntentHandler = {
             }
 
             if (!tipoFiltro && nombreFiltro) {
-                sessionAttributes.waitingFor = 'tipoFiltroStock';
-                sessionAttributes.savedContext = { nombreFiltro };
+                sessionAttributes.waitingFor = 'nombreFiltroStock';
+                sessionAttributes.savedContext = {};
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return responseWithApl(
                     handlerInput,
-                    `Quieres ver el stock de ${nombreFiltro} por producto, marca o familia?`,
-                    sectionPayload('stock'),
-                    'stock-tipo-filtro',
-                    'Por producto, marca o familia?'
+                    `No encontre ${nombreFiltro} como producto, marca o familia. Puedes intentar con otro nombre o decir menu principal.`,
+                    promptPayload(
+                        'No encontrado',
+                        `No encontre ${nombreFiltro} en el inventario.`,
+                        'Intenta con otro producto, marca o familia.',
+                        'Di otro nombre o di menu principal.'
+                    ),
+                    'stock-not-found',
+                    'Di otro nombre o di menu principal.'
                 );
             } else {
                 sessionAttributes.waitingFor = 'tipoFiltroStock';
@@ -1022,7 +1063,7 @@ const StockIntentHandler = {
                 }
 
                 if (tipoFiltro === 'producto') {
-                    const producto = await Producto.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } }).populate('marca');
+                    const producto = await Producto.findOne({ nombre: { $regex: escaparRegex(nombreFiltro), $options: "i" } }).populate('marca');
                     if (producto) {
                         aplProducts = [producto];
                         speakOutput = `Revisando el stock del producto ${producto.nombre}, nos quedan solamente ${producto.stock} unidades. `;
@@ -1032,7 +1073,7 @@ const StockIntentHandler = {
                         speakOutput = `No encontre el producto ${nombreFiltro}. Puedes intentar con otro nombre de producto o decir menu principal. `;
                     }
                 } else if (tipoFiltro === 'marca') {
-                    const marca = await Marca.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
+                    const marca = await Marca.findOne({ nombre: { $regex: escaparRegex(nombreFiltro), $options: "i" } });
                     if (marca) {
                         const productosBajos = await Producto.find({ marca: marca._id, stock: { $lt: STOCK_MINIMO } })
                             .populate('marca')
@@ -1051,7 +1092,7 @@ const StockIntentHandler = {
                         speakOutput = `No encontre la marca ${nombreFiltro}. Puedes intentar con otro nombre de marca o decir menu principal. `;
                     }
                 } else {
-                    const familia = await Familia.findOne({ nombre: { $regex: nombreFiltro, $options: "i" } });
+                    const familia = await Familia.findOne({ nombre: { $regex: escaparRegex(nombreFiltro), $options: "i" } });
                     if (familia) {
                         const productosBajos = await Producto.find({ familia: familia._id, stock: { $lt: STOCK_MINIMO } })
                             .populate('marca')
@@ -1127,9 +1168,9 @@ const EstadoIntentHandler = {
         sessionAttributes.lastIntent = 'estadoIntent';
 
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
-        let tipoEstado = slots.tipoEstado?.value?.toLowerCase() || null;
+        let tipoEstado = normalizarTipoEstado(slots.tipoEstado?.value);
         let periodo = normalizarPeriodo(slots.periodoEstado?.value);
-        let dias = slots.diasPersonalizado?.value || null;
+        let dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias');
 
         const ctx = sessionAttributes.savedContext || {};
         if (sessionAttributes.waitingFor === 'periodoEstado') {
@@ -1139,7 +1180,7 @@ const EstadoIntentHandler = {
         } else if (sessionAttributes.waitingFor === 'diasPersonalizadoEstado') {
             tipoEstado = ctx.tipoEstado;
             periodo = 'personalizado';
-            dias = slots.diasPersonalizado?.value || slots.tipoEstado?.value || null;
+            dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias', 'tipoEstado');
         }
 
         sessionAttributes.waitingFor = null;
@@ -1239,7 +1280,8 @@ const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.CancelIntent'
-                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
+                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent'
+                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'SalirIntent');
     },
     handle(handlerInput) {
         const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);
