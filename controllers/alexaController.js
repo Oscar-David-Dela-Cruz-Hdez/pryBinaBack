@@ -7,6 +7,7 @@ const Familia = require('../models/Familia');
 const Marca = require('../models/Marca');
 const Usuario = require('../models/Usuario');
 const bcrypt = require('bcryptjs');
+const { generarResumenAdministrativo } = require('../services/openaiService');
 const {
     createAplDocument,
     welcomePayload,
@@ -168,6 +169,69 @@ function escaparRegex(valor) {
 
 function filtroNombreExacto(nombre) {
     return { $regex: `^${escaparRegex(nombre.trim())}$`, $options: 'i' };
+}
+
+function resumenAdministrativoLocal(datos) {
+    const stock = datos.productosConStockBajo === 1
+        ? '1 producto con stock bajo'
+        : `${datos.productosConStockBajo} productos con stock bajo`;
+    const pedidos = datos.pedidosPorEnviar === 1
+        ? '1 pedido por enviar'
+        : `${datos.pedidosPorEnviar} pedidos por enviar`;
+
+    return `Hoy se registraron ${datos.ventasHoy} pesos en ventas. Actualmente hay ${stock} y ${pedidos}.`;
+}
+
+async function crearRespuestaResumenInteligente(handlerInput) {
+    const STOCK_MINIMO = 5;
+    const [ventasHoy, ventasMes, productosConStockBajo, pedidosPorEnviar, productosCriticos] = await Promise.all([
+        consultarGanancias('dia'),
+        consultarGanancias('mes'),
+        Producto.countDocuments({ activo: true, stock: { $lt: STOCK_MINIMO } }),
+        Pedido.countDocuments({ estado: { $in: ['Pendiente', 'Pagado'] } }),
+        Producto.find({ activo: true, stock: { $lt: STOCK_MINIMO } })
+            .select('nombre stock')
+            .sort({ stock: 1, nombre: 1 })
+            .limit(3)
+            .lean()
+    ]);
+
+    const datos = {
+        ventasHoy,
+        ventasMes,
+        productosConStockBajo,
+        pedidosPorEnviar,
+        productosCriticos: productosCriticos.map((producto) => ({
+            nombre: producto.nombre,
+            stock: producto.stock
+        }))
+    };
+
+    let speakOutput = resumenAdministrativoLocal(datos);
+    try {
+        speakOutput = await generarResumenAdministrativo(datos) || speakOutput;
+    } catch (error) {
+        console.error('OpenAI no pudo generar el resumen:', error.message);
+    }
+
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+    sessionAttributes.lastIntent = 'resumenIAIntent';
+    sessionAttributes.waitingFor = null;
+    sessionAttributes.savedContext = {};
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
+
+    const footer = 'Puedes decir menu principal, consultar otro dato o salir.';
+    const responseBuilder = handlerInput.responseBuilder
+        .speak(speakOutput)
+        .reprompt('Puedes decir menu principal, ventas, inventario, pedidos o salir.')
+        .withShouldEndSession(false);
+
+    return addAplDirective(
+        handlerInput,
+        responseBuilder,
+        resultPayload('Resumen inteligente', speakOutput, footer),
+        'resumen-inteligente'
+    ).getResponse();
 }
 
 function normalizarTipoFiltroStock(valor) {
@@ -451,6 +515,8 @@ const AplUserEventHandler = {
                 sessionAttributes.savedContext = {};
                 speakOutput = 'Abrimos pedidos. Puedes consultar por enviar, enviados o finalizados.';
                 datasource = sectionPayload('pedidos');
+            } else if (action === 'resumen_ia') {
+                return crearRespuestaResumenInteligente(handlerInput);
             } else if (action === 'ayuda') {
                 sessionAttributes.lastIntent = null;
                 sessionAttributes.waitingFor = null;
@@ -750,6 +816,16 @@ const LegacyAplUserEventHandler = {
 
         return addAplDirective(handlerInput, responseBuilder, datasource, `${action}-screen`)
             .getResponse();
+    }
+};
+
+const ResumenIAIntentHandler = {
+    canHandle(handlerInput) {
+        return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
+            && Alexa.getIntentName(handlerInput.requestEnvelope) === 'resumenIAIntent';
+    },
+    async handle(handlerInput) {
+        return crearRespuestaResumenInteligente(handlerInput);
     }
 };
 
@@ -1417,6 +1493,7 @@ const skillBuilder = Alexa.SkillBuilders.custom()
         AlexaTokenIntentHandler,
         AplUserEventHandler,
         NavigateHomeIntentHandler,
+        ResumenIAIntentHandler,
         VentasIntentHandler,
         StockIntentHandler,
         EstadoIntentHandler,

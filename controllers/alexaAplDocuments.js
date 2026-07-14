@@ -797,6 +797,7 @@ function welcomePayload() {
             option('Ventas', 'Di: checa las ganancias del mes.', 'ventas'),
             option('Inventario', 'Di: consulta el inventario de 4x4.', 'stock'),
             option('Pedidos', 'Di: dime los pedidos por enviar.', 'pedidos'),
+            option('Resumen inteligente', 'Di: dame un resumen del negocio.', 'resumen_ia'),
             option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
             option('Salir', 'Di: salir, cancelar o detener.', 'salir')
         ],
@@ -814,6 +815,7 @@ function menuPayload() {
             option('Ventas', 'Di: checa las ganancias del mes.', 'ventas'),
             option('Inventario', 'Di: consulta el inventario de 4x4.', 'stock'),
             option('Pedidos', 'Di: dime los pedidos por enviar.', 'pedidos'),
+            option('Resumen inteligente', 'Di: que necesita atencion hoy.', 'resumen_ia'),
             option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
             option('Salir', 'Di: salir, cancelar o detener.', 'salir')
         ],
