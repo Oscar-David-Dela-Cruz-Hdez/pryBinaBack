@@ -11,7 +11,8 @@ const BEAUTY_THEME = {
 
 const BACKGROUND_IMAGE = 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1600&q=80';
 const FALLBACK_PRODUCT_IMAGE = 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=80';
-const LOGO_IMAGE = '';
+const ALEXA_PUBLIC_BASE_URL = (process.env.ALEXA_PUBLIC_BASE_URL || 'https://prybinaback.onrender.com').replace(/\/$/, '');
+const LOGO_IMAGE = `${ALEXA_PUBLIC_BASE_URL}/assets/images/panamericana.png`;
 
 function option(title, subtitle, action, color = BEAUTY_THEME.primary, imageSource = null) {
     return { title, subtitle, action, color, imageSource };
@@ -302,13 +303,30 @@ function createKeypadDocument(payload) {
                             paddingBottom: '${viewport.height < 620 ? "18dp" : "26dp"}',
                             items: [
                                 {
-                                    type: 'Text',
+                                    type: 'Container',
+                                    direction: 'row',
                                     width: '${viewport.width < 900 ? "92%" : "620dp"}',
-                                    text: screen.eyebrow,
-                                    color: BEAUTY_THEME.accent,
-                                    fontSize: '${viewport.height < 620 ? "18dp" : "22dp"}',
-                                    fontWeight: 'bold',
-                                    maxLines: 1
+                                    height: '${viewport.height < 620 ? "42dp" : "54dp"}',
+                                    alignItems: 'center',
+                                    justifyContent: 'spaceBetween',
+                                    items: [
+                                        {
+                                            type: 'Text',
+                                            text: screen.eyebrow,
+                                            color: BEAUTY_THEME.accent,
+                                            fontSize: '${viewport.height < 620 ? "18dp" : "22dp"}',
+                                            fontWeight: 'bold',
+                                            maxLines: 1
+                                        },
+                                        {
+                                            type: 'Image',
+                                            source: screen.logoUrl,
+                                            width: '${viewport.height < 620 ? "38dp" : "50dp"}',
+                                            height: '${viewport.height < 620 ? "38dp" : "50dp"}',
+                                            scale: 'best-fit',
+                                            accessibilityLabel: 'Logo de Distribuidora Panamericana'
+                                        }
+                                    ]
                                 },
                                 {
                                     type: 'Text',

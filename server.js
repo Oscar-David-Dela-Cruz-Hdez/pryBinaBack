@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const conectarDB = require("./config/db");
 const { httpMetricsMiddleware } = require("./middlewares/httpMetricsMiddleware");
 // IMPORTANTE: monitoreoService debe requerirse ANTES que cualquier ruta/modelo
@@ -12,6 +13,9 @@ const port = process.env.PORT || 4000;
 
 // Ruta para el Webhook de Alexa (DEBE IR ANTES de express.json para que Amazon pueda validar la firma)
 app.use("/api/alexa", require("./routes/alexaRoutes"));
+
+// Recursos visuales publicos consumidos por APL.
+app.use("/assets", express.static(path.join(__dirname, "public")));
 
 // 1. PRIMERO le decimos a Express que entienda JSON y CORS
 app.use(express.json());
