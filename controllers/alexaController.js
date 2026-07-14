@@ -112,11 +112,21 @@ function sesionAlexaAutorizada(handlerInput) {
     return sessionAttributes.alexaAuthenticated === true;
 }
 
+function normalizarTexto(valor) {
+    if (valor === undefined || valor === null) return null;
+
+    return String(valor)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
+
 // Normaliza el periodo para aceptar variantes como "del mes", "mensual", etc.
 function normalizarPeriodo(valor) {
     if (!valor) return null;
-    const v = valor.toLowerCase().trim();
-    if (v.includes('dia') || v.includes('día') || v === 'hoy' || v === 'diario' || v === 'al dia' || v === 'al día') return 'dia';
+    const v = normalizarTexto(valor);
+    if (v.includes('dia') || v === 'hoy' || v === 'diario' || v === 'al dia') return 'dia';
     if (v.includes('semana') || v === 'semanal' || v === 'esta semana') return 'semana';
     if (v.includes('mes') || v === 'mensual' || v === 'este mes') return 'mes';
     if (v.includes('personalizado') || v.includes('custom')) return 'personalizado';
@@ -235,20 +245,32 @@ async function crearRespuestaResumenInteligente(handlerInput) {
 }
 
 function normalizarTipoFiltroStock(valor) {
-    const texto = valor?.toLowerCase().trim();
+    const texto = normalizarTexto(valor);
     if (!texto) return null;
 
     if (texto.includes('general')) return 'general';
     if (texto.includes('producto')) return 'producto';
     if (texto.includes('marca')) return 'marca';
     if (texto.includes('familia')) return 'familia';
+    if (texto.includes('categoria')) return 'marca';
 
     return null;
 }
 
+function obtenerValorSlotIndividual(slot) {
+    const authorities = slot?.resolutions?.resolutionsPerAuthority || [];
+    for (const authority of authorities) {
+        if (authority.status?.code !== 'ER_SUCCESS_MATCH') continue;
+        const valorResuelto = authority.values?.[0]?.value?.name;
+        if (valorResuelto) return valorResuelto;
+    }
+
+    return slot?.value ?? null;
+}
+
 function obtenerValorSlot(slots, ...nombres) {
     for (const nombre of nombres) {
-        const valor = slots[nombre]?.value;
+        const valor = obtenerValorSlotIndividual(slots[nombre]);
         if (valor !== undefined && valor !== null && String(valor).trim() !== '') {
             return valor;
         }
@@ -266,12 +288,21 @@ function normalizarNombreConsultado(valor) {
 
 function normalizarTipoEstado(valor) {
     if (!valor) return null;
-    const texto = String(valor).toLowerCase().trim();
+    const texto = normalizarTexto(valor);
 
     if (texto.includes('por enviar') || texto.includes('pendiente') || texto.includes('actual')) return 'por enviar';
     if (texto.includes('enviado')) return 'enviados';
     if (texto.includes('finalizado') || texto.includes('entregado') || texto.includes('terminado')) return 'finalizados';
 
+    return texto;
+}
+
+function normalizarTipoMercancia(valor) {
+    const texto = normalizarTexto(valor);
+    if (!texto) return null;
+    if (texto.includes('producto')) return 'producto';
+    if (texto.includes('familia')) return 'familia';
+    if (texto.includes('marca') || texto.includes('categoria')) return 'marca';
     return texto;
 }
 
@@ -323,7 +354,8 @@ const AlexaTokenIntentHandler = {
         const intentName = requestType === 'IntentRequest'
             ? Alexa.getIntentName(handlerInput.requestEnvelope)
             : null;
-        const esIntentSalida = intentName === 'AMAZON.StopIntent' || intentName === 'SalirIntent';
+        const esIntentSalida = intentName === 'AMAZON.StopIntent'
+            || intentName === 'AMAZON.CancelIntent';
 
         return requestType === 'IntentRequest'
             && !esIntentSalida
@@ -716,7 +748,7 @@ const LegacyAplUserEventHandler = {
             sessionAttributes.lastIntent = 'stockIntent';
             sessionAttributes.waitingFor = 'tipoFiltroStock';
             sessionAttributes.savedContext = {};
-            speakOutput = 'Abrimos inventario. Puedes decir stock general, por producto, por familia o por categoria.';
+            speakOutput = 'Abrimos inventario. Puedes decir inventario general, por producto, por familia o por marca.';
             datasource = sectionPayload('stock');
         } else if (action === 'pedidos') {
             sessionAttributes.lastIntent = 'estadoIntent';
@@ -840,11 +872,11 @@ const VentasIntentHandler = {
         sessionAttributes.lastIntent = 'ventasIntent';
 
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
-        let tipoConsulta = slots.tipoConsulta?.value?.toLowerCase() || null;
-        let periodo = normalizarPeriodo(slots.periodoGanancia?.value);
+        let tipoConsulta = normalizarTexto(obtenerValorSlot(slots, 'tipoConsulta'));
+        let periodo = normalizarPeriodo(obtenerValorSlot(slots, 'periodoGanancia'));
         let dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias');
-        let tipoMercancia = slots.tipoMercancia?.value?.toLowerCase() || null;
-        let nombreMercancia = slots.nombreMercancia?.value || null;
+        let tipoMercancia = normalizarTipoMercancia(obtenerValorSlot(slots, 'tipoMercancia'));
+        let nombreMercancia = obtenerValorSlot(slots, 'nombreMercancia');
 
         // Restaurar contexto guardado si veníamos de una pregunta pendiente
         const ctx = sessionAttributes.savedContext || {};
@@ -854,11 +886,11 @@ const VentasIntentHandler = {
             tipoMercancia = null;
             nombreMercancia = null;
         } else if (sessionAttributes.waitingFor === 'tipoMercancia') {
-            tipoConsulta = 'mercancía';
-            tipoMercancia = tipoMercancia || normalizarPeriodo(slots.periodoGanancia?.value);
+            tipoConsulta = 'mercancia';
+            tipoMercancia = tipoMercancia || normalizarTipoMercancia(obtenerValorSlot(slots, 'periodoGanancia'));
             nombreMercancia = ctx.nombreMercancia || nombreMercancia;
         } else if (sessionAttributes.waitingFor === 'nombreMercancia') {
-            tipoConsulta = 'mercancía';
+            tipoConsulta = 'mercancia';
             tipoMercancia = ctx.tipoMercancia || tipoMercancia;
         } else if (sessionAttributes.waitingFor === 'diasPersonalizadoVentas') {
             tipoConsulta = ctx.tipoConsulta || 'ganancia';
@@ -873,7 +905,7 @@ const VentasIntentHandler = {
         // Deducción automática
         if (!tipoConsulta) {
             if (periodo || dias) tipoConsulta = 'ganancia';
-            else if (tipoMercancia || nombreMercancia) tipoConsulta = 'mercancía';
+            else if (tipoMercancia || nombreMercancia) tipoConsulta = 'mercancia';
             else {
                 sessionAttributes.waitingFor = 'periodoGanancia';
                 sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
@@ -938,21 +970,21 @@ const VentasIntentHandler = {
                     ? `Las ganancias de ${textoPeriodo} fueron procesadas correctamente. Entraron ${totalGanancia} pesos. `
                     : `Las ganancias consultadas por ${textoPeriodo} fueron procesadas correctamente. Entraron ${totalGanancia} pesos. `;
 
-            } else if (tipoConsulta === 'mercancía' || tipoConsulta === 'mercancia') {
+            } else if (tipoConsulta === 'mercancia') {
                 if (!tipoMercancia && !nombreMercancia) {
                     sessionAttributes.waitingFor = 'tipoMercancia';
                     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                     return responseWithApl(
                         handlerInput,
-                        '¿Sobre qué deseas consultar? producto, familia o categoría.',
+                        '¿Sobre qué deseas consultar? producto, familia o marca.',
                         promptPayload(
                             'Ventas por mercancía',
-                            'Elige si quieres consultar producto, familia o categoría.',
+                            'Elige si quieres consultar producto, familia o marca.',
                             'También puedes decir: checa las ventas de Barbería.',
-                            'Di: producto, familia o categoría.'
+                            'Di: producto, familia o marca.'
                         ),
                         'ventas-mercancia-tipo',
-                        '¿Producto, familia o categoría?'
+                        '¿Producto, familia o marca?'
                     );
                 }
                 if (!nombreMercancia) {
@@ -964,7 +996,7 @@ const VentasIntentHandler = {
                         '¿Cuál es el nombre exacto que buscas?',
                         promptPayload(
                             'Nombre de mercancía',
-                            'Di el producto, familia o categoría que quieres revisar.',
+                            'Di el producto, familia o marca que quieres revisar.',
                             'Ejemplo: checa las ventas de Barbería.',
                             'Di: checa las ventas de Barbería.'
                         ),
@@ -998,10 +1030,10 @@ const VentasIntentHandler = {
                             }
                             speakOutput = `La familia ${familia.nombre} tiene ${totalVendido} artículos vendidos, con buen movimiento. `;
                         } else {
-                            speakOutput = `No encontré ningún producto ni categoría llamada ${nombreMercancia}. `;
+                            speakOutput = `No encontré ningún producto, familia o marca llamado ${nombreMercancia}. `;
                         }
                     }
-                } else {
+                } else if (tipoMercancia === 'familia') {
                     const familia = await Familia.findOne({ nombre: { $regex: nombreMercancia, $options: "i" } });
                     if (familia) {
                         const productosFamilia = await Producto.find({ familia: familia._id });
@@ -1014,7 +1046,27 @@ const VentasIntentHandler = {
                         }
                         speakOutput = `La familia ${familia.nombre} tiene ${totalVendido} artículos vendidos, con buen movimiento. `;
                     } else {
-                        speakOutput = `No encontré ninguna familia o categoría llamada ${nombreMercancia}. `;
+                        speakOutput = `No encontré ninguna familia llamada ${nombreMercancia}. `;
+                    }
+                } else if (tipoMercancia === 'marca') {
+                    const marca = await Marca.findOne({ nombre: { $regex: escaparRegex(nombreMercancia), $options: 'i' } });
+                    if (marca) {
+                        const productosMarca = await Producto.find({ marca: marca._id }).select('_id');
+                        const idsProductos = productosMarca.map((producto) => producto._id);
+                        const pedidos = await Pedido.find({
+                            estado: { $in: ['Pagado', 'Enviado', 'Entregado'] },
+                            'productos.producto': { $in: idsProductos }
+                        });
+                        for (const pedido of pedidos) {
+                            for (const productoPedido of pedido.productos) {
+                                if (idsProductos.some((id) => id.toString() === productoPedido.producto.toString())) {
+                                    totalVendido += productoPedido.cantidad;
+                                }
+                            }
+                        }
+                        speakOutput = `La marca ${marca.nombre} tiene ${totalVendido} artículos vendidos. `;
+                    } else {
+                        speakOutput = `No encontré ninguna marca llamada ${nombreMercancia}. `;
                     }
                 }
             }
@@ -1054,9 +1106,9 @@ const StockIntentHandler = {
         sessionAttributes.lastIntent = 'stockIntent';
 
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
-        const tipoFiltroSlot = slots.tipoFiltroStock?.value || null;
+        const tipoFiltroSlot = obtenerValorSlot(slots, 'tipoFiltroStock');
         let tipoFiltro = normalizarTipoFiltroStock(tipoFiltroSlot);
-        let nombreFiltro = normalizarNombreConsultado(slots.nombreFiltro?.value || null);
+        let nombreFiltro = normalizarNombreConsultado(obtenerValorSlot(slots, 'nombreFiltro'));
 
         const ctx = sessionAttributes.savedContext || {};
         if (sessionAttributes.waitingFor === 'tipoFiltroStock') {
@@ -1244,14 +1296,14 @@ const EstadoIntentHandler = {
         sessionAttributes.lastIntent = 'estadoIntent';
 
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
-        let tipoEstado = normalizarTipoEstado(slots.tipoEstado?.value);
-        let periodo = normalizarPeriodo(slots.periodoEstado?.value);
+        let tipoEstado = normalizarTipoEstado(obtenerValorSlot(slots, 'tipoEstado'));
+        let periodo = normalizarPeriodo(obtenerValorSlot(slots, 'periodoEstado'));
         let dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias');
 
         const ctx = sessionAttributes.savedContext || {};
         if (sessionAttributes.waitingFor === 'periodoEstado') {
             tipoEstado = ctx.tipoEstado || tipoEstado;
-            if (!periodo && !dias) periodo = normalizarPeriodo(slots.tipoEstado?.value);
+            if (!periodo && !dias) periodo = normalizarPeriodo(obtenerValorSlot(slots, 'tipoEstado'));
             tipoEstado = ctx.tipoEstado;
         } else if (sessionAttributes.waitingFor === 'diasPersonalizadoEstado') {
             tipoEstado = ctx.tipoEstado;
@@ -1356,8 +1408,7 @@ const CancelAndStopIntentHandler = {
     canHandle(handlerInput) {
         return Alexa.getRequestType(handlerInput.requestEnvelope) === 'IntentRequest'
             && (Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.CancelIntent'
-                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent'
-                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'SalirIntent');
+                || Alexa.getIntentName(handlerInput.requestEnvelope) === 'AMAZON.StopIntent');
     },
     handle(handlerInput) {
         const intentName = Alexa.getIntentName(handlerInput.requestEnvelope);

@@ -10,6 +10,8 @@ cuantos pedidos {tipoEstado} tenemos
 hay pedidos {tipoEstado}
 dime los pedidos {tipoEstado} del {periodoEstado}
 checa los pedidos {tipoEstado} del {periodoEstado}
+pedidos {tipoEstado} del {periodoEstado}
+pedidos {tipoEstado} de {periodoEstado}
 cuantos pedidos {tipoEstado} van este {periodoEstado}
 dime los pedidos {tipoEstado} de hace {diasPersonalizado} dias
 checa los pedidos {tipoEstado} de hace {diasPersonalizado} dias
