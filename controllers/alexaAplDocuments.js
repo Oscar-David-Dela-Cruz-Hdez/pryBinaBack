@@ -96,6 +96,7 @@ function createHeadlineDocument(payload) {
                     headerTitle: screen.eyebrow,
                     ...backButtonProps(screen),
                     headerAttributionImage: screen.logoUrl,
+                    headerAttributionPrimacy: true,
                     primaryText: screen.title,
                     secondaryText: screen.subtitle,
                     footerHintText: screen.footer,
@@ -131,6 +132,7 @@ function createTextListDocument(payload) {
                     headerSubtitle: screen.eyebrow,
                     ...backButtonProps(screen),
                     headerAttributionImage: screen.logoUrl,
+                    headerAttributionPrimacy: true,
                     backgroundImageSource: screen.backgroundImage,
                     backgroundBlur: true,
                     backgroundColorOverlay: true,
@@ -166,6 +168,7 @@ function createGridListDocument(payload) {
                     headerSubtitle: screen.eyebrow,
                     ...backButtonProps(screen),
                     headerAttributionImage: screen.logoUrl,
+                    headerAttributionPrimacy: true,
                     backgroundImageSource: screen.backgroundImage,
                     backgroundBlur: true,
                     backgroundColorOverlay: true,
@@ -203,6 +206,7 @@ function createPaginatedListDocument(payload) {
                     headerSubtitle: screen.eyebrow,
                     ...backButtonProps(screen),
                     headerAttributionImage: screen.logoUrl,
+                    headerAttributionPrimacy: true,
                     backgroundImageSource: screen.backgroundImage,
                     backgroundBlur: true,
                     backgroundColorOverlay: true,
@@ -321,8 +325,8 @@ function createKeypadDocument(payload) {
                                         {
                                             type: 'Image',
                                             source: screen.logoUrl,
-                                            width: '${viewport.height < 620 ? "38dp" : "50dp"}',
-                                            height: '${viewport.height < 620 ? "38dp" : "50dp"}',
+                                            width: '${viewport.height < 620 ? "56dp" : "72dp"}',
+                                            height: '${viewport.height < 620 ? "56dp" : "72dp"}',
                                             scale: 'best-fit',
                                             accessibilityLabel: 'Logo de Distribuidora Panamericana'
                                         }
@@ -835,10 +839,10 @@ function sectionPayload(section) {
                 option('Por dia', 'Di: checa las ganancias del dia.', 'ventas_ganancias_dia'),
                 option('Por semana', 'Di: cuanto vendimos en la semana.', 'ventas_ganancias_semana'),
                 option('Por mes', 'Di: checa las ganancias del mes.', 'ventas_ganancias_mes'),
-                option('Personalizado', 'Di: de hace 15 dias.', 'ventas_ganancias_personalizado'),
+                option('Personalizado', 'Di: ganancias de los ultimos 15 dias.', 'ventas_ganancias_personalizado'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
-            footer: 'Para rango personalizado di: de hace 15 dias.'
+            footer: 'Para rango personalizado di: ganancias de los ultimos 15 dias.'
         },
         stock: {
             template: 'textList',
@@ -876,10 +880,10 @@ function sectionPayload(section) {
                 option('Por dia', 'Di: pedidos enviados del dia.', 'pedidos_enviados_dia'),
                 option('Por semana', 'Di: pedidos enviados de la semana.', 'pedidos_enviados_semana'),
                 option('Por mes', 'Di: pedidos enviados del mes.', 'pedidos_enviados_mes'),
-                option('Personalizado', 'Di: pedidos enviados de hace 15 dias.', 'pedidos_enviados_personalizado'),
+                option('Personalizado', 'Di: pedidos enviados de los ultimos 15 dias.', 'pedidos_enviados_personalizado'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
-            footer: 'Ejemplo: pedidos enviados de hace 15 dias.'
+            footer: 'Ejemplo: pedidos enviados de los ultimos 15 dias.'
         },
         pedidosFinalizados: {
             template: 'textList',
@@ -890,10 +894,10 @@ function sectionPayload(section) {
                 option('Por dia', 'Di: pedidos finalizados del dia.', 'pedidos_finalizados_dia'),
                 option('Por semana', 'Di: pedidos finalizados de la semana.', 'pedidos_finalizados_semana'),
                 option('Por mes', 'Di: pedidos finalizados del mes.', 'pedidos_finalizados_mes'),
-                option('Personalizado', 'Di: pedidos finalizados de hace 15 dias.', 'pedidos_finalizados_personalizado'),
+                option('Personalizado', 'Di: pedidos finalizados de los ultimos 15 dias.', 'pedidos_finalizados_personalizado'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
-            footer: 'Ejemplo: pedidos finalizados de hace 15 dias.'
+            footer: 'Ejemplo: pedidos finalizados de los ultimos 15 dias.'
         },
         ayuda: {
             template: 'textList',
@@ -941,7 +945,7 @@ function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o d
     });
 }
 
-function promptPayload(title, subtitle, footer, examples = 'Di: de hace 15 dias, o hace cien dias.') {
+function promptPayload(title, subtitle, footer, examples = 'Di: ganancias de los ultimos 15 dias.') {
     return makePayload('textList', {
         eyebrow: 'Completar por voz',
         title,
@@ -951,6 +955,22 @@ function promptPayload(title, subtitle, footer, examples = 'Di: de hace 15 dias,
             option('Menu principal', 'Cancelar y volver al menu.', 'menu')
         ],
         footer
+    });
+}
+
+function ventasResultPayload(subtitle) {
+    return makePayload('textList', {
+        eyebrow: 'Resultado de ventas',
+        title: 'Ventas',
+        subtitle,
+        cards: [
+            option('Por dia', 'Di: checa las ganancias del dia.', 'ventas_ganancias_dia'),
+            option('Por semana', 'Di: cuanto vendimos en la semana.', 'ventas_ganancias_semana'),
+            option('Por mes', 'Di: checa las ganancias del mes.', 'ventas_ganancias_mes'),
+            option('Personalizado', 'Di: ganancias de los ultimos 15 dias.', 'ventas_ganancias_personalizado'),
+            option('Menu principal', 'Volver al inicio.', 'menu')
+        ],
+        footer: 'Elige otro rango o di menu principal para salir de ventas.'
     });
 }
 
@@ -1000,6 +1020,7 @@ module.exports = {
     sectionPayload,
     goodbyePayload,
     resultPayload,
+    ventasResultPayload,
     promptPayload,
     authPayload,
     productListPayload

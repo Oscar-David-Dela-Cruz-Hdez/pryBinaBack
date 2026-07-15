@@ -15,6 +15,7 @@ const {
     sectionPayload,
     goodbyePayload,
     resultPayload,
+    ventasResultPayload,
     promptPayload,
     authPayload,
     productListPayload
@@ -556,7 +557,7 @@ const AplUserEventHandler = {
                 speakOutput = 'Estas son algunas opciones. Puedes preguntar por ventas, inventario o pedidos.';
                 datasource = sectionPayload('ayuda');
             } else if (action === 'noop') {
-                speakOutput = 'Responde con una frase como: de hace quince dias, o hace cien dias.';
+                speakOutput = 'Responde con una frase como: ganancias de los ultimos quince dias.';
                 datasource = promptPayload('Rango personalizado', speakOutput, 'Usa una frase compatible con tus utterances.');
             } else if (action.startsWith('stock_detalle:')) {
                 const productId = action.replace('stock_detalle:', '');
@@ -580,21 +581,17 @@ const AplUserEventHandler = {
                 sessionAttributes.lastIntent = 'ventasIntent';
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
-                datasource = resultPayload(
-                    'Resultado de ventas',
-                    speakOutput,
-                    'Puedes decir menu principal, abrir inventario, abrir pedidos o salir.'
-                );
+                datasource = ventasResultPayload(speakOutput);
             } else if (action === 'ventas_ganancias_personalizado') {
                 sessionAttributes.lastIntent = 'ventasIntent';
                 sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
                 sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
-                speakOutput = 'Claro, dime el rango con una frase como: de hace quince dias, o hace cien dias.';
+                speakOutput = 'Claro, dime el rango con una frase como: ganancias de los ultimos quince dias.';
                 datasource = promptPayload(
                     'Rango personalizado',
                     speakOutput,
-                    'Usa: de hace 15 dias, o hace cien dias.',
-                    'Di: de hace 15 dias, o hace cien dias.'
+                    'Usa: ganancias de los ultimos 15 dias.',
+                    'Di: ganancias de los ultimos 15 dias.'
                 );
             } else if (action === 'stock_general') {
                 const STOCK_MINIMO = 5;
@@ -674,12 +671,12 @@ const AplUserEventHandler = {
                 sessionAttributes.lastIntent = 'estadoIntent';
                 sessionAttributes.waitingFor = 'diasPersonalizadoEstado';
                 sessionAttributes.savedContext = { tipoEstado };
-                speakOutput = `Dime una frase como: dime los pedidos ${tipoEstado} de hace quince dias.`;
+                speakOutput = `Dime una frase como: pedidos ${tipoEstado} de los ultimos quince dias.`;
                 datasource = promptPayload(
                     'Rango personalizado',
                     speakOutput,
-                    `Usa: pedidos ${tipoEstado} de hace 15 dias.`,
-                    `Di: pedidos ${tipoEstado} de hace 15 dias.`
+                    `Usa: pedidos ${tipoEstado} de los ultimos 15 dias.`,
+                    `Di: pedidos ${tipoEstado} de los ultimos 15 dias.`
                 );
             } else if (action === 'menu') {
                 sessionAttributes.lastIntent = null;
@@ -948,9 +945,9 @@ const VentasIntentHandler = {
                         '¿De cuántos días atrás quieres revisar las ganancias?',
                         promptPayload(
                             'Rango personalizado',
-                            'Di una frase como: dime las ganancias de hace 15 días.',
+                            'Di una frase como: ganancias de los últimos 15 días.',
                             'Usa un número de días para completar la consulta.',
-                            'Di: dime las ganancias de hace 15 días.'
+                            'Di: ganancias de los últimos 15 días.'
                         ),
                         'ventas-personalizado',
                         '¿De cuántos días?'
@@ -1080,13 +1077,13 @@ const VentasIntentHandler = {
         if (supportsAPL(handlerInput)) {
             const responseBuilder = handlerInput.responseBuilder
                 .speak(speakOutput)
-                .reprompt('Puedes decir menu principal, abrir inventario, abrir pedidos o salir.')
+                .reprompt('Puedes consultar otro rango de ventas o decir menu principal.')
                 .withShouldEndSession(false);
 
             return addAplDirective(
                 handlerInput,
                 responseBuilder,
-                resultPayload('Resultado de ventas', speakOutput, 'Puedes decir menu principal, abrir inventario, abrir pedidos o salir.'),
+                ventasResultPayload(speakOutput),
                 'ventas-result'
             ).getResponse();
         }
@@ -1356,9 +1353,9 @@ const EstadoIntentHandler = {
                         '¿De cuántos días quieres revisar los pedidos?',
                         promptPayload(
                             'Rango personalizado',
-                            `Di una frase como: dime los pedidos ${tipoEstado} de hace 15 días.`,
-                            `Usa: pedidos ${tipoEstado} de hace 15 días.`,
-                            `Di: pedidos ${tipoEstado} de hace 15 días.`
+                            `Di una frase como: pedidos ${tipoEstado} de los últimos 15 días.`,
+                            `Usa: pedidos ${tipoEstado} de los últimos 15 días.`,
+                            `Di: pedidos ${tipoEstado} de los últimos 15 días.`
                         ),
                         'pedidos-personalizado',
                         '¿De cuántos días?'
@@ -1492,8 +1489,8 @@ const FallbackIntentHandler = {
         }
         if (waitingFor === 'diasPersonalizadoVentas' || waitingFor === 'diasPersonalizadoEstado') {
             return handlerInput.responseBuilder
-                .speak('No entendí el rango. Para ganancias puedes decir: de hace quince días. Para pedidos puedes decir: pedidos enviados de hace quince días.')
-                .reprompt('Di una frase como: de hace quince días, o pedidos enviados de hace quince días.')
+                .speak('No entendí el rango. Para ganancias puedes decir: ganancias de los últimos quince días. Para pedidos puedes decir: pedidos enviados de los últimos quince días.')
+                .reprompt('Di una frase como: ganancias de los últimos quince días.')
                 .withShouldEndSession(false)
                 .getResponse();
         }

@@ -13,5 +13,6 @@ checa los pedidos {tipoEstado} del {periodoEstado}
 pedidos {tipoEstado} del {periodoEstado}
 pedidos {tipoEstado} de {periodoEstado}
 cuantos pedidos {tipoEstado} van este {periodoEstado}
-dime los pedidos {tipoEstado} de hace {diasPersonalizado} dias
-checa los pedidos {tipoEstado} de hace {diasPersonalizado} dias
+dime los pedidos {tipoEstado} de los ultimos {diasPersonalizado} dias
+checa los pedidos {tipoEstado} de los ultimos {diasPersonalizado} dias
+pedidos {tipoEstado} de los ultimos {diasPersonalizado} dias

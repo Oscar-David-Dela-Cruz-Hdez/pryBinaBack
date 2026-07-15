@@ -8,9 +8,12 @@ dime las ganancias del {periodoGanancia}
 cuanto vendimos en el {periodoGanancia}
 cuanto sacamos en el {periodoGanancia}
 como nos fue con las ventas del {periodoGanancia}
-dime las ganancias de hace {diasPersonalizado} dias
-checa las ganancias de hace {diasPersonalizado} dias
 cuanto se vendio en estos {diasPersonalizado} dias
+dime las ganancias de los ultimos {diasPersonalizado} dias
+checa las ganancias de los ultimos {diasPersonalizado} dias
+consulta las ganancias de los ultimos {diasPersonalizado} dias
+cuanto vendimos en los ultimos {diasPersonalizado} dias
+ganancias de los ultimos {diasPersonalizado} dias
 consulta ventas de {nombreMercancia}
 checa las ventas de {nombreMercancia}
 buscame las ventas de {nombreMercancia}
