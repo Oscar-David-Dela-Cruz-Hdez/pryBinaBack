@@ -1203,10 +1203,10 @@ const StockIntentHandler = {
                 handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
                 return responseWithApl(
                     handlerInput,
-                    'Quieres ver el stock por producto, marca, familia o general?',
+                    'Abrimos inventario. Puedes decir inventario general, por producto, por familia o por marca.',
                     sectionPayload('stock'),
                     'stock-options',
-                    'Por producto, marca, familia o general?'
+                    'Puedes decir inventario general, por producto, por familia o por marca.'
                 );
             }
         }
