@@ -68,7 +68,7 @@ function backButtonProps(screen) {
         headerBackButton: true,
         headerBackButtonCommand: {
             type: 'SendEvent',
-            arguments: ['menu']
+            arguments: [screen.backAction || 'menu']
         },
         headerBackButtonAccessibilityLabel: 'Volver al menu'
     };
@@ -963,6 +963,7 @@ function ventasResultPayload(subtitle) {
         eyebrow: 'Resultado de ventas',
         title: 'Ventas',
         subtitle,
+        backAction: 'ventas',
         cards: [
             option('Por dia', 'Di: checa las ganancias del dia.', 'ventas_ganancias_dia'),
             option('Por semana', 'Di: cuanto vendimos en la semana.', 'ventas_ganancias_semana'),
@@ -971,6 +972,22 @@ function ventasResultPayload(subtitle) {
             option('Menu principal', 'Volver al inicio.', 'menu')
         ],
         footer: 'Elige otro rango o di menu principal para salir de ventas.'
+    });
+}
+
+function pedidosResultPayload(title, subtitle) {
+    return makePayload('textList', {
+        eyebrow: 'Resultado de pedidos',
+        title,
+        subtitle,
+        backAction: 'pedidos',
+        cards: [
+            option('Por enviar', 'Di: cuantos pedidos por enviar tenemos.', 'pedidos_por_enviar'),
+            option('Enviados', 'Elegir otro rango de pedidos enviados.', 'pedidos_enviados'),
+            option('Finalizados', 'Elegir otro rango de pedidos finalizados.', 'pedidos_finalizados'),
+            option('Menu principal', 'Volver al inicio.', 'menu')
+        ],
+        footer: 'Elige otro estado o di menu principal para salir de pedidos.'
     });
 }
 
@@ -1021,6 +1038,7 @@ module.exports = {
     goodbyePayload,
     resultPayload,
     ventasResultPayload,
+    pedidosResultPayload,
     promptPayload,
     authPayload,
     productListPayload

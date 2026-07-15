@@ -16,6 +16,7 @@ const {
     goodbyePayload,
     resultPayload,
     ventasResultPayload,
+    pedidosResultPayload,
     promptPayload,
     authPayload,
     productListPayload
@@ -276,6 +277,62 @@ function obtenerValorSlot(slots, ...nombres) {
             return valor;
         }
     }
+    return null;
+}
+
+function convertirNumeroEspanol(valor) {
+    if (valor === undefined || valor === null) return null;
+    const texto = normalizarTexto(valor);
+    const numeroDirecto = texto.match(/\b\d{1,3}\b/);
+    if (numeroDirecto) return Number(numeroDirecto[0]);
+
+    const especiales = {
+        uno: 1, un: 1, una: 1, dos: 2, tres: 3, cuatro: 4, cinco: 5,
+        seis: 6, siete: 7, ocho: 8, nueve: 9, diez: 10, once: 11,
+        doce: 12, trece: 13, catorce: 14, quince: 15, dieciseis: 16,
+        diecisiete: 17, dieciocho: 18, diecinueve: 19, veinte: 20,
+        veintiuno: 21, veintidos: 22, veintitres: 23, veinticuatro: 24,
+        veinticinco: 25, veintiseis: 26, veintisiete: 27, veintiocho: 28,
+        veintinueve: 29, cien: 100, ciento: 100
+    };
+    const decenas = { treinta: 30, cuarenta: 40, cincuenta: 50, sesenta: 60, setenta: 70, ochenta: 80, noventa: 90 };
+    const centenas = { doscientos: 200, trescientos: 300 };
+    const tokens = texto.split(/\s+/).filter((token) => token !== 'y');
+
+    let total = 0;
+    let encontroNumero = false;
+    for (const token of tokens) {
+        if (Object.prototype.hasOwnProperty.call(especiales, token)) {
+            total += especiales[token];
+            encontroNumero = true;
+        } else if (Object.prototype.hasOwnProperty.call(decenas, token)) {
+            total += decenas[token];
+            encontroNumero = true;
+        } else if (Object.prototype.hasOwnProperty.call(centenas, token)) {
+            total += centenas[token];
+            encontroNumero = true;
+        }
+    }
+
+    return encontroNumero && total > 0 && total <= 365 ? total : null;
+}
+
+function obtenerDiasPersonalizados(slots) {
+    const slotPreferido = obtenerValorSlot(
+        slots,
+        'diasPersonalizado',
+        'diasPersonalizados',
+        'dias',
+        'numeroDias'
+    );
+    const diasPreferidos = convertirNumeroEspanol(slotPreferido);
+    if (diasPreferidos) return diasPreferidos;
+
+    for (const slot of Object.values(slots || {})) {
+        const dias = convertirNumeroEspanol(slot?.value);
+        if (dias) return dias;
+    }
+
     return null;
 }
 
@@ -625,11 +682,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Actualmente hay ${totalPorEnviar} pedidos por enviar registrados en el sistema.`;
-                datasource = resultPayload(
-                    'Pedidos por enviar',
-                    speakOutput,
-                    'Puedes decir menu principal, consultar enviados, finalizados o salir.'
-                );
+                datasource = pedidosResultPayload('Pedidos por enviar', speakOutput);
             } else if (action === 'pedidos_enviados') {
                 sessionAttributes.lastIntent = 'estadoIntent';
                 sessionAttributes.waitingFor = null;
@@ -649,11 +702,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalPedidos} pedidos enviados ${textoPeriodoApl(periodo)}.`;
-                datasource = resultPayload(
-                    'Pedidos enviados',
-                    speakOutput,
-                    'Puedes decir menu principal, consultar otro rango o salir.'
-                );
+                datasource = pedidosResultPayload('Pedidos enviados', speakOutput);
             } else if (action.startsWith('pedidos_finalizados_') && action !== 'pedidos_finalizados_personalizado') {
                 const periodo = action.replace('pedidos_finalizados_', '');
                 const totalPedidos = await consultarPedidosPorEstado('Entregado', periodo);
@@ -661,11 +710,7 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
                 speakOutput = `Se encontraron ${totalPedidos} pedidos finalizados ${textoPeriodoApl(periodo)}.`;
-                datasource = resultPayload(
-                    'Pedidos finalizados',
-                    speakOutput,
-                    'Puedes decir menu principal, consultar otro rango o salir.'
-                );
+                datasource = pedidosResultPayload('Pedidos finalizados', speakOutput);
             } else if (action === 'pedidos_enviados_personalizado' || action === 'pedidos_finalizados_personalizado') {
                 const tipoEstado = action === 'pedidos_enviados_personalizado' ? 'enviados' : 'finalizados';
                 sessionAttributes.lastIntent = 'estadoIntent';
@@ -871,7 +916,7 @@ const VentasIntentHandler = {
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
         let tipoConsulta = normalizarTexto(obtenerValorSlot(slots, 'tipoConsulta'));
         let periodo = normalizarPeriodo(obtenerValorSlot(slots, 'periodoGanancia'));
-        let dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias');
+        let dias = obtenerDiasPersonalizados(slots);
         let tipoMercancia = normalizarTipoMercancia(obtenerValorSlot(slots, 'tipoMercancia'));
         let nombreMercancia = obtenerValorSlot(slots, 'nombreMercancia');
 
@@ -892,7 +937,7 @@ const VentasIntentHandler = {
         } else if (sessionAttributes.waitingFor === 'diasPersonalizadoVentas') {
             tipoConsulta = ctx.tipoConsulta || 'ganancia';
             periodo = 'personalizado';
-            dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias', 'tipoConsulta');
+            dias = obtenerDiasPersonalizados(slots);
         }
 
         // Limpiar estado de espera
@@ -917,7 +962,7 @@ const VentasIntentHandler = {
             }
         }
 
-        if (!periodo && dias) periodo = 'personalizado';
+        if (dias) periodo = 'personalizado';
 
         let speakOutput = '';
 
@@ -1295,7 +1340,7 @@ const EstadoIntentHandler = {
         const slots = handlerInput.requestEnvelope.request.intent.slots || {};
         let tipoEstado = normalizarTipoEstado(obtenerValorSlot(slots, 'tipoEstado'));
         let periodo = normalizarPeriodo(obtenerValorSlot(slots, 'periodoEstado'));
-        let dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias');
+        let dias = obtenerDiasPersonalizados(slots);
 
         const ctx = sessionAttributes.savedContext || {};
         if (sessionAttributes.waitingFor === 'periodoEstado') {
@@ -1305,13 +1350,13 @@ const EstadoIntentHandler = {
         } else if (sessionAttributes.waitingFor === 'diasPersonalizadoEstado') {
             tipoEstado = ctx.tipoEstado;
             periodo = 'personalizado';
-            dias = obtenerValorSlot(slots, 'diasPersonalizado', 'diasPersonalizados', 'dias', 'numeroDias', 'tipoEstado');
+            dias = obtenerDiasPersonalizados(slots);
         }
 
         sessionAttributes.waitingFor = null;
         sessionAttributes.savedContext = {};
 
-        if (!periodo && dias) periodo = 'personalizado';
+        if (dias) periodo = 'personalizado';
 
         if (!tipoEstado) {
             sessionAttributes.waitingFor = 'tipoEstado';
@@ -1382,7 +1427,7 @@ const EstadoIntentHandler = {
         if (supportsAPL(handlerInput)) {
             const responseBuilder = handlerInput.responseBuilder
                 .speak(speakOutput)
-                .reprompt('Puedes decir menu principal, abrir ventas, abrir inventario o salir.')
+                .reprompt('Puedes consultar otro estado de pedidos o decir menu principal.')
                 .withShouldEndSession(false);
             const resultTitle = tipoEstado === 'por enviar' || tipoEstado === 'actuales'
                 ? 'Pedidos por enviar'
@@ -1391,7 +1436,7 @@ const EstadoIntentHandler = {
             return addAplDirective(
                 handlerInput,
                 responseBuilder,
-                resultPayload(resultTitle, speakOutput, 'Puedes decir menu principal, consultar otro estado o salir.'),
+                pedidosResultPayload(resultTitle, speakOutput),
                 'pedidos-result'
             ).getResponse();
         }
