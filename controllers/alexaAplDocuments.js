@@ -958,6 +958,24 @@ function promptPayload(title, subtitle, footer, examples = 'Di: ganancias de los
     });
 }
 
+function ventasPersonalizadoPayload() {
+    return makePayload('textList', {
+        eyebrow: 'Consulta de ventas',
+        title: 'Rango personalizado',
+        subtitle: 'Selecciona cuantos dias deseas consultar.',
+        backAction: 'ventas',
+        cards: [
+            option('Ultimos 15 dias', 'Consultar ganancias de los ultimos 15 dias.', 'ventas_ganancias_dias:15'),
+            option('Ultimos 30 dias', 'Consultar ganancias de los ultimos 30 dias.', 'ventas_ganancias_dias:30'),
+            option('Ultimos 60 dias', 'Consultar ganancias de los ultimos 60 dias.', 'ventas_ganancias_dias:60'),
+            option('Ultimos 100 dias', 'Consultar ganancias de los ultimos 100 dias.', 'ventas_ganancias_dias:100'),
+            option('Otro rango por voz', 'Di: ganancias de los ultimos 45 dias.', 'ventas_ganancias_otro_rango'),
+            option('Volver a ventas', 'Regresar a los rangos de ventas.', 'ventas')
+        ],
+        footer: 'Toca un rango o di: ganancias de los ultimos 45 dias.'
+    });
+}
+
 function ventasResultPayload(subtitle) {
     return makePayload('textList', {
         eyebrow: 'Resultado de ventas',
@@ -1038,6 +1056,7 @@ module.exports = {
     goodbyePayload,
     resultPayload,
     ventasResultPayload,
+    ventasPersonalizadoPayload,
     pedidosResultPayload,
     promptPayload,
     authPayload,

@@ -16,6 +16,7 @@ const {
     goodbyePayload,
     resultPayload,
     ventasResultPayload,
+    ventasPersonalizadoPayload,
     pedidosResultPayload,
     promptPayload,
     authPayload,
@@ -631,7 +632,7 @@ const AplUserEventHandler = {
                     speakOutput = 'No pude encontrar el producto seleccionado.';
                     datasource = resultPayload('Producto no encontrado', speakOutput, 'Puedes volver al menu principal.');
                 }
-            } else if (action.startsWith('ventas_ganancias_') && action !== 'ventas_ganancias_personalizado') {
+            } else if (['ventas_ganancias_dia', 'ventas_ganancias_semana', 'ventas_ganancias_mes'].includes(action)) {
                 const periodo = action.replace('ventas_ganancias_', '');
                 const totalGanancia = await consultarGanancias(periodo);
                 speakOutput = `Las ganancias ${textoPeriodoApl(periodo)} fueron ${totalGanancia} pesos.`;
@@ -643,13 +644,22 @@ const AplUserEventHandler = {
                 sessionAttributes.lastIntent = 'ventasIntent';
                 sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
                 sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
-                speakOutput = 'Claro, dime el rango con una frase como: ganancias de los ultimos quince dias.';
-                datasource = promptPayload(
-                    'Rango personalizado',
-                    speakOutput,
-                    'Usa: ganancias de los ultimos 15 dias.',
-                    'Di: ganancias de los ultimos 15 dias.'
-                );
+                speakOutput = 'Selecciona un rango de dias en pantalla o dime el numero de dias por voz.';
+                datasource = ventasPersonalizadoPayload();
+            } else if (action.startsWith('ventas_ganancias_dias:')) {
+                const dias = Number(action.replace('ventas_ganancias_dias:', ''));
+                const totalGanancia = await consultarGanancias('personalizado', dias);
+                sessionAttributes.lastIntent = 'ventasIntent';
+                sessionAttributes.waitingFor = null;
+                sessionAttributes.savedContext = {};
+                speakOutput = `Las ganancias de los ultimos ${dias} dias fueron ${totalGanancia} pesos.`;
+                datasource = ventasResultPayload(speakOutput);
+            } else if (action === 'ventas_ganancias_otro_rango') {
+                sessionAttributes.lastIntent = 'ventasIntent';
+                sessionAttributes.waitingFor = 'diasPersonalizadoVentas';
+                sessionAttributes.savedContext = { tipoConsulta: 'ganancia' };
+                speakOutput = 'Dime una frase como: ganancias de los ultimos cuarenta y cinco dias.';
+                datasource = ventasPersonalizadoPayload();
             } else if (action === 'stock_general') {
                 const STOCK_MINIMO = 5;
                 const productosBajos = await Producto.find({ stock: { $lt: STOCK_MINIMO } })
