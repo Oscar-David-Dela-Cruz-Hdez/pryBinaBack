@@ -839,7 +839,7 @@ function sectionPayload(section) {
                 option('Por dia', 'Di: checa las ganancias del dia.', 'ventas_ganancias_dia'),
                 option('Por semana', 'Di: cuanto vendimos en la semana.', 'ventas_ganancias_semana'),
                 option('Por mes', 'Di: checa las ganancias del mes.', 'ventas_ganancias_mes'),
-                option('Personalizado', 'Di: ganancias de los ultimos 15 dias.', 'ventas_ganancias_personalizado'),
+                option('Personalizado', 'Di: hace 15 dias.', 'ventas_ganancias_personalizado'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Para rango personalizado di: ganancias de los ultimos 15 dias.'
