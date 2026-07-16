@@ -935,6 +935,36 @@ const ResumenIAIntentHandler = {
             && Alexa.getIntentName(handlerInput.requestEnvelope) === 'resumenIAIntent';
     },
     async handle(handlerInput) {
+        const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+        const waitingFor = sessionAttributes.waitingFor;
+        const tipoFiltro = sessionAttributes.savedContext?.tipoFiltro;
+
+        if (sessionAttributes.lastIntent === 'stockIntent') {
+            if (waitingFor === 'nombreFiltroStock') {
+                const promptExample = {
+                    producto: 'Di: inventario de alicate barrilito.',
+                    familia: 'Di: consulta el stock de barberia.',
+                    marca: 'Di: consulta el stock de Alaska.'
+                }[tipoFiltro] || 'Di: inventario por producto.';
+                const speakOutput = `Sigo esperando el nombre ${tipoFiltro === 'producto' ? 'del producto' : tipoFiltro === 'marca' ? 'de la marca' : 'de la familia'} que quieres revisar.`;
+
+                return responseWithApl(
+                    handlerInput,
+                    speakOutput,
+                    promptPayload(
+                        `Inventario por ${tipoFiltro || 'producto'}`,
+                        speakOutput,
+                        promptExample,
+                        promptExample
+                    ),
+                    'stock-prompt',
+                    promptExample
+                );
+            }
+
+            return NavigateHomeIntentHandler.handle(handlerInput);
+        }
+
         return crearRespuestaResumenInteligente(handlerInput);
     }
 };
@@ -1575,6 +1605,28 @@ const FallbackIntentHandler = {
                 .reprompt('Di una frase como: ganancias de los últimos quince días.')
                 .withShouldEndSession(false)
                 .getResponse();
+        }
+        if (waitingFor === 'nombreFiltroStock') {
+            const tipoFiltro = sessionAttributes.savedContext?.tipoFiltro || 'producto';
+            const promptExample = {
+                producto: 'Di: inventario de alicate barrilito.',
+                familia: 'Di: consulta el stock de barberia.',
+                marca: 'Di: consulta el stock de Alaska.'
+            }[tipoFiltro] || 'Di: inventario por producto.';
+            const speakOutput = `No entendi el nombre. Por favor dime el nombre ${tipoFiltro === 'producto' ? 'del producto' : tipoFiltro === 'marca' ? 'de la marca' : 'de la familia'} que quieres revisar.`;
+
+            return responseWithApl(
+                handlerInput,
+                speakOutput,
+                promptPayload(
+                    `Inventario por ${tipoFiltro}`,
+                    speakOutput,
+                    promptExample,
+                    promptExample
+                ),
+                'stock-prompt',
+                promptExample
+            );
         }
         if (waitingFor === 'nombreMercancia' || waitingFor === 'nombreFiltroStock') {
             return handlerInput.responseBuilder
