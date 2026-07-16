@@ -701,11 +701,16 @@ const AplUserEventHandler = {
                 sessionAttributes.waitingFor = 'nombreFiltroStock';
                 sessionAttributes.savedContext = { tipoFiltro };
                 speakOutput = `Dime el nombre ${tipoFiltro === 'producto' ? 'del' : 'de la'} ${tipoFiltro} que quieres revisar.`;
+                const promptExample = {
+                    producto: 'Di: inventario de alicate barrilito.',
+                    familia: 'Di: consulta el stock de barberia.',
+                    marca: 'Di: consulta el stock de Alaska.'
+                }[tipoFiltro];
                 datasource = promptPayload(
-                    `Stock por ${tipoFiltro}`,
+                    `Inventario por ${tipoFiltro}`,
                     speakOutput,
-                    `Di una frase como: consulta el stock de ${tipoFiltro === 'producto' ? '4x4 Pomada azul 100g' : tipoFiltro === 'familia' ? 'Barberia' : 'Andis'}.`,
-                    `Di: consulta el stock de ${tipoFiltro === 'familia' ? 'Barberia' : tipoFiltro === 'marca' ? 'Andis' : '4x4 Pomada azul 100g'}.`
+                    promptExample,
+                    promptExample
                 );
             } else if (action === 'pedidos_por_enviar') {
                 const totalPorEnviar = await Pedido.countDocuments({ estado: { $in: ['Pendiente', 'Pagado'] } });
@@ -1345,9 +1350,11 @@ const StockIntentHandler = {
             const title = tipoFiltro === 'general'
                 ? 'Inventario general'
                 : `Inventario por ${tipoFiltro}`;
-            const datasource = aplProducts.length > 0
-                ? productListPayload(title, speakOutput, aplProducts, 'Puedes decir menu principal, pedir otro inventario o salir.')
-                : resultPayload(title, speakOutput, 'Puedes decir menu principal, pedir otro inventario o salir.');
+            const datasource = ['marca', 'familia'].includes(tipoFiltro)
+                ? simpleResultPayload(title, speakOutput, 'Puedes decir inventario por producto, inventario por marca, inventario por familia, menu principal o salir.')
+                : aplProducts.length > 0
+                    ? productListPayload(title, speakOutput, aplProducts, 'Puedes decir menu principal, pedir otro inventario o salir.')
+                    : resultPayload(title, speakOutput, 'Puedes decir menu principal, pedir otro inventario o salir.');
 
             return addAplDirective(handlerInput, responseBuilder, datasource, 'stock-result')
                 .getResponse();

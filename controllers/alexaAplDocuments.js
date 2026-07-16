@@ -860,9 +860,9 @@ function sectionPayload(section) {
             title: 'Inventario',
             subtitle: 'Elige como buscar o di el nombre directamente.',
             cards: [
-                option('Producto', 'Di: consulta inventario de 4x4 minoxidil.', 'stock_producto'),
-                option('Familia', 'Di: consulta inventario de Barberia.', 'stock_familia'),
-                option('Marca', 'Di: consulta inventario de Andis.', 'stock_marca'),
+                option('Producto', 'Di: inventario por producto.', 'stock_producto'),
+                option('Familia', 'Di: inventario por familia.', 'stock_familia'),
+                option('Marca', 'Di: inventario por marca.', 'stock_marca'),
                 option('Menu principal', 'Volver al inicio.', 'menu')
             ],
             footer: 'Para producto, marca o familia, completa el nombre por voz.'
