@@ -17,5 +17,17 @@ consulta stock de {nombreFiltro}
 consulta el stock de {nombreFiltro}
 stock de {nombreFiltro}
 inventario de {nombreFiltro}
+consulta el producto de {nombreFiltro}
+consulta producto de {nombreFiltro}
+consulta inventario del producto {nombreFiltro}
+consulta inventario de producto {nombreFiltro}
+consulta el stock del producto {nombreFiltro}
+consulta stock del producto {nombreFiltro}
+consulta la familia {nombreFiltro}
+consulta inventario de la familia {nombreFiltro}
+consulta inventario por familia {nombreFiltro}
+consulta la marca {nombreFiltro}
+consulta inventario de la marca {nombreFiltro}
+consulta inventario por marca {nombreFiltro}
 consulta inventario por {tipoFiltroStock}
 revisa inventario por {tipoFiltroStock}

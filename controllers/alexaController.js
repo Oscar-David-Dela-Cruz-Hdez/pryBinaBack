@@ -390,6 +390,31 @@ async function inferirTipoFiltroStock(nombreFiltro) {
     return null;
 }
 
+async function consultarInventarioGeneral() {
+    const STOCK_MINIMO = 5;
+    const [totalBajos, stockAgrupado, productosBajos] = await Promise.all([
+        Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } }),
+        Producto.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    stockTotal: { $sum: { $ifNull: ['$stock', 0] } }
+                }
+            }
+        ]),
+        Producto.find({ stock: { $lt: STOCK_MINIMO } })
+            .populate('marca')
+            .sort({ stock: 1, nombre: 1 })
+            .limit(12)
+    ]);
+
+    return {
+        totalBajos,
+        stockTotal: stockAgrupado[0]?.stockTotal || 0,
+        productosBajos
+    };
+}
+
 // 1. Manejador para LaunchRequest
 const LaunchRequestHandler = {
     canHandle(handlerInput) {
@@ -661,16 +686,11 @@ const AplUserEventHandler = {
                 speakOutput = 'Dime una frase como: ganancias de los ultimos cuarenta y cinco dias.';
                 datasource = ventasPersonalizadoPayload();
             } else if (action === 'stock_general') {
-                const STOCK_MINIMO = 5;
-                const productosBajos = await Producto.find({ stock: { $lt: STOCK_MINIMO } })
-                    .populate('marca')
-                    .sort({ stock: 1, nombre: 1 })
-                    .limit(12);
-                const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
+                const { totalBajos, stockTotal, productosBajos } = await consultarInventarioGeneral();
                 sessionAttributes.lastIntent = 'stockIntent';
                 sessionAttributes.waitingFor = null;
                 sessionAttributes.savedContext = {};
-                speakOutput = `Se encontraron ${totalBajos} productos con stock bajo en el almacen.`;
+                speakOutput = `En inventario general hay ${totalBajos} productos con stock bajo y el stock total en tienda es de ${stockTotal} unidades.`;
                 datasource = productosBajos.length > 0
                     ? productListPayload('Inventario general', speakOutput, productosBajos, 'Puedes decir menu principal, pedir otro inventario o salir.')
                     : resultPayload('Inventario general', speakOutput, 'Puedes decir menu principal, pedir otro inventario o salir.');
@@ -1178,8 +1198,10 @@ const StockIntentHandler = {
         sessionAttributes.savedContext = {};
 
         if (!tipoFiltro) {
+            tipoFiltro = normalizarTipoFiltroStock(nombreFiltro);
+
             if (nombreFiltro) {
-                tipoFiltro = await inferirTipoFiltroStock(nombreFiltro);
+                tipoFiltro = tipoFiltro || await inferirTipoFiltroStock(nombreFiltro);
             }
 
             if (!tipoFiltro && nombreFiltro) {
@@ -1217,12 +1239,9 @@ const StockIntentHandler = {
             const STOCK_MINIMO = 5;
 
             if (tipoFiltro === 'general') {
-                const totalBajos = await Producto.countDocuments({ stock: { $lt: STOCK_MINIMO } });
-                aplProducts = await Producto.find({ stock: { $lt: STOCK_MINIMO } })
-                    .populate('marca')
-                    .sort({ stock: 1, nombre: 1 })
-                    .limit(12);
-                speakOutput = `Se han encontrado ${totalBajos} artículos con stock bajo a nivel general en el almacén. `;
+                const { totalBajos, stockTotal, productosBajos } = await consultarInventarioGeneral();
+                aplProducts = productosBajos;
+                speakOutput = `En inventario general hay ${totalBajos} productos con stock bajo y el stock total en tienda es de ${stockTotal} unidades. `;
             } else {
                 if (!nombreFiltro) {
                     sessionAttributes.waitingFor = 'nombreFiltroStock';
