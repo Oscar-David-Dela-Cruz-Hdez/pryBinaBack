@@ -939,8 +939,8 @@ const ResumenIAIntentHandler = {
         const waitingFor = sessionAttributes.waitingFor;
         const tipoFiltro = sessionAttributes.savedContext?.tipoFiltro;
 
-        if (sessionAttributes.lastIntent === 'stockIntent') {
-            if (waitingFor === 'nombreFiltroStock') {
+        if (sessionAttributes.lastIntent && sessionAttributes.lastIntent !== 'resumenIAIntent') {
+            if (sessionAttributes.lastIntent === 'stockIntent' && waitingFor === 'nombreFiltroStock') {
                 const promptExample = {
                     producto: 'Di: inventario de alicate barrilito.',
                     familia: 'Di: consulta el stock de barberia.',

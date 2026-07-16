@@ -802,10 +802,10 @@ function welcomePayload() {
             option('Inventario', 'Di: abre inventario.', 'stock'),
             option('Pedidos', 'Di: abre pedidos.', 'pedidos'),
             option('Resumen inteligente', 'Di: abre resumen inteligente.', 'resumen_ia'),
-            option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
-            option('Salir', 'Di: salir, cancelar o detener.', 'salir')
+            option('Ayuda', 'Di: abre ayuda.', 'ayuda'),
+            option('Salir', 'Di: detener.', 'salir')
         ],
-        footer: 'Tambien puedes decir ventas, inventario, pedidos, ayuda o salir.',
+        footer: 'Para volver al menu di cancelar. Para salir di detener.',
         showBackButton: false
     });
 }
@@ -820,10 +820,10 @@ function menuPayload() {
             option('Inventario', 'Di: abre inventario.', 'stock'),
             option('Pedidos', 'Di: abre pedidos.', 'pedidos'),
             option('Resumen inteligente', 'Di: abre resumen inteligente.', 'resumen_ia'),
-            option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
-            option('Salir', 'Di: salir, cancelar o detener.', 'salir')
+            option('Ayuda', 'Di: abre ayuda.', 'ayuda'),
+            option('Salir', 'Di: detener.', 'salir')
         ],
-        footer: 'Tambien puedes decir ventas, inventario, pedidos, ayuda o salir.',
+        footer: 'Para volver al menu di cancelar. Para salir di detener.',
         showBackButton: false
     });
 }
@@ -850,7 +850,7 @@ function sectionPayload(section) {
                 option('Por semana', 'Di: cuanto vendimos en la semana.', 'ventas_ganancias_semana'),
                 option('Por mes', 'Di: checa las ganancias del mes.', 'ventas_ganancias_mes'),
                 option('Personalizado', 'Di: hace 15 dias.', 'ventas_ganancias_personalizado'),
-                option('Menu principal', 'Volver al inicio.', 'menu')
+                option('Menu principal', 'Di: cancelar.', 'menu')
             ],
             footer: 'Para rango personalizado di: ganancias de los ultimos 15 dias.'
         },
@@ -863,7 +863,7 @@ function sectionPayload(section) {
                 option('Producto', 'Di: inventario por producto.', 'stock_producto'),
                 option('Familia', 'Di: inventario por familia.', 'stock_familia'),
                 option('Marca', 'Di: inventario por marca.', 'stock_marca'),
-                option('Menu principal', 'Volver al inicio.', 'menu')
+                option('Menu principal', 'Di: cancelar.', 'menu')
             ],
             footer: 'Para producto, marca o familia, completa el nombre por voz.'
         },
@@ -873,10 +873,10 @@ function sectionPayload(section) {
             title: 'Pedidos',
             subtitle: 'Elige el estado que quieres consultar.',
             cards: [
-                option('Por enviar', 'Di: cuantos pedidos por enviar tenemos.', 'pedidos_por_enviar'),
+                option('Por enviar', 'Di: pedidos por enviar.', 'pedidos_por_enviar'),
                 option('Enviados', 'Di: pedidos enviados del mes.', 'pedidos_enviados'),
-                option('Finalizados', 'Di: pedidos finalizados de la semana.', 'pedidos_finalizados'),
-                option('Menu principal', 'Volver al inicio.', 'menu')
+                option('Finalizados', 'Di: pedidos finalizados.', 'pedidos_finalizados'),
+                option('Menu principal', 'Di: cancelar.', 'menu')
             ],
             footer: 'Enviados y finalizados permiten rangos.'
         },
@@ -890,7 +890,7 @@ function sectionPayload(section) {
                 option('Por semana', 'Di: pedidos enviados de la semana.', 'pedidos_enviados_semana'),
                 option('Por mes', 'Di: pedidos enviados del mes.', 'pedidos_enviados_mes'),
                 option('Personalizado', 'Di: pedidos enviados de los ultimos 15 dias.', 'pedidos_enviados_personalizado'),
-                option('Menu principal', 'Volver al inicio.', 'menu')
+                option('Menu principal', 'Di: cancelar.', 'menu')
             ],
             footer: 'Ejemplo: pedidos enviados de los ultimos 15 dias.'
         },
@@ -904,7 +904,7 @@ function sectionPayload(section) {
                 option('Por semana', 'Di: pedidos finalizados de la semana.', 'pedidos_finalizados_semana'),
                 option('Por mes', 'Di: pedidos finalizados del mes.', 'pedidos_finalizados_mes'),
                 option('Personalizado', 'Di: pedidos finalizados de los ultimos 15 dias.', 'pedidos_finalizados_personalizado'),
-                option('Menu principal', 'Volver al inicio.', 'menu')
+                option('Menu principal', 'Di: cancelar.', 'menu')
             ],
             footer: 'Ejemplo: pedidos finalizados de los ultimos 15 dias.'
         },
@@ -917,9 +917,9 @@ function sectionPayload(section) {
                 option('Ventas', 'Checa las ganancias del mes.', 'ventas'),
                 option('Inventario', 'Consulta el inventario de 4x4.', 'stock'),
                 option('Pedidos', 'Dime los pedidos por enviar.', 'pedidos'),
-                option('Menu principal', 'Volver al inicio.', 'menu')
+                option('Menu principal', 'Di: cancelar.', 'menu')
             ],
-            footer: 'Tambien puedes decir menu principal o salir.'
+            footer: 'Para volver al menu di cancelar. Para salir di detener.'
         }
     };
 
@@ -948,7 +948,7 @@ function resultPayload(title, subtitle, footer = 'Puedes pedir otra consulta o d
             option('Ventas', 'Consultar ganancias o mercancia.', 'ventas'),
             option('Inventario', 'Revisar productos, marcas o familias.', 'stock'),
             option('Pedidos', 'Consultar estado de pedidos.', 'pedidos'),
-            option('Menu principal', 'Volver al inicio.', 'menu')
+            option('Menu principal', 'Di: cancelar.', 'menu')
         ],
         footer
     });
@@ -996,9 +996,9 @@ function ventasResultPayload(subtitle) {
             option('Por semana', 'Di: cuanto vendimos en la semana.', 'ventas_ganancias_semana'),
             option('Por mes', 'Di: checa las ganancias del mes.', 'ventas_ganancias_mes'),
             option('Personalizado', 'Di: ganancias de los ultimos 15 dias.', 'ventas_ganancias_personalizado'),
-            option('Menu principal', 'Volver al inicio.', 'menu')
+            option('Menu principal', 'Di: cancelar.', 'menu')
         ],
-        footer: 'Elige otro rango o di menu principal para salir de ventas.'
+        footer: 'Elige otro rango o di cancelar para volver al menu.'
     });
 }
 
@@ -1012,9 +1012,9 @@ function pedidosResultPayload(title, subtitle) {
             option('Por enviar', 'Di: cuantos pedidos por enviar tenemos.', 'pedidos_por_enviar'),
             option('Enviados', 'Elegir otro rango de pedidos enviados.', 'pedidos_enviados'),
             option('Finalizados', 'Elegir otro rango de pedidos finalizados.', 'pedidos_finalizados'),
-            option('Menu principal', 'Volver al inicio.', 'menu')
+            option('Menu principal', 'Di: cancelar.', 'menu')
         ],
-        footer: 'Elige otro estado o di menu principal para salir de pedidos.'
+        footer: 'Elige otro estado o di cancelar para volver al menu.'
     });
 }
 
@@ -1046,7 +1046,7 @@ function productListPayload(title, subtitle, products, footer = 'Toca menu princ
         product.imagenUrl || FALLBACK_PRODUCT_IMAGE
     ));
 
-    cards.push(option('Menu principal', 'Volver al inicio.', 'menu', BEAUTY_THEME.ink, FALLBACK_PRODUCT_IMAGE));
+    cards.push(option('Menu principal', 'Di: cancelar.', 'menu', BEAUTY_THEME.ink, FALLBACK_PRODUCT_IMAGE));
 
     return makePayload(template, {
         eyebrow: 'Inventario',
