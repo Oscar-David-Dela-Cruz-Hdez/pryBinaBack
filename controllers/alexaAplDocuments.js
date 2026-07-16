@@ -798,10 +798,10 @@ function welcomePayload() {
         title: 'Panamericana',
         subtitle: 'Toca una opcion o di una frase de ejemplo.',
         cards: [
-            option('Ventas', 'Di: checa las ganancias del mes.', 'ventas'),
-            option('Inventario', 'Di: consulta el inventario de 4x4.', 'stock'),
-            option('Pedidos', 'Di: dime los pedidos por enviar.', 'pedidos'),
-            option('Resumen inteligente', 'Di: dame un resumen del negocio.', 'resumen_ia'),
+            option('Ventas', 'Di: abre ventas.', 'ventas'),
+            option('Inventario', 'Di: abre inventario.', 'stock'),
+            option('Pedidos', 'Di: abre pedidos.', 'pedidos'),
+            option('Resumen inteligente', 'Di: abre resumen inteligente.', 'resumen_ia'),
             option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
             option('Salir', 'Di: salir, cancelar o detener.', 'salir')
         ],
@@ -816,15 +816,25 @@ function menuPayload() {
         title: 'Panamericana',
         subtitle: 'Toca una opcion o di una frase de ejemplo.',
         cards: [
-            option('Ventas', 'Di: checa las ganancias del mes.', 'ventas'),
-            option('Inventario', 'Di: consulta el inventario de 4x4.', 'stock'),
-            option('Pedidos', 'Di: dime los pedidos por enviar.', 'pedidos'),
-            option('Resumen inteligente', 'Di: que necesita atencion hoy.', 'resumen_ia'),
+            option('Ventas', 'Di: abre ventas.', 'ventas'),
+            option('Inventario', 'Di: abre inventario.', 'stock'),
+            option('Pedidos', 'Di: abre pedidos.', 'pedidos'),
+            option('Resumen inteligente', 'Di: abre resumen inteligente.', 'resumen_ia'),
             option('Ayuda', 'Ver mas frases que Alexa entiende.', 'ayuda'),
             option('Salir', 'Di: salir, cancelar o detener.', 'salir')
         ],
         footer: 'Tambien puedes decir ventas, inventario, pedidos, ayuda o salir.',
         showBackButton: false
+    });
+}
+
+function simpleResultPayload(title, subtitle, footer = 'Puedes decir menu principal o salir.') {
+    return makePayload('headline', {
+        eyebrow: 'Resultado',
+        title,
+        subtitle,
+        cards: [],
+        footer
     });
 }
 
@@ -850,7 +860,6 @@ function sectionPayload(section) {
             title: 'Inventario',
             subtitle: 'Elige como buscar o di el nombre directamente.',
             cards: [
-                option('General', 'Di: consulta inventario general.', 'stock_general'),
                 option('Producto', 'Di: consulta inventario de 4x4 minoxidil.', 'stock_producto'),
                 option('Familia', 'Di: consulta inventario de Barberia.', 'stock_familia'),
                 option('Marca', 'Di: consulta inventario de Andis.', 'stock_marca'),
@@ -1054,6 +1063,7 @@ module.exports = {
     menuPayload,
     sectionPayload,
     goodbyePayload,
+    simpleResultPayload,
     resultPayload,
     ventasResultPayload,
     ventasPersonalizadoPayload,

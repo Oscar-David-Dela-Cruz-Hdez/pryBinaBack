@@ -14,6 +14,7 @@ const {
     menuPayload,
     sectionPayload,
     goodbyePayload,
+    simpleResultPayload,
     resultPayload,
     ventasResultPayload,
     ventasPersonalizadoPayload,
@@ -242,7 +243,7 @@ async function crearRespuestaResumenInteligente(handlerInput) {
     return addAplDirective(
         handlerInput,
         responseBuilder,
-        resultPayload('Resumen inteligente', speakOutput, footer),
+        simpleResultPayload('Resumen inteligente', speakOutput, footer),
         'resumen-inteligente'
     ).getResponse();
 }
