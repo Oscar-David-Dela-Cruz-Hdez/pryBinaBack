@@ -1,0 +1,272 @@
+{"kind":"deck","id":"pr/e3gays","name":"Deck"}
+{"kind":"layout","layoutId":"c459aa06-ad85-451c-897a-41ff40d3cdb1","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"d0acdf6c-2105-456d-ab00-f536752bf439","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/ymqujz","slide":1,"title":"DISTRIBUIDORA PANAMERICANA · GRUPO C","textShapes":7}
+{"kind":"textbox","id":"sh/md4zep4f","slide":1,"name":"company","text":"DISTRIBUIDORA PANAMERICANA · GRUPO C","textPreview":"DISTRIBUIDORA PANAMERICANA · GRUPO C","textChars":36,"textLines":1,"bbox":[48,28,560,24]}
+{"kind":"textbox","id":"sh/90fi943q","slide":1,"name":"title","text":"Sistema de gestión de ventas e inventario para la Distribuidora Panamericana","textPreview":"Sistema de gestión de ventas e inventario para la Distribuidora Panamericana","textChars":76,"textLines":1,"bbox":[48,72,548,150]}
+{"kind":"shape","id":"sh/8zmhgzm5","slide":1,"name":"divider","bbox":[48,244,548,2]}
+{"kind":"textbox","id":"sh/v2x0belw","slide":1,"name":"description","text":"Plataforma web para administrar el catálogo, controlar existencias, registrar pedidos y consultar ventas. Integra productos, marcas, familias, usuarios, ofertas y métodos de entrega en una sola operación.","textPreview":"Plataforma web para administrar el catálogo, controlar existencias, registrar pedidos y consultar ventas. Integra productos, marcas, fami...","textChars":204,"textLines":1,"bbox":[48,276,520,140]}
+{"kind":"textbox","id":"sh/u1ozi94b","slide":1,"name":"scope","text":"CATÁLOGO  ·  INVENTARIO  ·  PEDIDOS  ·  VENTAS","textPreview":"CATÁLOGO  ·  INVENTARIO  ·  PEDIDOS  ·  VENTAS","textChars":46,"textLines":1,"bbox":[48,442,520,26]}
+{"kind":"textbox","id":"sh/w36hkjmh","slide":1,"name":"caption","text":"Captura del sistema — página principal","textPreview":"Captura del sistema — página principal","textChars":38,"textLines":1,"bbox":[630,500,602,24]}
+{"kind":"textbox","id":"sh/b6tgzals","slide":1,"name":"note","text":"Base para tres aplicaciones de analítica: anticipar, segmentar decisiones y personalizar la experiencia.","textPreview":"Base para tres aplicaciones de analítica: anticipar, segmentar decisiones y personalizar la experiencia.","textChars":104,"textLines":1,"bbox":[48,600,1080,36]}
+{"kind":"textbox","id":"sh/q5kz6547","slide":1,"name":"page","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[1202,682,30,18]}
+{"kind":"image","id":"im/0fahcjeh","slide":1,"name":"","geometry":"roundRect","alt":"Captura de la página principal del sistema de Distribuidora Panamericana","bbox":[630,72,602,414]}
+{"kind":"notes","id":"nt/ymqujz","slide":1,"text":""}
+{"kind":"slide","id":"sl/zqj5mb","slide":2,"title":"PROPUESTA 1 · CLASIFICACIÓN","textShapes":43}
+{"kind":"textbox","id":"sh/zy5kfq9g","slide":2,"name":"kicker","text":"PROPUESTA 1 · CLASIFICACIÓN","textPreview":"PROPUESTA 1 · CLASIFICACIÓN","textChars":27,"textLines":1,"bbox":[48,24,400,22]}
+{"kind":"textbox","id":"sh/kze18vq1","slide":2,"name":"title","text":"Clasificar el riesgo de desabasto prioriza la reposición","textPreview":"Clasificar el riesgo de desabasto prioriza la reposición","textChars":56,"textLines":1,"bbox":[48,52,1120,52]}
+{"kind":"textbox","id":"sh/lkn2h0rm","slide":2,"name":"page","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[1202,682,30,18]}
+{"kind":"shape","id":"sh/6lwja587","slide":2,"name":"source-box","bbox":[48,132,250,116]}
+{"kind":"textbox","id":"sh/7mpkja9s","slide":2,"name":"source-label","text":"COLECCIONES","textPreview":"COLECCIONES","textChars":11,"textLines":1,"bbox":[64,142,210,20]}
+{"kind":"textbox","id":"sh/8ny1cfqd","slide":2,"name":"sources","text":"pedidos\nproductos\nmarcas · familias","textPreview":"pedidos | productos | marcas · familias","textChars":35,"textLines":3,"bbox":[64,168,210,66]}
+{"kind":"shape","id":"sh/to72l0ry","slide":2,"name":"flow-arrow","bbox":[310,178,42,22]}
+{"kind":"shape","id":"sh/upg3e583","slide":2,"name":"transform-box","bbox":[364,132,340,116]}
+{"kind":"textbox","id":"sh/vqpkna9o","slide":2,"name":"transform-label","text":"TRANSFORMACIÓN","textPreview":"TRANSFORMACIÓN","textChars":14,"textLines":1,"bbox":[380,142,250,20]}
+{"kind":"textbox","id":"sh/bel4f6tg","slide":2,"name":"transform","text":"Filtrar pedidos entregados → separar productos → agregar ventas de 7, 15 y 30 días → unir stock y catálogo.","textPreview":"Filtrar pedidos entregados → separar productos → agregar ventas de 7, 15 y 30 días → unir stock y catálogo.","textChars":107,"textLines":1,"bbox":[380,166,308,70]}
+{"kind":"shape","id":"sh/qdsnm1sv","slide":2,"name":"flow-arrow","bbox":[716,178,42,22]}
+{"kind":"shape","id":"sh/dg3mhgbm","slide":2,"name":"target-box","bbox":[770,132,462,116]}
+{"kind":"textbox","id":"sh/cfu5oba1","slide":2,"name":"target-label","text":"VARIABLE / RESULTADO","textPreview":"VARIABLE / RESULTADO","textChars":20,"textLines":1,"bbox":[786,142,300,20]}
+{"kind":"textbox","id":"sh/3q14b6t4","slide":2,"name":"target","text":"Objetivo: riesgo_desabasto\nClases: ALTO · MEDIO · BAJO","textPreview":"Objetivo: riesgo_desabasto | Clases: ALTO · MEDIO · BAJO","textChars":54,"textLines":2,"bbox":[786,166,430,70]}
+{"kind":"textbox","id":"sh/2psni1sz","slide":2,"name":"dataset-title","text":"Dataset de entrenamiento — una fila por producto y fecha de corte","textPreview":"Dataset de entrenamiento — una fila por producto y fecha de corte","textChars":65,"textLines":1,"bbox":[48,270,760,24]}
+{"kind":"shape","id":"sh/pcjmdgba","slide":2,"name":"th","bbox":[48,304,148,34]}
+{"kind":"textbox","id":"sh/oba5kbap","slide":2,"name":"th-text","text":"producto","textPreview":"producto","textChars":8,"textLines":1,"bbox":[54,304,136,34]}
+{"kind":"shape","id":"sh/n65onq9o","slide":2,"name":"th","bbox":[196,304,90,34]}
+{"kind":"textbox","id":"sh/mlcnuls3","slide":2,"name":"th-text","text":"stock","textPreview":"stock","textChars":5,"textLines":1,"bbox":[202,304,78,34]}
+{"kind":"shape","id":"sh/i1g7mpcb","slide":2,"name":"th","bbox":[286,304,95,34]}
+{"kind":"textbox","id":"sh/j2p8fudw","slide":2,"name":"th-text","text":"ventas_7d","textPreview":"ventas_7d","textChars":9,"textLines":1,"bbox":[292,304,83,34]}
+{"kind":"shape","id":"sh/k3ypozuh","slide":2,"name":"th","bbox":[381,304,95,34]}
+{"kind":"textbox","id":"sh/547qh4bm","slide":2,"name":"th-text","text":"ventas_30d","textPreview":"ventas_30d","textChars":10,"textLines":1,"bbox":[387,304,83,34]}
+{"kind":"shape","id":"sh/6507q9c7","slide":2,"name":"th","bbox":[476,304,110,34]}
+{"kind":"textbox","id":"sh/7698jets","slide":2,"name":"th-text","text":"promedio/día","textPreview":"promedio/día","textChars":12,"textLines":1,"bbox":[482,304,98,34]}
+{"kind":"shape","id":"sh/s7ipsjud","slide":2,"name":"th","bbox":[586,304,116,34]}
+{"kind":"textbox","id":"sh/t8rqloby","slide":2,"name":"th-text","text":"días cobertura","textPreview":"días cobertura","textChars":14,"textLines":1,"bbox":[592,304,104,34]}
+{"kind":"shape","id":"sh/m9w7e5c3","slide":2,"name":"th","bbox":[702,304,130,34]}
+{"kind":"textbox","id":"sh/na5o7ado","slide":2,"name":"th-text","text":"clase","textPreview":"clase","textChars":5,"textLines":1,"bbox":[708,304,118,34]}
+{"kind":"shape","id":"sh/pgv29czi","slide":2,"name":"td","bbox":[48,338,148,34]}
+{"kind":"textbox","id":"sh/ofm107ix","slide":2,"name":"td-text","text":"Alicate P001","textPreview":"Alicate P001","textChars":12,"textLines":1,"bbox":[54,338,136,34]}
+{"kind":"shape","id":"sh/nedk721c","slide":2,"name":"td","bbox":[196,338,90,34]}
+{"kind":"textbox","id":"sh/2d4jyx0r","slide":2,"name":"td-text","text":"8","textPreview":"8","textChars":1,"textLines":1,"bbox":[202,338,78,34]}
+{"kind":"shape","id":"sh/x4f2dwze","slide":2,"name":"td","bbox":[286,338,95,34]}
+{"kind":"textbox","id":"sh/c3614rit","slide":2,"name":"td-text","text":"6","textPreview":"6","textChars":1,"textLines":1,"bbox":[292,338,83,34]}
+{"kind":"shape","id":"sh/b2xkbmh8","slide":2,"name":"td","bbox":[381,338,95,34]}
+{"kind":"textbox","id":"sh/a1oj2h03","slide":2,"name":"td-text","text":"27","textPreview":"27","textChars":2,"textLines":1,"bbox":[387,338,83,34]}
+{"kind":"shape","id":"sh/t8bi1sja","slide":2,"name":"td","bbox":[476,338,110,34]}
+{"kind":"textbox","id":"sh/s721snip","slide":2,"name":"td-text","text":"0.90","textPreview":"0.90","textChars":4,"textLines":1,"bbox":[482,338,98,34]}
+{"kind":"shape","id":"sh/w3a50v2d","slide":2,"name":"td","bbox":[586,338,116,34]}
+{"kind":"textbox","id":"sh/h4jm90jy","slide":2,"name":"td-text","text":"9","textPreview":"9","textChars":1,"textLines":1,"bbox":[592,338,104,34]}
+{"kind":"shape","id":"sh/u1snylk7","slide":2,"name":"td","bbox":[702,338,130,34]}
+{"kind":"textbox","id":"sh/v2147q1s","slide":2,"name":"td-text","text":"ALTO","textPreview":"ALTO","textChars":4,"textLines":1,"bbox":[708,338,118,34]}
+{"kind":"shape","id":"sh/8zq5wv21","slide":2,"name":"td","bbox":[48,372,148,34]}
+{"kind":"textbox","id":"sh/90jm5gjm","slide":2,"name":"td-text","text":"Peine P002","textPreview":"Peine P002","textChars":10,"textLines":1,"bbox":[54,372,136,34]}
+{"kind":"shape","id":"sh/mx83ulkb","slide":2,"name":"td","bbox":[196,372,90,34]}
+{"kind":"textbox","id":"sh/7yh43q1g","slide":2,"name":"td-text","text":"35","textPreview":"35","textChars":2,"textLines":1,"bbox":[202,372,78,34]}
+{"kind":"shape","id":"sh/kvqlsb25","slide":2,"name":"td","bbox":[286,372,95,34]}
+{"kind":"textbox","id":"sh/lwzm1g3q","slide":2,"name":"td-text","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[292,372,83,34]}
+{"kind":"shape","id":"sh/n6xob65c","slide":2,"name":"td","bbox":[381,372,95,34]}
+{"kind":"textbox","id":"sh/25oni14r","slide":2,"name":"td-text","text":"13","textPreview":"13","textChars":2,"textLines":1,"bbox":[387,372,83,34]}
+{"kind":"shape","id":"sh/p8f6dgni","slide":2,"name":"td","bbox":[476,372,110,34]}
+{"kind":"textbox","id":"sh/o765kbmx","slide":2,"name":"td-text","text":"0.43","textPreview":"0.43","textChars":4,"textLines":1,"bbox":[482,372,98,34]}
+{"kind":"shape","id":"sh/buhofq5o","slide":2,"name":"td","bbox":[586,372,116,34]}
+{"kind":"textbox","id":"sh/at8nml43","slide":2,"name":"td-text","text":"81","textPreview":"81","textChars":2,"textLines":1,"bbox":[592,372,104,34]}
+{"kind":"shape","id":"sh/xwz6hgne","slide":2,"name":"td","bbox":[702,372,130,34]}
+{"kind":"textbox","id":"sh/cvq5obmt","slide":2,"name":"td-text","text":"BAJO","textPreview":"BAJO","textChars":4,"textLines":1,"bbox":[708,372,118,34]}
+{"kind":"shape","id":"sh/zyhojq5k","slide":2,"name":"td","bbox":[48,406,148,34]}
+{"kind":"textbox","id":"sh/yx8nql4z","slide":2,"name":"td-text","text":"Máquina P003","textPreview":"Máquina P003","textChars":12,"textLines":1,"bbox":[54,406,136,34]}
+{"kind":"shape","id":"sh/utcripo7","slide":2,"name":"td","bbox":[196,406,90,34]}
+{"kind":"textbox","id":"sh/vul8bups","slide":2,"name":"td-text","text":"18","textPreview":"18","textChars":2,"textLines":1,"bbox":[202,406,78,34]}
+{"kind":"shape","id":"sh/wvu9kz6d","slide":2,"name":"td","bbox":[286,406,95,34]}
+{"kind":"textbox","id":"sh/hw3qd47y","slide":2,"name":"td-text","text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[292,406,83,34]}
+{"kind":"shape","id":"sh/mps7epob","slide":2,"name":"td","bbox":[381,406,95,34]}
+{"kind":"textbox","id":"sh/7q187apw","slide":2,"name":"td-text","text":"24","textPreview":"24","textChars":2,"textLines":1,"bbox":[387,406,83,34]}
+{"kind":"shape","id":"sh/8rapgf61","slide":2,"name":"td","bbox":[476,406,110,34]}
+{"kind":"textbox","id":"sh/9sjq9k7m","slide":2,"name":"td-text","text":"0.80","textPreview":"0.80","textChars":4,"textLines":1,"bbox":[482,406,98,34]}
+{"kind":"shape","id":"sh/6lwrq9of","slide":2,"name":"td","bbox":[586,406,116,34]}
+{"kind":"textbox","id":"sh/rm58jep0","slide":2,"name":"td-text","text":"23","textPreview":"23","textChars":2,"textLines":1,"bbox":[592,406,104,34]}
+{"kind":"shape","id":"sh/1g7u98r2","slide":2,"name":"td","bbox":[702,406,130,34]}
+{"kind":"textbox","id":"sh/gfytg3qh","slide":2,"name":"td-text","text":"MEDIO","textPreview":"MEDIO","textChars":5,"textLines":1,"bbox":[708,406,118,34]}
+{"kind":"shape","id":"sh/feps7y9c","slide":2,"name":"utility","bbox":[922,286,310,180]}
+{"kind":"textbox","id":"sh/edgbet8r","slide":2,"name":"utility-title","text":"¿Para qué sirve?","textPreview":"¿Para qué sirve?","textChars":16,"textLines":1,"bbox":[942,304,270,28]}
+{"kind":"textbox","id":"sh/ts7a58r6","slide":2,"name":"utility-body","text":"• Priorizar compras\n• Evitar productos agotados\n• Reducir sobreinventario\n• Alertar al administrador","textPreview":"• Priorizar compras | • Evitar productos agotados | • Reducir sobreinventario | • Alertar al administrador","textChars":100,"textLines":4,"bbox":[942,340,260,104]}
+{"kind":"shape","id":"sh/sretc3ql","slide":2,"name":"method-note","bbox":[48,484,1184,112]}
+{"kind":"textbox","id":"sh/rq5s3y90","slide":2,"name":"method-title","text":"Cómo se etiquetan las clases","textPreview":"Cómo se etiquetan las clases","textChars":28,"textLines":1,"bbox":[68,500,300,22]}
+{"kind":"textbox","id":"sh/6pwbat8f","slide":2,"name":"method-body","text":"ALTO: cobertura ≤ 7 días   ·   MEDIO: 8–30 días   ·   BAJO: > 30 días. Para entrenamiento real se guardarán cortes históricos de stock; el esquema actual permite iniciar con etiquetas calculadas.","textPreview":"ALTO: cobertura ≤ 7 días   ·   MEDIO: 8–30 días   ·   BAJO: > 30 días. Para entrenamiento real se guardarán cortes históricos de stock; e...","textChars":195,"textLines":1,"bbox":[68,528,1120,52]}
+{"kind":"textbox","id":"sh/xoruhsra","slide":2,"name":"example-note","text":"Valores de ejemplo para mostrar la estructura del dataset.","textPreview":"Valores de ejemplo para mostrar la estructura del dataset.","textChars":58,"textLines":1,"bbox":[48,628,700,18]}
+{"kind":"notes","id":"nt/zqj5mb","slide":2,"text":""}
+{"kind":"slide","id":"sl/hf8m8a","slide":3,"title":"PROPUESTA 2 · REGRESIÓN","textShapes":48}
+{"kind":"textbox","id":"sh/wfqxgreh","slide":3,"name":"kicker","text":"PROPUESTA 2 · REGRESIÓN","textPreview":"PROPUESTA 2 · REGRESIÓN","textChars":23,"textLines":1,"bbox":[48,24,400,22]}
+{"kind":"textbox","id":"sh/vehg7mdw","slide":3,"name":"title","text":"Predecir la demanda convierte ventas históricas en compras planeadas","textPreview":"Predecir la demanda convierte ventas históricas en compras planeadas","textChars":68,"textLines":1,"bbox":[48,52,1120,52]}
+{"kind":"textbox","id":"sh/ud8fehwb","slide":3,"name":"page","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[1202,682,30,18]}
+{"kind":"shape","id":"sh/5kjydgvy","slide":3,"name":"source-box","bbox":[48,132,250,116]}
+{"kind":"textbox","id":"sh/4jqxkbet","slide":3,"name":"source-label","text":"COLECCIONES","textPreview":"COLECCIONES","textChars":11,"textLines":1,"bbox":[64,142,210,20]}
+{"kind":"textbox","id":"sh/jihgb6d8","slide":3,"name":"sources","text":"pedidos\nproductos\nofertas","textPreview":"pedidos | productos | ofertas","textChars":25,"textLines":3,"bbox":[64,168,210,66]}
+{"kind":"shape","id":"sh/ih8fi1wn","slide":3,"name":"flow-arrow","bbox":[310,178,42,22]}
+{"kind":"shape","id":"sh/t8jyhgva","slide":3,"name":"transform-box","bbox":[364,132,340,116]}
+{"kind":"textbox","id":"sh/snaxobep","slide":3,"name":"transform-label","text":"TRANSFORMACIÓN","textPreview":"TRANSFORMACIÓN","textChars":14,"textLines":1,"bbox":[380,142,250,20]}
+{"kind":"textbox","id":"sh/ilwzyt4r","slide":3,"name":"transform","text":"Pedidos pagados/entregados → una fila por producto y semana → sumar unidades → crear rezagos y variables de precio, oferta y calendario.","textPreview":"Pedidos pagados/entregados → una fila por producto y semana → sumar unidades → crear rezagos y variables de precio, oferta y calendario.","textChars":136,"textLines":1,"bbox":[380,166,308,70]}
+{"kind":"shape","id":"sh/jm50ry5w","slide":3,"name":"flow-arrow","bbox":[716,178,42,22]}
+{"kind":"shape","id":"sh/4neh0jmh","slide":3,"name":"target-box","bbox":[770,132,462,116]}
+{"kind":"textbox","id":"sh/5oniton2","slide":3,"name":"target-label","text":"VARIABLE / RESULTADO","textPreview":"VARIABLE / RESULTADO","textChars":20,"textLines":1,"bbox":[786,142,300,20]}
+{"kind":"textbox","id":"sh/6pwz2t4n","slide":3,"name":"target","text":"Valor continuo: unidades_siguientes_30d","textPreview":"Valor continuo: unidades_siguientes_30d","textChars":39,"textLines":1,"bbox":[786,166,430,70]}
+{"kind":"textbox","id":"sh/rq50vy58","slide":3,"name":"dataset-title","text":"Dataset de regresión — una fila por producto y semana","textPreview":"Dataset de regresión — una fila por producto y semana","textChars":53,"textLines":1,"bbox":[48,270,760,24]}
+{"kind":"shape","id":"sh/sbyh43mt","slide":3,"name":"th","bbox":[48,304,120,34]}
+{"kind":"textbox","id":"sh/tc7ix8ne","slide":3,"name":"th-text","text":"producto","textPreview":"producto","textChars":8,"textLines":1,"bbox":[54,304,108,34]}
+{"kind":"shape","id":"sh/mtczq9oj","slide":3,"name":"th","bbox":[168,304,70,34]}
+{"kind":"textbox","id":"sh/nulgje5o","slide":3,"name":"th-text","text":"semana","textPreview":"semana","textChars":6,"textLines":1,"bbox":[174,304,58,34]}
+{"kind":"shape","id":"sh/rmxob6hk","slide":3,"name":"th","bbox":[238,304,90,34]}
+{"kind":"textbox","id":"sh/qlon21gz","slide":3,"name":"th-text","text":"precio","textPreview":"precio","textChars":6,"textLines":1,"bbox":[244,304,78,34]}
+{"kind":"shape","id":"sh/doz6dgza","slide":3,"name":"th","bbox":[328,304,90,34]}
+{"kind":"textbox","id":"sh/cnq54by5","slide":3,"name":"th-text","text":"descuento","textPreview":"descuento","textChars":9,"textLines":1,"bbox":[334,304,78,34]}
+{"kind":"shape","id":"sh/3ix476h8","slide":3,"name":"th","bbox":[418,304,110,34]}
+{"kind":"textbox","id":"sh/2hony10n","slide":3,"name":"th-text","text":"ventas prev.","textPreview":"ventas prev.","textChars":12,"textLines":1,"bbox":[424,304,98,34]}
+{"kind":"shape","id":"sh/pkf69wze","slide":3,"name":"th","bbox":[528,304,105,34]}
+{"kind":"textbox","id":"sh/4j650rit","slide":3,"name":"th-text","text":"prom. 4 sem.","textPreview":"prom. 4 sem.","textChars":12,"textLines":1,"bbox":[534,304,93,34]}
+{"kind":"shape","id":"sh/ne1ojqhs","slide":3,"name":"th","bbox":[633,304,110,34]}
+{"kind":"textbox","id":"sh/md8nalg7","slide":3,"name":"th-text","text":"stock","textPreview":"stock","textChars":5,"textLines":1,"bbox":[639,304,98,34]}
+{"kind":"shape","id":"sh/kz2l4nyp","slide":3,"name":"th","bbox":[743,304,120,34]}
+{"kind":"textbox","id":"sh/50b2xsfa","slide":3,"name":"th-text","text":"unid. próximos 30d","textPreview":"unid. próximos 30d","textChars":18,"textLines":1,"bbox":[749,304,108,34]}
+{"kind":"shape","id":"sh/ixk32dgj","slide":3,"name":"td","bbox":[48,338,120,34]}
+{"kind":"textbox","id":"sh/jytkvix4","slide":3,"name":"td-text","text":"P001","textPreview":"P001","textChars":4,"textLines":1,"bbox":[54,338,108,34]}
+{"kind":"shape","id":"sh/sn2l87el","slide":3,"name":"td","bbox":[168,338,70,34]}
+{"kind":"textbox","id":"sh/tov21sf6","slide":3,"name":"td-text","text":"24","textPreview":"24","textChars":2,"textLines":1,"bbox":[174,338,58,34]}
+{"kind":"shape","id":"sh/6lk36xgf","slide":3,"name":"td","bbox":[238,338,90,34]}
+{"kind":"textbox","id":"sh/7mtkz2x0","slide":3,"name":"td-text","text":"$125","textPreview":"$125","textChars":4,"textLines":1,"bbox":[244,338,78,34]}
+{"kind":"shape","id":"sh/grmlc7ex","slide":3,"name":"td","bbox":[328,338,90,34]}
+{"kind":"textbox","id":"sh/hsv25cf2","slide":3,"name":"td-text","text":"0%","textPreview":"0%","textChars":2,"textLines":1,"bbox":[334,338,78,34]}
+{"kind":"shape","id":"sh/10n2lsji","slide":3,"name":"td","bbox":[418,338,110,34]}
+{"kind":"textbox","id":"sh/0zels72x","slide":3,"name":"td-text","text":"14","textPreview":"14","textChars":2,"textLines":1,"bbox":[424,338,98,34]}
+{"kind":"shape","id":"sh/fy5kj21c","slide":3,"name":"td","bbox":[528,338,105,34]}
+{"kind":"textbox","id":"sh/exc3qxkr","slide":3,"name":"td-text","text":"12.5","textPreview":"12.5","textChars":4,"textLines":1,"bbox":[534,338,93,34]}
+{"kind":"shape","id":"sh/dw32hsj6","slide":3,"name":"td","bbox":[633,338,110,34]}
+{"kind":"textbox","id":"sh/svulon21","slide":3,"name":"td-text","text":"38","textPreview":"38","textChars":2,"textLines":1,"bbox":[639,338,98,34]}
+{"kind":"shape","id":"sh/rulkfi1g","slide":3,"name":"td","bbox":[743,338,120,34]}
+{"kind":"textbox","id":"sh/qtc3mdkv","slide":3,"name":"td-text","text":"51","textPreview":"51","textChars":2,"textLines":1,"bbox":[749,338,108,34]}
+{"kind":"shape","id":"sh/xs7mtcjq","slide":3,"name":"td","bbox":[48,372,120,34]}
+{"kind":"textbox","id":"sh/cryl0ri5","slide":3,"name":"td-text","text":"P002","textPreview":"P002","textChars":4,"textLines":1,"bbox":[54,372,108,34]}
+{"kind":"shape","id":"sh/a1orypwb","slide":3,"name":"td","bbox":[168,372,70,34]}
+{"kind":"textbox","id":"sh/v2h87udw","slide":3,"name":"td-text","text":"24","textPreview":"24","textChars":2,"textLines":1,"bbox":[174,372,58,34]}
+{"kind":"shape","id":"sh/wnq90zeh","slide":3,"name":"td","bbox":[238,372,90,34]}
+{"kind":"textbox","id":"sh/xoza9kv2","slide":3,"name":"td-text","text":"$189","textPreview":"$189","textChars":4,"textLines":1,"bbox":[244,372,78,34]}
+{"kind":"shape","id":"sh/mxoru5wf","slide":3,"name":"td","bbox":[328,372,90,34]}
+{"kind":"textbox","id":"sh/nyx83adk","slide":3,"name":"td-text","text":"10%","textPreview":"10%","textChars":3,"textLines":1,"bbox":[334,372,78,34]}
+{"kind":"shape","id":"sh/8z69wfe5","slide":3,"name":"td","bbox":[418,372,110,34]}
+{"kind":"textbox","id":"sh/90fq5kvq","slide":3,"name":"td-text","text":"8","textPreview":"8","textChars":1,"textLines":1,"bbox":[424,372,98,34]}
+{"kind":"shape","id":"sh/6tsr69wj","slide":3,"name":"td","bbox":[528,372,105,34]}
+{"kind":"textbox","id":"sh/ru1sfed4","slide":3,"name":"td-text","text":"7.2","textPreview":"7.2","textChars":3,"textLines":1,"bbox":[534,372,93,34]}
+{"kind":"shape","id":"sh/3yto76tg","slide":3,"name":"td","bbox":[633,372,110,34]}
+{"kind":"textbox","id":"sh/2xkny1cv","slide":3,"name":"td-text","text":"45","textPreview":"45","textChars":2,"textLines":1,"bbox":[639,372,98,34]}
+{"kind":"shape","id":"sh/p0b69gbm","slide":3,"name":"td","bbox":[743,372,120,34]}
+{"kind":"textbox","id":"sh/oz250bu1","slide":3,"name":"td-text","text":"34","textPreview":"34","textChars":2,"textLines":1,"bbox":[749,372,108,34]}
+{"kind":"shape","id":"sh/b2dob6tc","slide":3,"name":"td","bbox":[48,406,120,34]}
+{"kind":"textbox","id":"sh/q1k721c7","slide":3,"name":"td-text","text":"P003","textPreview":"P003","textChars":4,"textLines":1,"bbox":[54,406,108,34]}
+{"kind":"shape","id":"sh/d4v6dgbi","slide":3,"name":"td","bbox":[168,406,70,34]}
+{"kind":"textbox","id":"sh/c3mp4bux","slide":3,"name":"td-text","text":"24","textPreview":"24","textChars":2,"textLines":1,"bbox":[174,406,58,34]}
+{"kind":"shape","id":"sh/z6dofqto","slide":3,"name":"td","bbox":[238,406,90,34]}
+{"kind":"textbox","id":"sh/y5476lc3","slide":3,"name":"td-text","text":"$95","textPreview":"$95","textChars":3,"textLines":1,"bbox":[244,406,78,34]}
+{"kind":"shape","id":"sh/wv65wvqh","slide":3,"name":"td","bbox":[328,406,90,34]}
+{"kind":"textbox","id":"sh/xwf6p0rm","slide":3,"name":"td-text","text":"0%","textPreview":"0%","textChars":2,"textLines":1,"bbox":[334,406,78,34]}
+{"kind":"shape","id":"sh/a9onul8b","slide":3,"name":"td","bbox":[418,406,110,34]}
+{"kind":"textbox","id":"sh/vaxonq9w","slide":3,"name":"td-text","text":"21","textPreview":"21","textChars":2,"textLines":1,"bbox":[424,406,98,34]}
+{"kind":"shape","id":"sh/87m5sbq5","slide":3,"name":"td","bbox":[528,406,105,34]}
+{"kind":"textbox","id":"sh/98vmlgrq","slide":3,"name":"td-text","text":"18.7","textPreview":"18.7","textChars":4,"textLines":1,"bbox":[534,406,93,34]}
+{"kind":"shape","id":"sh/m54nql8z","slide":3,"name":"td","bbox":[633,406,110,34]}
+{"kind":"textbox","id":"sh/n6d4j69k","slide":3,"name":"td-text","text":"27","textPreview":"27","textChars":2,"textLines":1,"bbox":[639,406,98,34]}
+{"kind":"shape","id":"sh/03m5obq9","slide":3,"name":"td","bbox":[743,406,120,34]}
+{"kind":"textbox","id":"sh/l4vmhgru","slide":3,"name":"td-text","text":"76","textPreview":"76","textChars":2,"textLines":1,"bbox":[749,406,108,34]}
+{"kind":"shape","id":"sh/d0zu18r2","slide":3,"name":"prediction","bbox":[980,286,252,180]}
+{"kind":"textbox","id":"sh/sf6ds3ax","slide":3,"name":"prediction-title","text":"Predicción","textPreview":"Predicción","textChars":10,"textLines":1,"bbox":[1000,304,210,28]}
+{"kind":"textbox","id":"sh/rexczy9c","slide":3,"name":"prediction-big","text":"51","textPreview":"51","textChars":2,"textLines":1,"bbox":[1000,340,210,60]}
+{"kind":"textbox","id":"sh/qdovqtsr","slide":3,"name":"prediction-label","text":"unidades de P001\nen 30 días","textPreview":"unidades de P001 | en 30 días","textChars":27,"textLines":2,"bbox":[1000,398,210,52]}
+{"kind":"shape","id":"sh/14zu58re","slide":3,"name":"utility","bbox":[48,484,1184,112]}
+{"kind":"textbox","id":"sh/03qdw3at","slide":3,"name":"utility-title","text":"Utilidad operativa","textPreview":"Utilidad operativa","textChars":18,"textLines":1,"bbox":[68,500,260,22]}
+{"kind":"textbox","id":"sh/f2hc3y98","slide":3,"name":"utility-body","text":"Define cuánto reabastecer por producto, anticipa temporadas de mayor demanda y reduce tanto faltantes como capital detenido en mercancía. Modelo inicial: regresión lineal; comparación posterior con Random Forest.","textPreview":"Define cuánto reabastecer por producto, anticipa temporadas de mayor demanda y reduce tanto faltantes como capital detenido en mercancía....","textChars":212,"textLines":1,"bbox":[68,528,1120,52]}
+{"kind":"textbox","id":"sh/e18vutsn","slide":3,"name":"example-note","text":"Valores de ejemplo para mostrar la estructura del dataset.","textPreview":"Valores de ejemplo para mostrar la estructura del dataset.","textChars":58,"textLines":1,"bbox":[48,628,700,18]}
+{"kind":"notes","id":"nt/hf8m8a","slide":3,"text":""}
+{"kind":"slide","id":"sl/fu1gyz","slide":4,"title":"PROPUESTA 3 · SISTEMA DE RECOMENDACIÓN","textShapes":48}
+{"kind":"textbox","id":"sh/0na9gfmd","slide":4,"name":"kicker","text":"PROPUESTA 3 · SISTEMA DE RECOMENDACIÓN","textPreview":"PROPUESTA 3 · SISTEMA DE RECOMENDACIÓN","textChars":38,"textLines":1,"bbox":[48,24,400,22]}
+{"kind":"textbox","id":"sh/f2187a58","slide":4,"name":"title","text":"Las transacciones permiten recomendar productos relevantes a cada cliente","textPreview":"Las transacciones permiten recomendar productos relevantes a cada cliente","textChars":73,"textLines":1,"bbox":[48,52,1120,52]}
+{"kind":"textbox","id":"sh/e1s7e54n","slide":4,"name":"page","text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[1202,682,30,18]}
+{"kind":"shape","id":"sh/9s3qdkna","slide":4,"name":"source-box","bbox":[48,132,250,116]}
+{"kind":"textbox","id":"sh/oru9kfmp","slide":4,"name":"source-label","text":"COLECCIONES","textPreview":"COLECCIONES","textChars":11,"textLines":1,"bbox":[64,142,210,20]}
+{"kind":"textbox","id":"sh/nql8ba54","slide":4,"name":"sources","text":"pedidos\nusuarios\nproductos\nmarcas · familias","textPreview":"pedidos | usuarios | productos | marcas · familias","textChars":44,"textLines":4,"bbox":[64,168,210,66]}
+{"kind":"shape","id":"sh/2psrip4j","slide":4,"name":"flow-arrow","bbox":[310,178,42,22]}
+{"kind":"shape","id":"sh/xw3qh4n6","slide":4,"name":"transform-box","bbox":[364,132,340,116]}
+{"kind":"textbox","id":"sh/wvu9ozml","slide":4,"name":"transform-label","text":"TRANSFORMACIÓN","textPreview":"TRANSFORMACIÓN","textChars":14,"textLines":1,"bbox":[380,142,250,20]}
+{"kind":"textbox","id":"sh/qt4fqhsv","slide":4,"name":"transform","text":"Pedidos pagados/entregados → separar cada artículo → crear interacción usuario–producto → ponderar frecuencia, cantidad y recencia.","textPreview":"Pedidos pagados/entregados → separar cada artículo → crear interacción usuario–producto → ponderar frecuencia, cantidad y recencia.","textChars":131,"textLines":1,"bbox":[380,166,308,70]}
+{"kind":"shape","id":"sh/rudgzm9g","slide":4,"name":"flow-arrow","bbox":[716,178,42,22]}
+{"kind":"shape","id":"sh/cvmxs7a1","slide":4,"name":"target-box","bbox":[770,132,462,116]}
+{"kind":"textbox","id":"sh/dwvy1crm","slide":4,"name":"target-label","text":"VARIABLE / RESULTADO","textPreview":"VARIABLE / RESULTADO","textChars":20,"textLines":1,"bbox":[786,142,300,20]}
+{"kind":"textbox","id":"sh/ex4fuhs7","slide":4,"name":"target","text":"Salida: Top-N productos por usuario\nFiltrar activos y con stock","textPreview":"Salida: Top-N productos por usuario | Filtrar activos y con stock","textChars":63,"textLines":2,"bbox":[786,166,430,70]}
+{"kind":"textbox","id":"sh/zydg3m9c","slide":4,"name":"dataset-title","text":"Dataset transaccional — una fila por artículo dentro de cada pedido","textPreview":"Dataset transaccional — una fila por artículo dentro de cada pedido","textChars":67,"textLines":1,"bbox":[48,270,850,24]}
+{"kind":"shape","id":"sh/0zmxwrax","slide":4,"name":"th","bbox":[48,304,118,34]}
+{"kind":"textbox","id":"sh/1kfy5wri","slide":4,"name":"th-text","text":"transacción","textPreview":"transacción","textChars":11,"textLines":1,"bbox":[54,304,106,34]}
+{"kind":"shape","id":"sh/u1kfixsn","slide":4,"name":"th","bbox":[166,304,105,34]}
+{"kind":"textbox","id":"sh/f2twr298","slide":4,"name":"th-text","text":"usuario","textPreview":"usuario","textChars":7,"textLines":1,"bbox":[172,304,93,34]}
+{"kind":"shape","id":"sh/j6pczyp0","slide":4,"name":"th","bbox":[271,304,105,34]}
+{"kind":"textbox","id":"sh/i5gvqt8f","slide":4,"name":"th-text","text":"producto","textPreview":"producto","textChars":8,"textLines":1,"bbox":[277,304,93,34]}
+{"kind":"shape","id":"sh/587u1o76","slide":4,"name":"th","bbox":[376,304,105,34]}
+{"kind":"textbox","id":"sh/k7yds3ql","slide":4,"name":"th-text","text":"fecha","textPreview":"fecha","textChars":5,"textLines":1,"bbox":[382,304,93,34]}
+{"kind":"shape","id":"sh/v2pcvep4","slide":4,"name":"th","bbox":[481,304,78,34]}
+{"kind":"textbox","id":"sh/a1gvm98j","slide":4,"name":"th-text","text":"cantidad","textPreview":"cantidad","textChars":8,"textLines":1,"bbox":[487,304,66,34]}
+{"kind":"shape","id":"sh/x47uxo7u","slide":4,"name":"th","bbox":[559,304,90,34]}
+{"kind":"textbox","id":"sh/w3ydojqp","slide":4,"name":"th-text","text":"precio","textPreview":"precio","textChars":6,"textLines":1,"bbox":[565,304,78,34]}
+{"kind":"shape","id":"sh/fy9c7ip8","slide":4,"name":"th","bbox":[649,304,120,34]}
+{"kind":"textbox","id":"sh/ux0vyd8n","slide":4,"name":"th-text","text":"marca","textPreview":"marca","textChars":5,"textLines":1,"bbox":[655,304,108,34]}
+{"kind":"shape","id":"sh/cju9sf65","slide":4,"name":"th","bbox":[769,304,120,34]}
+{"kind":"textbox","id":"sh/dk3a10nq","slide":4,"name":"th-text","text":"familia","textPreview":"familia","textChars":7,"textLines":1,"bbox":[775,304,108,34]}
+{"kind":"shape","id":"sh/qhsrq5oz","slide":4,"name":"td","bbox":[48,338,118,34]}
+{"kind":"textbox","id":"sh/bilsza5k","slide":4,"name":"td-text","text":"PED001","textPreview":"PED001","textChars":6,"textLines":1,"bbox":[54,338,106,34]}
+{"kind":"shape","id":"sh/07u9wf6h","slide":4,"name":"td","bbox":[166,338,105,34]}
+{"kind":"textbox","id":"sh/l83a5knm","slide":4,"name":"td-text","text":"U001","textPreview":"U001","textChars":4,"textLines":1,"bbox":[172,338,93,34]}
+{"kind":"shape","id":"sh/y5cru5ob","slide":4,"name":"td","bbox":[271,338,105,34]}
+{"kind":"textbox","id":"sh/z6ls3a5w","slide":4,"name":"td-text","text":"P001","textPreview":"P001","textChars":4,"textLines":1,"bbox":[277,338,93,34]}
+{"kind":"shape","id":"sh/8bet0z6d","slide":4,"name":"td","bbox":[376,338,105,34]}
+{"kind":"textbox","id":"sh/9cna94ny","slide":4,"name":"td-text","text":"12/06/26","textPreview":"12/06/26","textChars":8,"textLines":1,"bbox":[382,338,93,34]}
+{"kind":"shape","id":"sh/98v2tgn2","slide":4,"name":"td","bbox":[481,338,78,34]}
+{"kind":"textbox","id":"sh/87m10v6h","slide":4,"name":"td-text","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[487,338,66,34]}
+{"kind":"shape","id":"sh/76t0rqpw","slide":4,"name":"td","bbox":[559,338,90,34]}
+{"kind":"textbox","id":"sh/m5kjylob","slide":4,"name":"td-text","text":"$125","textPreview":"$125","textChars":4,"textLines":1,"bbox":[565,338,78,34]}
+{"kind":"shape","id":"sh/l4bipg7q","slide":4,"name":"td","bbox":[649,338,120,34]}
+{"kind":"textbox","id":"sh/k321wb65","slide":4,"name":"td-text","text":"Barrilito","textPreview":"Barrilito","textChars":9,"textLines":1,"bbox":[655,338,108,34]}
+{"kind":"shape","id":"sh/z2t0n6pk","slide":4,"name":"td","bbox":[769,338,120,34]}
+{"kind":"textbox","id":"sh/y1kju1of","slide":4,"name":"td-text","text":"Barbería","textPreview":"Barbería","textChars":8,"textLines":1,"bbox":[775,338,108,34]}
+{"kind":"shape","id":"sh/50f210nu","slide":4,"name":"td","bbox":[48,372,118,34]}
+{"kind":"textbox","id":"sh/4z618f6p","slide":4,"name":"td-text","text":"PED001","textPreview":"PED001","textChars":6,"textLines":1,"bbox":[54,372,106,34]}
+{"kind":"shape","id":"sh/2lgzmx47","slide":4,"name":"td","bbox":[166,372,105,34]}
+{"kind":"textbox","id":"sh/3mpgv25c","slide":4,"name":"td-text","text":"U001","textPreview":"U001","textChars":4,"textLines":1,"bbox":[172,372,93,34]}
+{"kind":"shape","id":"sh/o7iho7mx","slide":4,"name":"td","bbox":[271,372,105,34]}
+{"kind":"textbox","id":"sh/p8ryxc3i","slide":4,"name":"td-text","text":"P004","textPreview":"P004","textChars":4,"textLines":1,"bbox":[277,372,93,34]}
+{"kind":"shape","id":"sh/ehgfix4v","slide":4,"name":"td","bbox":[376,372,105,34]}
+{"kind":"textbox","id":"sh/fipgr25g","slide":4,"name":"td-text","text":"12/06/26","textPreview":"12/06/26","textChars":8,"textLines":1,"bbox":[382,372,93,34]}
+{"kind":"shape","id":"sh/gjyxk7m1","slide":4,"name":"td","bbox":[481,372,78,34]}
+{"kind":"textbox","id":"sh/1k7ytsnm","slide":4,"name":"td-text","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[487,372,66,34]}
+{"kind":"shape","id":"sh/yd0zuh4z","slide":4,"name":"td","bbox":[559,372,90,34]}
+{"kind":"textbox","id":"sh/ze9g3mlk","slide":4,"name":"td-text","text":"$350","textPreview":"$350","textChars":4,"textLines":1,"bbox":[565,372,78,34]}
+{"kind":"shape","id":"sh/vilwvelw","slide":4,"name":"td","bbox":[649,372,120,34]}
+{"kind":"textbox","id":"sh/uhcvm9kr","slide":4,"name":"td-text","text":"Wahl","textPreview":"Wahl","textChars":4,"textLines":1,"bbox":[655,372,108,34]}
+{"kind":"shape","id":"sh/hk3exo32","slide":4,"name":"td","bbox":[769,372,120,34]}
+{"kind":"textbox","id":"sh/wjudoj2h","slide":4,"name":"td-text","text":"Máquinas","textPreview":"Máquinas","textChars":8,"textLines":1,"bbox":[775,372,108,34]}
+{"kind":"shape","id":"sh/jmlwzyl8","slide":4,"name":"td","bbox":[48,406,118,34]}
+{"kind":"textbox","id":"sh/ilcvqtkn","slide":4,"name":"td-text","text":"PED002","textPreview":"PED002","textChars":6,"textLines":1,"bbox":[54,406,106,34]}
+{"kind":"shape","id":"sh/5one183e","slide":4,"name":"td","bbox":[166,406,105,34]}
+{"kind":"textbox","id":"sh/4nuds32t","slide":4,"name":"td-text","text":"U002","textPreview":"U002","textChars":4,"textLines":1,"bbox":[172,406,93,34]}
+{"kind":"shape","id":"sh/rq5w3y14","slide":4,"name":"td","bbox":[271,406,105,34]}
+{"kind":"textbox","id":"sh/6pwvutkz","slide":4,"name":"td-text","text":"P001","textPreview":"P001","textChars":4,"textLines":1,"bbox":[277,406,93,34]}
+{"kind":"shape","id":"sh/ofydk3ix","slide":4,"name":"td","bbox":[376,406,105,34]}
+{"kind":"textbox","id":"sh/pg7ut8zi","slide":4,"name":"td-text","text":"13/06/26","textPreview":"13/06/26","textChars":8,"textLines":1,"bbox":[382,406,93,34]}
+{"kind":"shape","id":"sh/2twvid0r","slide":4,"name":"td","bbox":[481,406,78,34]}
+{"kind":"textbox","id":"sh/3u5cryhc","slide":4,"name":"td-text","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[487,406,66,34]}
+{"kind":"shape","id":"sh/gredg3i1","slide":4,"name":"td","bbox":[559,406,90,34]}
+{"kind":"textbox","id":"sh/1snup8z6","slide":4,"name":"td-text","text":"$125","textPreview":"$125","textChars":4,"textLines":1,"bbox":[565,406,78,34]}
+{"kind":"shape","id":"sh/epwbet0v","slide":4,"name":"td","bbox":[649,406,120,34]}
+{"kind":"textbox","id":"sh/fq5cnyhg","slide":4,"name":"td-text","text":"Barrilito","textPreview":"Barrilito","textChars":9,"textLines":1,"bbox":[655,406,108,34]}
+{"kind":"shape","id":"sh/snutcjip","slide":4,"name":"td","bbox":[769,406,120,34]}
+{"kind":"textbox","id":"sh/tonuloza","slide":4,"name":"td-text","text":"Barbería","textPreview":"Barbería","textChars":8,"textLines":1,"bbox":[775,406,108,34]}
+{"kind":"shape","id":"sh/lk72pgjy","slide":4,"name":"recommendation","bbox":[954,286,278,180]}
+{"kind":"textbox","id":"sh/kzy1wbid","slide":4,"name":"recommendation-title","text":"Ejemplo de salida","textPreview":"Ejemplo de salida","textChars":17,"textLines":1,"bbox":[974,304,238,28]}
+{"kind":"textbox","id":"sh/jypkn61s","slide":4,"name":"recommendation-user","text":"Para U001","textPreview":"Para U001","textChars":9,"textLines":1,"bbox":[974,340,238,22]}
+{"kind":"textbox","id":"sh/yxgju107","slide":4,"name":"recommendation-list","text":"1. Navaja P008\n2. Peine P002\n3. Cera P011","textPreview":"1. Navaja P008 | 2. Peine P002 | 3. Cera P011","textChars":41,"textLines":3,"bbox":[974,370,220,74]}
+{"kind":"shape","id":"sh/tor2t0ju","slide":4,"name":"utility","bbox":[48,484,1184,112]}
+{"kind":"textbox","id":"sh/8ni10vi9","slide":4,"name":"utility-title","text":"Utilidad comercial","textPreview":"Utilidad comercial","textChars":18,"textLines":1,"bbox":[68,500,260,22]}
+{"kind":"textbox","id":"sh/7m9krq14","slide":4,"name":"utility-body","text":"Personaliza el catálogo, impulsa ventas cruzadas y permite mostrar “clientes que compraron este producto también compraron…”. Puede iniciar con coocurrencia de productos y evolucionar a filtrado colaborativo.","textPreview":"Personaliza el catálogo, impulsa ventas cruzadas y permite mostrar “clientes que compraron este producto también compraron…”. Puede inici...","textChars":208,"textLines":1,"bbox":[68,528,1120,52]}
+{"kind":"textbox","id":"sh/6lgjyl0j","slide":4,"name":"example-note","text":"Identificadores y valores de ejemplo; la estructura corresponde a los modelos reales del backend.","textPreview":"Identificadores y valores de ejemplo; la estructura corresponde a los modelos reales del backend.","textChars":97,"textLines":1,"bbox":[48,628,820,18]}
+{"kind":"notes","id":"nt/fu1gyz","slide":4,"text":""}

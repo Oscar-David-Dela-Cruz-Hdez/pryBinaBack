@@ -25,12 +25,26 @@ const pedidoSchema = new mongoose.Schema({
         telefono: { type: String, required: true }
     },
     metodoPago: { type: String, required: true }, // "Tarjeta", "Transferencia", etc.
+    pago: {
+        proveedor: { type: String, enum: ["paypal", "manual"], default: "manual" },
+        estado: {
+            type: String,
+            enum: ["pendiente", "aprobado", "rechazado", "cancelado", "reembolsado"],
+            default: "pendiente"
+        },
+        ordenExternaId: { type: String, index: true, sparse: true },
+        capturaId: { type: String },
+        moneda: { type: String, default: "MXN" },
+        monto: { type: Number },
+        fechaPago: { type: Date }
+    },
     estado: {
         type: String,
         enum: ["Pendiente", "Pagado", "Enviado", "Entregado", "Cancelado", "Devolución"],
         default: "Pendiente"
     },
     costoEnvio: { type: Number, default: 0 },
+    inventarioReservado: { type: Boolean, default: false },
     fecha: { type: Date, default: Date.now }
 }, { timestamps: true });
 
