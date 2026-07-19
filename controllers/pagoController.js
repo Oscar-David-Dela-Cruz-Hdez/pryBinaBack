@@ -110,6 +110,31 @@ const capturarOrdenPaypal = async (req, res) => {
   }
 };
 
+// Genera una orden PayPal nueva para un pedido pendiente ya existente.
+// No crea otro pedido ni vuelve a modificar el inventario reservado.
+const reintentarOrdenPaypal = async (req, res) => {
+  try {
+    const pedido = await Pedido.findOne({ _id: req.params.pedidoId, usuario: req.user.id });
+    if (!pedido) return res.status(404).json({ error: "Pedido no encontrado" });
+
+    if (pedido.estado !== "Pendiente" || pedido.pago?.estado !== "pendiente") {
+      return res.status(409).json({ error: "Este pedido ya no admite un nuevo intento de pago" });
+    }
+    if (pedido.pago?.proveedor !== "paypal") {
+      return res.status(400).json({ error: "El pedido no utiliza PayPal" });
+    }
+
+    const ordenPaypal = await crearOrden(pedido);
+    pedido.pago.ordenExternaId = ordenPaypal.id;
+    await pedido.save();
+
+    return res.status(201).json({ orderId: ordenPaypal.id, pedidoId: pedido._id, total: pedido.total });
+  } catch (error) {
+    console.error("Error al reintentar pago PayPal:", error.response?.data || error.message);
+    return res.status(error.response?.status || 500).json({ error: "No fue posible reiniciar el pago" });
+  }
+};
+
 const obtenerConfiguracionPaypal = (req, res) => {
   if (!process.env.PAYPAL_CLIENT_ID) {
     return res.status(503).json({ error: "PayPal no está configurado" });
@@ -117,4 +142,4 @@ const obtenerConfiguracionPaypal = (req, res) => {
   res.json({ clientId: process.env.PAYPAL_CLIENT_ID, currency: "MXN" });
 };
 
-module.exports = { crearOrdenPaypal, capturarOrdenPaypal, obtenerConfiguracionPaypal };
+module.exports = { crearOrdenPaypal, capturarOrdenPaypal, reintentarOrdenPaypal, obtenerConfiguracionPaypal };
