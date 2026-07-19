@@ -2,6 +2,7 @@ const Pedido = require("../models/Pedido");
 const Producto = require("../models/Producto");
 const ExcelJS = require('exceljs');
 const filterXSS = require('xss');
+const { cancelarPedidosVencidos } = require('../services/pedidoPendienteService');
 
 // Crear Pedido (Cliente)
 const createPedido = async (req, res) => {
@@ -63,6 +64,7 @@ const createPedido = async (req, res) => {
 // Obtener Pedidos (Admin: Todos, Usuario: Suyos)
 const getPedidos = async (req, res) => {
     try {
+        await cancelarPedidosVencidos();
         const { rol, id } = req.user;
         let query = {};
 

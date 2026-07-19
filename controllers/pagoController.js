@@ -1,6 +1,9 @@
 const Pedido = require("../models/Pedido");
 const Producto = require("../models/Producto");
 const { crearOrden, capturarOrden } = require("../services/paypalService");
+const { cancelarPedidoPendiente, cancelarPedidosVencidos } = require("../services/pedidoPendienteService");
+
+const UNA_HORA_MS = 60 * 60 * 1000;
 
 const liberarInventario = async (productos) => {
   await Promise.all(productos.map(item =>
@@ -22,6 +25,27 @@ const crearOrdenPaypal = async (req, res) => {
       return res.status(400).json({ error: "La dirección de envío está incompleta" });
     }
 
+    await cancelarPedidosVencidos();
+    const pedidoVigente = await Pedido.findOne({
+      usuario: req.user.id,
+      estado: "Pendiente",
+      "pago.proveedor": "paypal",
+      "pago.estado": "pendiente",
+      "pago.expiraEn": { $gt: new Date() }
+    }).sort({ createdAt: -1 });
+    if (pedidoVigente) {
+      const ordenVigente = await crearOrden(pedidoVigente);
+      pedidoVigente.pago.ordenExternaId = ordenVigente.id;
+      await pedidoVigente.save();
+      return res.status(200).json({
+        orderId: ordenVigente.id,
+        pedidoId: pedidoVigente._id,
+        total: pedidoVigente.total,
+        expiraEn: pedidoVigente.pago.expiraEn,
+        reutilizado: true
+      });
+    }
+
     let subtotal = 0;
     for (const item of productos) {
       const cantidad = Number(item.cantidad);
@@ -38,16 +62,10 @@ const crearOrdenPaypal = async (req, res) => {
         throw Object.assign(new Error("Producto inexistente, inactivo o sin stock suficiente"), { status: 409 });
       }
 
-      reservados.push({
-        producto: producto._id,
-        nombre: producto.nombre,
-        cantidad,
-        precio: producto.precioNormal
-      });
+      reservados.push({ producto: producto._id, nombre: producto.nombre, cantidad, precio: producto.precioNormal });
       subtotal += Number(producto.precioNormal) * cantidad;
     }
 
-    // El envío se calcula en servidor. Por ahora la política configurada es envío sin costo.
     const costoEnvio = 0;
     pedido = await Pedido.create({
       usuario: req.user.id,
@@ -57,14 +75,25 @@ const crearOrdenPaypal = async (req, res) => {
       direccionEnvio,
       metodoPago: "PayPal",
       inventarioReservado: true,
-      pago: { proveedor: "paypal", estado: "pendiente", moneda: "MXN", monto: subtotal + costoEnvio }
+      pago: {
+        proveedor: "paypal",
+        estado: "pendiente",
+        moneda: "MXN",
+        monto: subtotal + costoEnvio,
+        expiraEn: new Date(Date.now() + UNA_HORA_MS)
+      }
     });
 
     const ordenPaypal = await crearOrden(pedido);
     pedido.pago.ordenExternaId = ordenPaypal.id;
     await pedido.save();
 
-    return res.status(201).json({ orderId: ordenPaypal.id, pedidoId: pedido._id, total: pedido.total });
+    return res.status(201).json({
+      orderId: ordenPaypal.id,
+      pedidoId: pedido._id,
+      total: pedido.total,
+      expiraEn: pedido.pago.expiraEn
+    });
   } catch (error) {
     if (reservados.length) await liberarInventario(reservados);
     if (pedido) await Pedido.findByIdAndDelete(pedido._id);
@@ -76,16 +105,30 @@ const crearOrdenPaypal = async (req, res) => {
 };
 
 const capturarOrdenPaypal = async (req, res) => {
+  let pedido;
   try {
-    const pedido = await Pedido.findOne({
+    pedido = await Pedido.findOne({
       "pago.ordenExternaId": req.params.orderId,
       usuario: req.user.id
     });
     if (!pedido) return res.status(404).json({ error: "Pedido de PayPal no encontrado" });
-
     if (pedido.pago.estado === "aprobado") {
       return res.json({ mensaje: "El pago ya estaba confirmado", pedido });
     }
+    if (pedido.pago.estado !== "pendiente") {
+      return res.status(409).json({ error: "El pedido no se encuentra disponible para pago" });
+    }
+    if (pedido.pago.expiraEn && pedido.pago.expiraEn <= new Date()) {
+      await cancelarPedidoPendiente(pedido._id, "Tiempo de pago vencido", req.user.id);
+      return res.status(410).json({ error: "El tiempo para pagar este pedido venció" });
+    }
+
+    pedido = await Pedido.findOneAndUpdate(
+      { _id: pedido._id, "pago.estado": "pendiente" },
+      { $set: { "pago.estado": "procesando" } },
+      { new: true }
+    );
+    if (!pedido) return res.status(409).json({ error: "El pago ya está siendo procesado" });
 
     const resultado = await capturarOrden(req.params.orderId);
     const captura = resultado.purchase_units?.[0]?.payments?.captures?.[0];
@@ -93,53 +136,86 @@ const capturarOrdenPaypal = async (req, res) => {
       Number(captura?.amount?.value) === Number(pedido.total);
 
     if (resultado.status !== "COMPLETED" || captura?.status !== "COMPLETED" || !montoCoincide) {
+      await Pedido.findByIdAndUpdate(pedido._id, { $set: { "pago.estado": "pendiente" } });
       return res.status(409).json({ error: "PayPal no confirmó el pago por el importe esperado" });
     }
 
-    pedido.pago.estado = "aprobado";
-    pedido.pago.capturaId = captura.id;
-    pedido.pago.fechaPago = new Date();
-    pedido.estado = "Pagado";
-    pedido.inventarioReservado = false;
-    await pedido.save();
-
+    pedido = await Pedido.findOneAndUpdate(
+      { _id: pedido._id, "pago.estado": "procesando" },
+      {
+        $set: {
+          "pago.estado": "aprobado",
+          "pago.capturaId": captura.id,
+          "pago.fechaPago": new Date(),
+          estado: "Pagado",
+          inventarioReservado: false
+        }
+      },
+      { new: true }
+    );
     return res.json({ mensaje: "Pago confirmado", pedido });
   } catch (error) {
+    if (pedido?._id) {
+      await Pedido.findOneAndUpdate(
+        { _id: pedido._id, "pago.estado": "procesando" },
+        { $set: { "pago.estado": "pendiente" } }
+      );
+    }
     console.error("Error al capturar pago PayPal:", error.response?.data || error.message);
     return res.status(error.response?.status || 500).json({ error: "No fue posible confirmar el pago" });
   }
 };
 
-// Genera una orden PayPal nueva para un pedido pendiente ya existente.
-// No crea otro pedido ni vuelve a modificar el inventario reservado.
 const reintentarOrdenPaypal = async (req, res) => {
   try {
     const pedido = await Pedido.findOne({ _id: req.params.pedidoId, usuario: req.user.id });
     if (!pedido) return res.status(404).json({ error: "Pedido no encontrado" });
-
     if (pedido.estado !== "Pendiente" || pedido.pago?.estado !== "pendiente") {
       return res.status(409).json({ error: "Este pedido ya no admite un nuevo intento de pago" });
     }
     if (pedido.pago?.proveedor !== "paypal") {
       return res.status(400).json({ error: "El pedido no utiliza PayPal" });
     }
+    if (pedido.pago.expiraEn && pedido.pago.expiraEn <= new Date()) {
+      await cancelarPedidoPendiente(pedido._id, "Tiempo de pago vencido", req.user.id);
+      return res.status(410).json({ error: "El tiempo para pagar este pedido venció" });
+    }
 
     const ordenPaypal = await crearOrden(pedido);
     pedido.pago.ordenExternaId = ordenPaypal.id;
     await pedido.save();
-
-    return res.status(201).json({ orderId: ordenPaypal.id, pedidoId: pedido._id, total: pedido.total });
+    return res.status(201).json({
+      orderId: ordenPaypal.id,
+      pedidoId: pedido._id,
+      total: pedido.total,
+      expiraEn: pedido.pago.expiraEn
+    });
   } catch (error) {
     console.error("Error al reintentar pago PayPal:", error.response?.data || error.message);
     return res.status(error.response?.status || 500).json({ error: "No fue posible reiniciar el pago" });
   }
 };
 
-const obtenerConfiguracionPaypal = (req, res) => {
-  if (!process.env.PAYPAL_CLIENT_ID) {
-    return res.status(503).json({ error: "PayPal no está configurado" });
+const cancelarPedidoPaypal = async (req, res) => {
+  try {
+    const pedido = await cancelarPedidoPendiente(req.params.pedidoId, "Cancelado por el cliente", req.user.id);
+    if (!pedido) return res.status(409).json({ error: "El pedido ya no puede cancelarse" });
+    return res.json({ mensaje: "Pedido cancelado e inventario liberado", pedido });
+  } catch (error) {
+    console.error("Error al cancelar pedido PayPal:", error.message);
+    return res.status(500).json({ error: "No fue posible cancelar el pedido" });
   }
+};
+
+const obtenerConfiguracionPaypal = (req, res) => {
+  if (!process.env.PAYPAL_CLIENT_ID) return res.status(503).json({ error: "PayPal no está configurado" });
   res.json({ clientId: process.env.PAYPAL_CLIENT_ID, currency: "MXN" });
 };
 
-module.exports = { crearOrdenPaypal, capturarOrdenPaypal, reintentarOrdenPaypal, obtenerConfiguracionPaypal };
+module.exports = {
+  crearOrdenPaypal,
+  capturarOrdenPaypal,
+  reintentarOrdenPaypal,
+  cancelarPedidoPaypal,
+  obtenerConfiguracionPaypal
+};

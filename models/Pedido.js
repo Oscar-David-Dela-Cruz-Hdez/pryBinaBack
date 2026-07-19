@@ -29,14 +29,17 @@ const pedidoSchema = new mongoose.Schema({
         proveedor: { type: String, enum: ["paypal", "manual"], default: "manual" },
         estado: {
             type: String,
-            enum: ["pendiente", "aprobado", "rechazado", "cancelado", "reembolsado"],
+            enum: ["pendiente", "procesando", "aprobado", "rechazado", "cancelado", "reembolsado"],
             default: "pendiente"
         },
         ordenExternaId: { type: String, index: true, sparse: true },
         capturaId: { type: String },
         moneda: { type: String, default: "MXN" },
         monto: { type: Number },
-        fechaPago: { type: Date }
+        fechaPago: { type: Date },
+        expiraEn: { type: Date, index: true },
+        fechaCancelacion: { type: Date },
+        motivoCancelacion: { type: String }
     },
     estado: {
         type: String,

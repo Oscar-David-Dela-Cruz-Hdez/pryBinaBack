@@ -65,6 +65,13 @@ const loginAttempts = {};
 
 conectarDB();
 
+// Libera cada cinco minutos el inventario de pedidos PayPal vencidos.
+const { cancelarPedidosVencidos } = require("./services/pedidoPendienteService");
+const limpiezaPedidos = setInterval(() => {
+  cancelarPedidosVencidos().catch(error => console.error("Error al vencer pedidos:", error.message));
+}, 5 * 60 * 1000);
+limpiezaPedidos.unref();
+
 app.use("/api/usuarios", (req, res, next) => {
   req.recoveryAttempts = recoveryAttempts;
   req.loginAttempts = loginAttempts;
