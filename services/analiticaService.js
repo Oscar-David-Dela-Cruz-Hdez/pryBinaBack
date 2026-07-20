@@ -98,7 +98,9 @@ const recomendarProductos = async (productoIds, limite = 6) => {
       const juntos = coocurrencia.get([semilla, candidato].sort().join('|')) || 0;
       if (!juntos) continue;
       const similitud = juntos / Math.sqrt((frecuencia.get(semilla) || 1) * frecuenciaCandidato);
-      puntuaciones.set(candidato, Math.max(puntuaciones.get(candidato) || 0, similitud));
+      // Suma evidencia de todas las semillas del carrito; así una cesta variada
+      // no queda representada únicamente por el producto más popular.
+      puntuaciones.set(candidato, (puntuaciones.get(candidato) || 0) + similitud);
     }
   }
   const idsOrdenados = [...puntuaciones.entries()].sort((a, b) => b[1] - a[1]).slice(0, limite * 2);
@@ -106,12 +108,24 @@ const recomendarProductos = async (productoIds, limite = 6) => {
     .populate('marca', 'nombre').populate('familia', 'nombre').lean();
   productos.sort((a, b) => (puntuaciones.get(id(b._id)) || 0) - (puntuaciones.get(id(a._id)) || 0));
 
-  // Con poco historial, completa la vista con productos activos para que la sección no quede vacía.
+  // Con poco historial, completa por familia/marca de las distintas semillas,
+  // distribuyendo candidatos para conservar diversidad en carritos mixtos.
   if (productos.length < limite) {
     const excluir = [...semillas, ...productos.map(producto => id(producto._id))];
-    const respaldo = await Producto.find({ _id: { $nin: excluir }, activo: true, stock: { $gt: 0 } })
-      .populate('marca', 'nombre').populate('familia', 'nombre').limit(limite - productos.length).lean();
-    productos = productos.concat(respaldo);
+    const productosSemilla = await Producto.find({ _id: { $in: semillas } }).select('marca familia').lean();
+    const familias = productosSemilla.map(p => p.familia).filter(Boolean);
+    const marcas = productosSemilla.map(p => p.marca).filter(Boolean);
+    const relacionados = await Producto.find({
+      _id: { $nin: excluir }, activo: true, stock: { $gt: 0 },
+      $or: [{ familia: { $in: familias } }, { marca: { $in: marcas } }]
+    }).populate('marca', 'nombre').populate('familia', 'nombre').limit(limite - productos.length).lean();
+    productos = productos.concat(relacionados);
+    if (productos.length < limite) {
+      const excluirFinal = [...excluir, ...productos.map(producto => id(producto._id))];
+      const respaldo = await Producto.find({ _id: { $nin: excluirFinal }, activo: true, stock: { $gt: 0 } })
+        .populate('marca', 'nombre').populate('familia', 'nombre').limit(limite - productos.length).lean();
+      productos = productos.concat(respaldo);
+    }
   }
   return productos.slice(0, limite).map(producto => ({
     ...producto,
