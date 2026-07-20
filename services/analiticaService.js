@@ -40,10 +40,19 @@ const estimarRiesgo = (pedido, historicos) => {
   );
   const probabilidad = pesoTotal ? pesoCancelados / pesoTotal : 0.25;
   const porcentaje = Math.round(Math.max(0.02, Math.min(0.98, probabilidad)) * 100);
+  const mismoMetodo = historicos.filter(item => item.metodoPago === pedido.metodoPago);
+  const canceladosMismoMetodo = mismoMetodo.filter(item => item.estado === 'Cancelado').length;
+  const tasaMetodo = mismoMetodo.length ? Math.round((canceladosMismoMetodo / mismoMetodo.length) * 100) : 0;
   return {
     porcentaje,
     nivel: porcentaje >= 60 ? 'Alto' : porcentaje >= 35 ? 'Medio' : 'Bajo',
-    vecinosUsados: candidatos.length
+    vecinosUsados: candidatos.length,
+    factores: [
+      `Método ${pedido.metodoPago}: ${tasaMetodo}% de cancelación histórica`,
+      `Total del pedido: $${Number(pedido.total || 0).toLocaleString('es-MX')}`,
+      `${pedido.productos?.length || 0} productos distintos en el pedido`,
+      `Comparado con ${candidatos.length} pedidos similares`
+    ]
   };
 };
 
