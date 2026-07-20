@@ -21,6 +21,11 @@ const {
   getAlexaAdmins,
   generateAlexaToken,
   revokeAlexaToken,
+  getDirecciones,
+  createDireccion,
+  updateDireccion,
+  deleteDireccion,
+  setDireccionPredeterminada,
 } = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
 
@@ -45,6 +50,11 @@ router.get("/perfil", authMiddleware(), getMiPerfil);
 router.put("/perfil", authMiddleware(), updateMiPerfil);
 router.put("/update-password", authMiddleware(), updatePassword);
 router.put("/update-secret", authMiddleware(), updateSecret);
+router.get("/direcciones", authMiddleware(), getDirecciones);
+router.post("/direcciones", authMiddleware(), createDireccion);
+router.put("/direcciones/:direccionId", authMiddleware(), updateDireccion);
+router.delete("/direcciones/:direccionId", authMiddleware(), deleteDireccion);
+router.put("/direcciones/:direccionId/predeterminada", authMiddleware(), setDireccionPredeterminada);
 
 // --- Rutas de Administrador (requieren rol 'admin') ---
 router.get("/admin/usuarios", authMiddleware(["admin"]), getUsuarios);

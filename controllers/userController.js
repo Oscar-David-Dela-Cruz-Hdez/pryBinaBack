@@ -420,6 +420,96 @@ const updateMiPerfil = async (req, res) => {
   }
 };
 
+const limpiarDireccion = (body) => ({
+  alias: limpiarDato(body.alias),
+  calle: limpiarDato(body.calle),
+  colonia: limpiarDato(body.colonia),
+  ciudad: limpiarDato(body.ciudad),
+  estado: limpiarDato(body.estado),
+  cp: limpiarDato(body.cp),
+  telefono: limpiarDato(body.telefono),
+  referencias: limpiarDato(body.referencias)
+});
+
+const direccionValida = (direccion) =>
+  direccion.alias && direccion.calle && direccion.ciudad && direccion.estado && direccion.cp && direccion.telefono;
+
+const getDirecciones = async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.user.id).select('direcciones');
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json(usuario.direcciones);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener direcciones' });
+  }
+};
+
+const createDireccion = async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.user.id);
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    if (usuario.direcciones.length >= 10) return res.status(400).json({ error: 'Puedes guardar un máximo de 10 direcciones' });
+
+    const direccion = limpiarDireccion(req.body);
+    if (!direccionValida(direccion)) return res.status(400).json({ error: 'Completa los campos obligatorios de la dirección' });
+    if (usuario.direcciones.length === 0 || req.body.predeterminada === true) {
+      usuario.direcciones.forEach(item => item.predeterminada = false);
+      direccion.predeterminada = true;
+    }
+    usuario.direcciones.push(direccion);
+    await usuario.save();
+    res.status(201).json(usuario.direcciones[usuario.direcciones.length - 1]);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al guardar la dirección' });
+  }
+};
+
+const updateDireccion = async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.user.id);
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    const direccion = usuario.direcciones.id(req.params.direccionId);
+    if (!direccion) return res.status(404).json({ error: 'Dirección no encontrada' });
+    const datos = limpiarDireccion(req.body);
+    if (!direccionValida(datos)) return res.status(400).json({ error: 'Completa los campos obligatorios de la dirección' });
+    Object.assign(direccion, datos);
+    await usuario.save();
+    res.json(direccion);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar la dirección' });
+  }
+};
+
+const deleteDireccion = async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.user.id);
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    const direccion = usuario.direcciones.id(req.params.direccionId);
+    if (!direccion) return res.status(404).json({ error: 'Dirección no encontrada' });
+    const eraPredeterminada = direccion.predeterminada;
+    direccion.deleteOne();
+    if (eraPredeterminada && usuario.direcciones.length) usuario.direcciones[0].predeterminada = true;
+    await usuario.save();
+    res.json({ mensaje: 'Dirección eliminada' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar la dirección' });
+  }
+};
+
+const setDireccionPredeterminada = async (req, res) => {
+  try {
+    const usuario = await Usuario.findById(req.user.id);
+    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+    const direccion = usuario.direcciones.id(req.params.direccionId);
+    if (!direccion) return res.status(404).json({ error: 'Dirección no encontrada' });
+    usuario.direcciones.forEach(item => item.predeterminada = item._id.equals(direccion._id));
+    await usuario.save();
+    res.json(usuario.direcciones);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al establecer la dirección predeterminada' });
+  }
+};
+
 // --- CORRECCIÓN CRÍTICA PARA EL LOGIN DE GOOGLE ---
 // Aquí estaba el error principal: usabas "secreto" en lugar de la llave privada
 const googleLogin = async (req, res) => {
@@ -493,5 +583,6 @@ module.exports = {
   registerUser, loginUser, googleLogin, verifyLoginCode, getUsuarios, updateRol,
   deleteUsuario, verificarCorreo, obtenerPregunta, verificarRespuesta, cambiarContrasena,
   getMiPerfil, updateMiPerfil, updatePassword, updateSecret, checkUsername, checkEmail, checkPhone,
-  getAlexaAdmins, generateAlexaToken, revokeAlexaToken
+  getAlexaAdmins, generateAlexaToken, revokeAlexaToken,
+  getDirecciones, createDireccion, updateDireccion, deleteDireccion, setDireccionPredeterminada
 };
