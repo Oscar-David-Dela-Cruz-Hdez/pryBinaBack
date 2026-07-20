@@ -3,6 +3,7 @@ const Producto = require("../models/Producto");
 const ExcelJS = require('exceljs');
 const filterXSS = require('xss');
 const { cancelarPedidosVencidos } = require('../services/pedidoPendienteService');
+const { obtenerRiesgosCancelacion } = require('../services/analiticaService');
 
 // Crear Pedido (Cliente)
 const createPedido = async (req, res) => {
@@ -117,6 +118,15 @@ const updateEstadoPedido = async (req, res) => {
     }
 };
 
+const getAnaliticaRiesgo = async (_req, res) => {
+    try {
+        res.json(await obtenerRiesgosCancelacion());
+    } catch (error) {
+        console.error('Error al calcular riesgo de cancelación:', error);
+        res.status(500).json({ error: 'Error al calcular riesgo de cancelación' });
+    }
+};
+
 // Exportar Pedidos a Excel (Admin)
 const exportarPedidosExcel = async (req, res) => {
     try {
@@ -181,5 +191,6 @@ module.exports = {
     getPedidos,
     getPedidoById,
     updateEstadoPedido,
-    exportarPedidosExcel
+    exportarPedidosExcel,
+    getAnaliticaRiesgo
 };

@@ -11,11 +11,14 @@ const {
   deleteProducto,
   exportarProductosExcel,
   importarProductosExcel
+  ,getRecomendaciones
 } = require('../controllers/productoController');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 // Rutas Públicas
 router.get('/', getProductos);
+router.post('/recomendaciones', getRecomendaciones);
+router.get('/:id/recomendaciones', getRecomendaciones);
 router.get('/:id', getProductoById);
 
 // Rutas Privadas (Admin)

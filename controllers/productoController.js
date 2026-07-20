@@ -3,6 +3,7 @@ const Oferta = require('../models/Oferta');
 const Marca = require('../models/Marca');
 const Familia = require('../models/Familia');
 const ExcelJS = require('exceljs');
+const { recomendarProductos } = require('../services/analiticaService');
 
 const obtenerOfertaParaProducto = (producto, ofertasActivas) => {
   // 1. Buscar oferta directa al producto
@@ -112,6 +113,17 @@ const getProductoById = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al obtener el producto" });
+  }
+};
+
+const getRecomendaciones = async (req, res) => {
+  try {
+    const ids = Array.isArray(req.body?.productos) ? req.body.productos : [req.params.id].filter(Boolean);
+    const recomendaciones = await recomendarProductos(ids, Number(req.query.limite) || 6);
+    res.json(recomendaciones);
+  } catch (error) {
+    console.error('Error al generar recomendaciones:', error);
+    res.status(500).json({ error: 'Error al generar recomendaciones' });
   }
 };
 
@@ -461,4 +473,5 @@ module.exports = {
   deleteProducto,
   exportarProductosExcel,
   importarProductosExcel
+  ,getRecomendaciones
 };
