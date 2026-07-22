@@ -17,7 +17,7 @@ const usuarioSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   ap: { type: String, required: false },
   am: { type: String, required: false },
-  username: { type: String, unique: true, sparse: true },
+  fechaNacimiento: { type: Date, required: false },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: false },
   telefono: { type: String, required: false },

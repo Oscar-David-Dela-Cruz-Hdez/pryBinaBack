@@ -22,6 +22,7 @@ const obtenerAccessToken = async () => {
     `${getBaseUrl()}/v1/oauth2/token`,
     "grant_type=client_credentials",
     {
+      timeout: 15000,
       headers: {
         Authorization: `Basic ${credenciales}`,
         "Content-Type": "application/x-www-form-urlencoded"
@@ -37,6 +38,7 @@ const paypalRequest = async (method, path, body) => {
     method,
     url: `${getBaseUrl()}${path}`,
     data: body,
+    timeout: 20000,
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",

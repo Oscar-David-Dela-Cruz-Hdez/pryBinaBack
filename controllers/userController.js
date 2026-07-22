@@ -73,22 +73,18 @@ const updateSecret = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { username, email, telefono, nombre, ap, am, password, preguntaSecreta, respuestaSecreta } = req.body;
+    const { fechaNacimiento, email, telefono, nombre, ap, am, password, preguntaSecreta, respuestaSecreta } = req.body;
     
     // Sanitizamos los datos
-    const safeUsername = limpiarDato(username);
     const safeEmail = limpiarDato(email);
     const safePhone = limpiarDato(telefono);
     const safeNombre = limpiarDato(nombre);
 
+    const fechaNacimientoNormalizada = fechaNacimientoValida(fechaNacimiento);
     if (!safeEmail) return res.status(400).json({ error: "El correo es obligatorio" });
+    if (!fechaNacimientoNormalizada) return res.status(400).json({ error: "La fecha de nacimiento es obligatoria y debe ser válida" });
 
     // Validaciones
-    if (safeUsername) {
-        const existingUsername = await Usuario.findOne({ username: safeUsername });
-        if (existingUsername) return res.status(400).json({ error: "El nombre de usuario ya está en uso" });
-    }
-    
     const existingEmail = await Usuario.findOne({ email: safeEmail });
     if (existingEmail) return res.status(400).json({ error: "El correo electrónico ya está registrado" });
     
@@ -104,7 +100,7 @@ const registerUser = async (req, res) => {
       nombre: safeNombre,
       ap: limpiarDato(ap),
       am: limpiarDato(am),
-      username: safeUsername,
+      fechaNacimiento: fechaNacimientoNormalizada,
       email: safeEmail,
       password: hashedPassword,
       telefono: safePhone,
@@ -240,7 +236,7 @@ const generarAlexaTokenPlano = () => crypto.randomInt(10000, 100000).toString();
 const getAlexaAdmins = async (req, res) => {
   try {
     const admins = await Usuario.find({ rol: "admin" })
-      .select("nombre ap am email username rol alexaTokenLast4 alexaTokenUpdatedAt")
+      .select("nombre ap am email fechaNacimiento rol alexaTokenLast4 alexaTokenUpdatedAt")
       .sort({ nombre: 1, email: 1 });
     res.json(admins);
   } catch (error) {
@@ -382,14 +378,11 @@ const getMiPerfil = async (req, res) => {
 const updateMiPerfil = async (req, res) => {
   try {
     const userId = req.user.id;
-    const { username, email } = req.body;
-    const safeUsername = limpiarDato(username);
+    const { fechaNacimiento, email } = req.body;
     const safeEmail = limpiarDato(email);
+    const fechaNacimientoNormalizada = fechaNacimiento === undefined ? undefined : fechaNacimientoValida(fechaNacimiento);
 
     // 1. Validar duplicados de forma plana
-    if (safeUsername && await Usuario.findOne({ username: safeUsername, _id: { $ne: userId } })) {
-      return res.status(400).json({ error: "Ese usuario ya existe" });
-    }
     if (safeEmail && await Usuario.findOne({ email: safeEmail, _id: { $ne: userId } })) {
       return res.status(400).json({ error: "Ese email ya está en uso" });
     }
@@ -404,7 +397,10 @@ const updateMiPerfil = async (req, res) => {
     });
 
     // Casos especiales (ya sanitizados arriba)
-    if (username !== undefined && safeUsername !== undefined) camposAActualizar.username = safeUsername;
+    if (fechaNacimiento !== undefined) {
+      if (!fechaNacimientoNormalizada) return res.status(400).json({ error: "La fecha de nacimiento no es válida" });
+      camposAActualizar.fechaNacimiento = fechaNacimientoNormalizada;
+    }
     if (email !== undefined && safeEmail !== undefined) camposAActualizar.email = safeEmail;
 
     const usuarioActualizado = await Usuario.findByIdAndUpdate(
@@ -418,6 +414,15 @@ const updateMiPerfil = async (req, res) => {
     console.error("Error al actualizar perfil:", error);
     res.status(500).json({ error: "Error al actualizar perfil" });
   }
+};
+
+const fechaNacimientoValida = (valor) => {
+  if (!valor) return null;
+  const fecha = new Date(valor);
+  const minima = new Date('1900-01-01T00:00:00.000Z');
+  const hoy = new Date();
+  if (Number.isNaN(fecha.getTime()) || fecha < minima || fecha > hoy) return null;
+  return fecha;
 };
 
 const limpiarDireccion = (body) => ({
@@ -528,14 +533,9 @@ const googleLogin = async (req, res) => {
     let usuario = await Usuario.findOne({ email: email });
 
     if (!usuario) {
-      const baseName = email.split("@")[0];
-      const randomNum = Math.floor(1000 + Math.random() * 9000);
-      const generatedUsername = `${baseName}${randomNum}`;
-
       usuario = new Usuario({
         nombre: name,
         email: email,
-        username: generatedUsername,
         rol: "usuario",
       });
       await usuario.save();

@@ -73,9 +73,13 @@ const getPedidos = async (req, res) => {
             query.usuario = id;
         }
 
+        const limiteSolicitado = Number.parseInt(req.query.limite, 10);
+        const limite = Number.isFinite(limiteSolicitado) ? Math.min(Math.max(limiteSolicitado, 1), 500) : 250;
         const pedidos = await Pedido.find(query)
-            .populate('usuario', 'nombre email')
-            .sort({ createdAt: -1 });
+            .populate('usuario', 'nombre email fechaNacimiento')
+            .sort({ createdAt: -1 })
+            .limit(limite)
+            .lean();
 
         res.json(pedidos);
     } catch (error) {

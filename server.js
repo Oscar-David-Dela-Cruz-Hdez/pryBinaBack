@@ -58,12 +58,7 @@ let recoveryAttempts = {};
 const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
 const publicKey = process.env.PUBLIC_KEY.replace(/\\n/g, '\n');
 
-console.log("Private Key:", privateKey);
-console.log("Public Key:", publicKey);
-
 const loginAttempts = {};
-
-conectarDB();
 
 // Libera cada cinco minutos el inventario de pedidos PayPal vencidos.
 const { cancelarPedidosVencidos } = require("./services/pedidoPendienteService");
@@ -175,6 +170,15 @@ app.use("/api/monitoreo", (req, res, next) => {
   next();
 }, require("./routes/monitoreoRoutes"));
 
-app.listen(port, () => {
-  console.log(`🚀 Servidor corriendo en http://localhost:${port}`);
-});
+app.get('/api/health', (_req, res) => res.json({
+  ok: true,
+  mongo: require('mongoose').connection.readyState === 1 ? 'conectado' : 'conectando',
+  uptime: Math.round(process.uptime())
+}));
+
+const iniciarServidor = async () => {
+  await conectarDB();
+  app.listen(port, () => console.log(`Servidor corriendo en http://localhost:${port}`));
+};
+
+iniciarServidor();

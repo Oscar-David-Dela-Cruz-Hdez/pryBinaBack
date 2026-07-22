@@ -3,6 +3,17 @@ const Producto = require('../models/Producto');
 
 const id = valor => valor?._id?.toString?.() || valor?.toString?.() || '';
 
+const calcularEdad = (fechaNacimiento, fechaReferencia = new Date()) => {
+  if (!fechaNacimiento) return null;
+  const nacimiento = new Date(fechaNacimiento);
+  const referencia = new Date(fechaReferencia);
+  let edad = referencia.getFullYear() - nacimiento.getFullYear();
+  const antesDelCumple = referencia.getMonth() < nacimiento.getMonth() ||
+    (referencia.getMonth() === nacimiento.getMonth() && referencia.getDate() < nacimiento.getDate());
+  if (antesDelCumple) edad--;
+  return Number.isFinite(edad) && edad >= 0 ? edad : null;
+};
+
 const similitudJaccard = (a, b) => {
   const conjuntoA = new Set((a.productos || []).map(item => id(item.producto)));
   const conjuntoB = new Set((b.productos || []).map(item => id(item.producto)));
@@ -27,8 +38,11 @@ const estimarRiesgo = (pedido, historicos) => {
       );
       const coincidePago = pedido.metodoPago === historico.metodoPago ? 1 : 0;
       const similitudProductos = similitudJaccard(pedido, historico);
-      const similitud = (coincidePago * 0.35) + ((1 - diferenciaTotal) * 0.3) +
-        (similitudProductos * 0.25) + ((1 - diferenciaCantidad) * 0.1);
+      const edadPedido = calcularEdad(pedido.usuario?.fechaNacimiento, pedido.createdAt);
+      const edadHistorico = calcularEdad(historico.usuario?.fechaNacimiento, historico.createdAt);
+      const similitudEdad = edadPedido === null || edadHistorico === null ? 0.5 : 1 - Math.min(Math.abs(edadPedido - edadHistorico) / 50, 1);
+      const similitud = (coincidePago * 0.30) + ((1 - diferenciaTotal) * 0.25) +
+        (similitudProductos * 0.20) + ((1 - diferenciaCantidad) * 0.10) + (similitudEdad * 0.15);
       return { historico, similitud };
     })
     .sort((a, b) => b.similitud - a.similitud)
@@ -43,6 +57,7 @@ const estimarRiesgo = (pedido, historicos) => {
   const mismoMetodo = historicos.filter(item => item.metodoPago === pedido.metodoPago);
   const canceladosMismoMetodo = mismoMetodo.filter(item => item.estado === 'Cancelado').length;
   const tasaMetodo = mismoMetodo.length ? Math.round((canceladosMismoMetodo / mismoMetodo.length) * 100) : 0;
+  const edad = calcularEdad(pedido.usuario?.fechaNacimiento, pedido.createdAt);
   return {
     porcentaje,
     nivel: porcentaje >= 60 ? 'Alto' : porcentaje >= 35 ? 'Medio' : 'Bajo',
@@ -51,15 +66,24 @@ const estimarRiesgo = (pedido, historicos) => {
       `Método ${pedido.metodoPago}: ${tasaMetodo}% de cancelación histórica`,
       `Total del pedido: $${Number(pedido.total || 0).toLocaleString('es-MX')}`,
       `${pedido.productos?.length || 0} productos distintos en el pedido`,
+      edad === null ? 'Edad no disponible' : `Edad del cliente al realizar el pedido: ${edad} años`,
       `Comparado con ${candidatos.length} pedidos similares`
     ]
   };
 };
 
 const obtenerRiesgosCancelacion = async () => {
-  const pedidos = await Pedido.find().populate('usuario', 'nombre email').sort({ createdAt: -1 }).lean();
-  const historicos = pedidos.filter(pedido => ['Entregado', 'Cancelado'].includes(pedido.estado));
-  const resultados = pedidos.map(pedido => ({
+  const [historicos, pendientes, totalHistoricos, totalCancelados] = await Promise.all([
+    Pedido.find({ estado: { $in: ['Entregado', 'Cancelado'] } })
+      .select('_id usuario productos total metodoPago estado createdAt').populate('usuario', 'fechaNacimiento').sort({ createdAt: -1 }).limit(2500).lean(),
+    Pedido.find({ estado: { $in: ['Pendiente', 'Pagado'] } })
+      .populate('usuario', 'nombre email fechaNacimiento').sort({ createdAt: -1 }).limit(200).lean(),
+    Pedido.countDocuments({ estado: { $in: ['Entregado', 'Cancelado'] } }),
+    Pedido.countDocuments({ estado: 'Cancelado' })
+  ]);
+  // Solamente los pedidos cuyo resultado todavía no se conoce requieren predicción.
+  // Antes se recalculaban también los 1,800 históricos, provocando millones de comparaciones.
+  const resultados = pendientes.map(pedido => ({
     pedidoId: id(pedido._id),
     usuario: pedido.usuario,
     estado: pedido.estado,
@@ -68,16 +92,14 @@ const obtenerRiesgosCancelacion = async () => {
     createdAt: pedido.createdAt,
     riesgo: estimarRiesgo(pedido, historicos)
   }));
-  const pendientes = resultados.filter(item => ['Pendiente', 'Pagado'].includes(item.estado));
-  const universo = pendientes.length ? pendientes : resultados;
   return {
     modelo: 'k-NN sobre pedidos históricos',
-    entrenamiento: { pedidos: historicos.length, cancelados: historicos.filter(p => p.estado === 'Cancelado').length },
+    entrenamiento: { pedidos: totalHistoricos, cancelados: totalCancelados },
     resumen: {
-      analizados: universo.length,
-      riesgoAlto: universo.filter(item => item.riesgo.nivel === 'Alto').length,
-      riesgoMedio: universo.filter(item => item.riesgo.nivel === 'Medio').length,
-      riesgoBajo: universo.filter(item => item.riesgo.nivel === 'Bajo').length
+      analizados: resultados.length,
+      riesgoAlto: resultados.filter(item => item.riesgo.nivel === 'Alto').length,
+      riesgoMedio: resultados.filter(item => item.riesgo.nivel === 'Medio').length,
+      riesgoBajo: resultados.filter(item => item.riesgo.nivel === 'Bajo').length
     },
     predicciones: resultados
   };

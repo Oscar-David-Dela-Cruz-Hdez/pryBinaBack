@@ -162,7 +162,23 @@ function costoEnvioParaDestino(destino, utils) {
   return Math.round((base + destino.riesgo * 250) / 5) * 5;
 }
 
-function calcularProbabilidadCancelacion({ metodoPago, costoEnvio, total, destino, productos }) {
+function calcularEdad(fechaNacimiento, fechaReferencia = new Date()) {
+  if (!fechaNacimiento) return null;
+  const nacimiento = new Date(fechaNacimiento);
+  let edad = fechaReferencia.getFullYear() - nacimiento.getFullYear();
+  const antesDelCumple = fechaReferencia.getMonth() < nacimiento.getMonth() ||
+    (fechaReferencia.getMonth() === nacimiento.getMonth() && fechaReferencia.getDate() < nacimiento.getDate());
+  if (antesDelCumple) edad--;
+  return edad;
+}
+
+function crearFechaNacimientoSintetica(utils) {
+  const hoy = new Date();
+  const edad = utils.entero(18, 75);
+  return new Date(Date.UTC(hoy.getUTCFullYear() - edad, utils.entero(0, 11), utils.entero(1, 28)));
+}
+
+function calcularProbabilidadCancelacion({ metodoPago, costoEnvio, total, destino, productos, edad }) {
   let probabilidad = 0.10;
 
   if (metodoPago === 'Efectivo') probabilidad += 0.14;
@@ -170,6 +186,9 @@ function calcularProbabilidadCancelacion({ metodoPago, costoEnvio, total, destin
   if (costoEnvio >= 130) probabilidad += 0.10;
   if (total >= 2000) probabilidad += 0.09;
   if (productos.length >= 4) probabilidad += 0.05;
+  // Señal sintética moderada para que la edad pueda evaluarse sin dominar el modelo.
+  if (edad !== null && edad < 25) probabilidad += 0.06;
+  if (edad !== null && edad >= 55) probabilidad -= 0.03;
   probabilidad += destino.riesgo;
 
   // Evita reglas deterministas y limita el desbalance de clases.
@@ -226,6 +245,20 @@ async function crearPedidos() {
     throw new Error('Se necesita al menos un usuario con rol distinto de admin.');
   }
 
+  const actualizacionesNacimiento = [];
+  for (const usuario of usuarios) {
+    if (!usuario.fechaNacimiento || usuario.username) {
+      if (!usuario.fechaNacimiento) usuario.fechaNacimiento = crearFechaNacimientoSintetica(utils);
+      actualizacionesNacimiento.push({
+        updateOne: { filter: { _id: usuario._id }, update: { $set: { fechaNacimiento: usuario.fechaNacimiento }, $unset: { username: '' } } }
+      });
+    }
+  }
+  if (actualizacionesNacimiento.length) {
+    await Usuario.bulkWrite(actualizacionesNacimiento);
+    console.log(`Fechas de nacimiento sintéticas asignadas: ${actualizacionesNacimiento.length}`);
+  }
+
   const grupos = construirGrupos(productos);
   if (!grupos.length) throw new Error('No fue posible construir grupos de productos.');
 
@@ -257,6 +290,7 @@ async function crearPedidos() {
     const metodoPago = utils.elegir(METODOS_PAGO);
     const costoEnvio = costoEnvioParaDestino(destino, utils);
     const fechaPedido = fechaAleatoria(utils.random, diasAtras);
+    const edad = calcularEdad(usuario.fechaNacimiento, fechaPedido);
 
     let subtotal = 0;
     const productosPedido = productosElegidos.map((producto) => {
@@ -277,7 +311,8 @@ async function crearPedidos() {
       costoEnvio,
       total,
       destino,
-      productos: productosPedido
+      productos: productosPedido,
+      edad
     });
     const cancelado = utils.random() < probabilidadCancelacion;
     const estado = cancelado ? 'Cancelado' : 'Entregado';
