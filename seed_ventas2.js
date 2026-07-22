@@ -39,7 +39,7 @@ const Usuario = require('./models/Usuario');
 const Pedido = require('./models/Pedido');
 
 const MARKER = 'SINTETICO_ML_V2';
-const DEFAULT_TOTAL_PEDIDOS = 1500;
+const DEFAULT_TOTAL_PEDIDOS = 2000;
 const DEFAULT_SEED = 20260720;
 
 const METODOS_PAGO = ['Tarjeta', 'Transferencia', 'Efectivo'];
