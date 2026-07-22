@@ -112,6 +112,26 @@ const registerUser = async (req, res) => {
     res.status(201).json({ mensaje: "Usuario registrado con éxito", usuario: nuevoUsuario });
   } catch (error) {
     console.error("Error en registerUser:", error);
+
+    if (error?.code === 11000) {
+      const campoDuplicado = Object.keys(error.keyPattern || error.keyValue || {})[0];
+      const mensajes = {
+        email: "El correo electrónico ya está registrado",
+        telefono: "El número de teléfono ya está registrado",
+      };
+
+      return res.status(409).json({
+        error: mensajes[campoDuplicado] || "Ya existe un usuario con esos datos",
+      });
+    }
+
+    if (error?.name === "ValidationError") {
+      const primerError = Object.values(error.errors || {})[0];
+      return res.status(400).json({
+        error: primerError?.message || "Los datos del usuario no son válidos",
+      });
+    }
+
     res.status(500).json({ error: "Error al registrar usuario" });
   }
 };
