@@ -1,0 +1,346 @@
+{"kind":"deck","id":"pr/xvl6na","name":"Deck"}
+{"kind":"layout","layoutId":"/ppt/slideMasters/slideMaster1.xml","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"/ppt/slideLayouts/slideLayout1.xml","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/y90nupkv","slide":1,"title":"DISTRIBUIDORA PANAMERICANA · GRUPO C","textShapes":7}
+{"kind":"textbox","id":"sh/wn6dc7eh","slide":1,"name":"company","text":"DISTRIBUIDORA PANAMERICANA · GRUPO C","textPreview":"DISTRIBUIDORA PANAMERICANA · GRUPO C","textChars":36,"textLines":1,"bbox":[48,28,560,24]}
+{"kind":"textbox","id":"sh/547294r6","slide":1,"name":"title","text":"Sistema de gestión de ventas e inventario para la Distribuidora Panamericana","textPreview":"Sistema de gestión de ventas e inventario para la Distribuidora Panamericana","textChars":76,"textLines":1,"bbox":[48,72,548,150]}
+{"kind":"shape","id":"sh/k3yl0zql","slide":1,"name":"divider","bbox":[48,244,548,2]}
+{"kind":"textbox","id":"sh/7qp4be9c","slide":1,"name":"description","text":"La aplicación es una plataforma web para administrar el catálogo, controlar existencias, registrar pedidos y consultar ventas. Integra productos, marcas, familias, usuarios, ofertas y métodos de entrega en una sola operación.","textPreview":"La aplicación es una plataforma web para administrar el catálogo, controlar existencias, registrar pedidos y consultar ventas. Integra pr...","textChars":225,"textLines":1,"bbox":[48,276,520,140]}
+{"kind":"textbox","id":"sh/65g3298r","slide":1,"name":"scope","text":"COLECCIONES PRINCIPALES: CATÁLOGO  ·  INVENTARIO  ·  PEDIDOS  ·  VENTAS","textPreview":"COLECCIONES PRINCIPALES: CATÁLOGO  ·  INVENTARIO  ·  PEDIDOS  ·  VENTAS","textChars":71,"textLines":1,"bbox":[48,442,520,26]}
+{"kind":"textbox","id":"sh/sryl4zqx","slide":1,"name":"caption","text":"Captura del sistema — página principal","textPreview":"Captura del sistema — página principal","textChars":38,"textLines":1,"bbox":[630,500,602,24]}
+{"kind":"textbox","id":"sh/fu94fe98","slide":1,"name":"note","text":"Base para tres aplicaciones de analítica: anticipar, segmentar decisiones y personalizar la experiencia.","textPreview":"Base para tres aplicaciones de analítica: anticipar, segmentar decisiones y personalizar la experiencia.","textChars":104,"textLines":1,"bbox":[48,600,1080,36]}
+{"kind":"textbox","id":"sh/utg3698n","slide":1,"name":"page","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[1202,682,30,18]}
+{"kind":"image","id":"im/ipofexcz","slide":1,"name":"Imagen 14","geometry":"roundRect","bbox":[630,121.45,602,315.1]}
+{"kind":"notes","id":"nt/y90nupkv","slide":1,"text":""}
+{"kind":"slide","id":"sl/hwbqtkby","slide":2,"title":"PROPUESTA 1 · CLASIFICACIÓN","textShapes":47}
+{"kind":"textbox","id":"sh/8vy54jal","slide":2,"name":"cls-kicker","text":"PROPUESTA 1 · CLASIFICACIÓN","textPreview":"PROPUESTA 1 · CLASIFICACIÓN","textChars":27,"textLines":1,"bbox":[50,20,500,24]}
+{"kind":"textbox","id":"sh/9072xkry","slide":2,"name":"cls-title","text":"Predecir qué pedidos tienen riesgo de cancelación","textPreview":"Predecir qué pedidos tienen riesgo de cancelación","textChars":49,"textLines":1,"bbox":[50,50,1180,48]}
+{"kind":"textbox","id":"sh/ozy1ofad","slide":2,"name":"cls-page","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[1200,682,28,18]}
+{"kind":"shape","id":"sh/b29kza94","slide":2,"name":"cls-database-panel","bbox":[34,112,500,510]}
+{"kind":"shape","id":"sh/a10jqpsj","slide":2,"name":"cls-database-banner","bbox":[145,124,280,42]}
+{"kind":"textbox","id":"sh/x4r21kru","slide":2,"name":"cls-database-banner-text","text":"CAMPOS UTILIZADOS","textPreview":"CAMPOS UTILIZADOS","textChars":17,"textLines":1,"bbox":[155,133,260,24]}
+{"kind":"shape","id":"sh/w3i1sfa9","slide":2,"name":"cls-full-USUARIOS","bbox":[52,178,114,270]}
+{"kind":"shape","id":"sh/r65knqtk","slide":2,"name":"cls-full-head-USUARIOS","bbox":[52,178,114,30]}
+{"kind":"textbox","id":"sh/q5wjelsz","slide":2,"name":"cls-full-title-USUARIOS","text":"USUARIOS","textPreview":"USUARIOS","textChars":8,"textLines":1,"bbox":[57,182,104,22]}
+{"kind":"textbox","id":"sh/ove9o7yd","slide":2,"name":"cls-full-fields-USUARIOS-0","text":"_id · PK\nnombre\nap\nam\nfechaNacimiento","textPreview":"_id · PK | nombre | ap | am | fechaNacimiento","textChars":37,"textLines":5,"bbox":[60,213,96.5,232]}
+{"kind":"shape","id":"sh/nu58f2hs","slide":2,"name":"cls-full-PEDIDOS","bbox":[291,178,209,270]}
+{"kind":"shape","id":"sh/wjy9sry9","slide":2,"name":"cls-full-head-PEDIDOS","bbox":[291,178,209,30]}
+{"kind":"textbox","id":"sh/xk7qlczu","slide":2,"name":"cls-full-title-PEDIDOS","text":"PEDIDOS","textPreview":"PEDIDOS","textChars":7,"textLines":1,"bbox":[296,182,199,22]}
+{"kind":"textbox","id":"sh/ahwrqhgj","slide":2,"name":"cls-full-fields-PEDIDOS-0","text":"_id · PK\nusuario · FK\nproductos[].producto\nproductos[].cantidad\nproductos[].precio\ntotal\nmetodoPago\nestado\ncostoEnvio\ncreatedAt","textPreview":"_id · PK | usuario · FK | productos[].producto | productos[].cantidad | productos[].precio | total | metodoPago | estado | costoEnvio | c...","textChars":127,"textLines":10,"bbox":[299,213,190,232]}
+{"kind":"shape","id":"sh/bip8jmho","slide":2,"name":"cls-full-fields-PEDIDOS-1","bbox":[403.5,213,96.5,232]}
+{"kind":"shape","id":"sh/cnupgny5","slide":2,"name":"cls-full-divider-PEDIDOS-1","bbox":[399.5,212,1,231]}
+{"kind":"shape","id":"sh/do3q9szq","slide":2,"name":"cls-full-PRODUCTOS","bbox":[82,460,404,132]}
+{"kind":"shape","id":"sh/t8byxkn2","slide":2,"name":"cls-full-head-PRODUCTOS","bbox":[82,460,404,30]}
+{"kind":"textbox","id":"sh/s72xofmh","slide":2,"name":"cls-full-title-PRODUCTOS","text":"PRODUCTOS","textPreview":"PRODUCTOS","textChars":9,"textLines":1,"bbox":[87,464,394,22]}
+{"kind":"textbox","id":"sh/76twva5c","slide":2,"name":"cls-full-fields-PRODUCTOS-0","text":"_id · PK\nnombre","textPreview":"_id · PK | nombre","textChars":15,"textLines":2,"bbox":[90,495,186,94]}
+{"kind":"textbox","id":"sh/65kfmpor","slide":2,"name":"cls-full-fields-PRODUCTOS-1","text":"Se une para identificar\nel producto en catálogo.","textPreview":"Se une para identificar | el producto en catálogo.","textChars":48,"textLines":2,"bbox":[284,495,186,94]}
+{"kind":"shape","id":"sh/hcvy14ne","slide":2,"name":"cls-full-divider-PRODUCTOS-1","bbox":[280,494,1,93]}
+{"kind":"shape","id":"sh/gbmxszmt","slide":2,"name":"cls-keys-legend","bbox":[82,598,404,18]}
+{"kind":"textbox","id":"sh/fadgzu58","slide":2,"name":"cls-keys-legend-text","text":"PK: _id   ·   FK: ObjectId   ·   [ ]: arreglo   ·   ↳: campo anidado","textPreview":"PK: _id   ·   FK: ObjectId   ·   [ ]: arreglo   ·   ↳: campo anidado","textChars":68,"textLines":1,"bbox":[88,600,392,14]}
+{"kind":"shape","id":"sh/u94fqp4n","slide":2,"name":"cls-flow-arrow","bbox":[548,300,84,58]}
+{"kind":"textbox","id":"sh/p0vy54na","slide":2,"name":"cls-flow-caption","text":"Extracción, unión\ny codificación","textPreview":"Extracción, unión | y codificación","textChars":32,"textLines":2,"bbox":[538,370,105,55]}
+{"kind":"shape","id":"sh/4zmxwzmp","slide":2,"name":"cls-dataset-panel","bbox":[650,112,595,510]}
+{"kind":"shape","id":"sh/mlgvq147","slide":2,"name":"cls-dataset-banner","bbox":[810,124,275,42]}
+{"kind":"textbox","id":"sh/nmpcj6ls","slide":2,"name":"cls-dataset-banner-text","text":"▦  DATASET / DATAFRAME","textPreview":"▦  DATASET / DATAFRAME","textChars":22,"textLines":1,"bbox":[820,133,255,24]}
+{"kind":"textbox","id":"sh/onydsbmd","slide":2,"name":"cls-x-label","text":"Variables X utilizadas","textPreview":"Variables X utilizadas","textChars":22,"textLines":1,"bbox":[680,178,458,24]}
+{"kind":"textbox","id":"sh/9o7ulg3y","slide":2,"name":"cls-y-label","text":"Variable Y","textPreview":"Variable Y","textChars":10,"textLines":1,"bbox":[1138,178,79,24]}
+{"kind":"shape","id":"sh/a9gvulkj","slide":2,"name":"cls-table-header-0","bbox":[680,218,45,42]}
+{"kind":"textbox","id":"sh/ba9cn6l4","slide":2,"name":"cls-table-header-text-0","text":"edad","textPreview":"edad","textChars":4,"textLines":1,"bbox":[684,223,37,32]}
+{"kind":"shape","id":"sh/wbidwb29","slide":2,"name":"cls-table-header-1","bbox":[725,218,65,42]}
+{"kind":"textbox","id":"sh/xcrupg3u","slide":2,"name":"cls-table-header-text-1","text":"producto","textPreview":"producto","textChars":8,"textLines":1,"bbox":[729,223,57,32]}
+{"kind":"shape","id":"sh/id0vylkf","slide":2,"name":"cls-table-header-2","bbox":[790,218,60,42]}
+{"kind":"textbox","id":"sh/je9crql0","slide":2,"name":"cls-table-header-text-2","text":"cantidad","textPreview":"cantidad","textChars":8,"textLines":1,"bbox":[794,223,52,32]}
+{"kind":"shape","id":"sh/ru5cbqd4","slide":2,"name":"cls-table-header-3","bbox":[850,218,52,42]}
+{"kind":"textbox","id":"sh/69wbilcj","slide":2,"name":"cls-table-header-text-3","text":"precio","textPreview":"precio","textChars":6,"textLines":1,"bbox":[854,223,44,32]}
+{"kind":"shape","id":"sh/tw7ud0va","slide":2,"name":"cls-table-header-4","bbox":[902,218,56,42]}
+{"kind":"textbox","id":"sh/svedkvup","slide":2,"name":"cls-table-header-text-4","text":"total","textPreview":"total","textChars":5,"textLines":1,"bbox":[906,223,48,32]}
+{"kind":"shape","id":"sh/fypcfqdg","slide":2,"name":"cls-table-header-5","bbox":[958,218,58,42]}
+{"kind":"textbox","id":"sh/exgvmlcv","slide":2,"name":"cls-table-header-text-5","text":"costo_\nenvio","textPreview":"costo_ | envio","textChars":12,"textLines":2,"bbox":[962,223,50,32]}
+{"kind":"shape","id":"sh/107uh0v6","slide":2,"name":"cls-table-header-6","bbox":[1016,218,64,42]}
+{"kind":"textbox","id":"sh/gzydovul","slide":2,"name":"cls-table-header-text-6","text":"metodo_\npago","textPreview":"metodo_ | pago","textChars":12,"textLines":2,"bbox":[1020,223,56,32]}
+{"kind":"shape","id":"sh/v2lc36dw","slide":2,"name":"cls-table-cell-0-0","bbox":[1080,218,72,42]}
+{"kind":"textbox","id":"sh/a1cba1wb","slide":2,"name":"cls-table-cell-text-0-0","text":"% cancelados\nprevios","textPreview":"% cancelados | previos","textChars":20,"textLines":2,"bbox":[1084,223,64,32]}
+{"kind":"shape","id":"sh/0vq1o36x","slide":2,"name":"cls-table-cell-0-1","bbox":[1152,218,51,42]}
+{"kind":"textbox","id":"sh/1wzix87i","slide":2,"name":"cls-table-cell-text-0-1","text":"clase_y","textPreview":"clase_y","textChars":7,"textLines":1,"bbox":[1156,223,43,32]}
+{"kind":"shape","id":"sh/et8zmto7","slide":2,"name":"cls-table-cell-0-2","bbox":[680,260,45,42]}
+{"kind":"textbox","id":"sh/zuh0vypc","slide":2,"name":"cls-table-cell-text-0-2","text":"24","textPreview":"24","textChars":2,"textLines":1,"bbox":[684,265,37,32]}
+{"kind":"shape","id":"sh/c76hk361","slide":2,"name":"cls-table-cell-0-3","bbox":[725,260,65,42]}
+{"kind":"textbox","id":"sh/d8zit87m","slide":2,"name":"cls-table-cell-text-0-3","text":"P001","textPreview":"P001","textChars":4,"textLines":1,"bbox":[729,265,57,32]}
+{"kind":"shape","id":"sh/q5ozitov","slide":2,"name":"cls-table-cell-0-4","bbox":[790,260,60,42]}
+{"kind":"textbox","id":"sh/r6x0rypg","slide":2,"name":"cls-table-cell-text-0-4","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[794,265,52,32]}
+{"kind":"shape","id":"sh/w3a1wn65","slide":2,"name":"cls-table-cell-0-5","bbox":[850,260,52,42]}
+{"kind":"textbox","id":"sh/xoji5s7q","slide":2,"name":"cls-table-cell-text-0-5","text":"$85","textPreview":"$85","textChars":3,"textLines":1,"bbox":[854,265,44,32]}
+{"kind":"shape","id":"sh/5kfipszu","slide":2,"name":"cls-table-cell-0-6","bbox":[902,260,56,42]}
+{"kind":"textbox","id":"sh/kj6hgny9","slide":2,"name":"cls-table-cell-text-0-6","text":"$1,305","textPreview":"$1,305","textChars":6,"textLines":1,"bbox":[906,265,48,32]}
+{"kind":"shape","id":"sh/jix0niho","slide":2,"name":"cls-table-cell-1-0","bbox":[958,260,58,42]}
+{"kind":"textbox","id":"sh/ihozedgj","slide":2,"name":"cls-table-cell-text-1-0","text":"$0","textPreview":"$0","textChars":2,"textLines":1,"bbox":[962,265,50,32]}
+{"kind":"shape","id":"sh/xgfil8zy","slide":2,"name":"cls-table-cell-1-1","bbox":[1016,260,64,42]}
+{"kind":"textbox","id":"sh/wf6hcnyd","slide":2,"name":"cls-table-cell-text-1-1","text":"Efectivo","textPreview":"Efectivo","textChars":8,"textLines":1,"bbox":[1020,265,56,32]}
+{"kind":"shape","id":"sh/ved0jihs","slide":2,"name":"cls-table-cell-1-2","bbox":[1080,260,72,42]}
+{"kind":"textbox","id":"sh/ad4zadg7","slide":2,"name":"cls-table-cell-text-1-2","text":"0%","textPreview":"0%","textChars":2,"textLines":1,"bbox":[1084,265,64,32]}
+{"kind":"shape","id":"sh/9svih8zm","slide":2,"name":"cls-table-cell-1-3","bbox":[1152,260,51,42]}
+{"kind":"textbox","id":"sh/8rmh83y1","slide":2,"name":"cls-table-cell-text-1-3","text":"0","textPreview":"0","textChars":1,"textLines":1,"bbox":[1156,265,43,32]}
+{"kind":"shape","id":"sh/yxkfi9wz","slide":2,"name":"cls-table-cell-1-4","bbox":[680,302,45,42]}
+{"kind":"textbox","id":"sh/zytgbexk","slide":2,"name":"cls-table-cell-text-1-4","text":"37","textPreview":"37","textChars":2,"textLines":1,"bbox":[684,307,37,32]}
+{"kind":"shape","id":"sh/0j2xkje5","slide":2,"name":"cls-table-cell-1-5","bbox":[725,302,65,42]}
+{"kind":"textbox","id":"sh/lkbyd4fq","slide":2,"name":"cls-table-cell-text-1-5","text":"P002","textPreview":"P002","textChars":4,"textLines":1,"bbox":[729,307,57,32]}
+{"kind":"shape","id":"sh/qt0fepw3","slide":2,"name":"cls-table-cell-1-6","bbox":[790,302,60,42]}
+{"kind":"textbox","id":"sh/bu9w7uxo","slide":2,"name":"cls-table-cell-text-1-6","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[794,307,52,32]}
+{"kind":"shape","id":"sh/cv2xgzet","slide":2,"name":"cls-table-cell-2-0","bbox":[850,302,52,42]}
+{"kind":"textbox","id":"sh/dwbe94fe","slide":2,"name":"cls-table-cell-text-2-0","text":"$120","textPreview":"$120","textChars":4,"textLines":1,"bbox":[854,307,44,32]}
+{"kind":"shape","id":"sh/2p0fapwr","slide":2,"name":"cls-table-cell-2-1","bbox":[902,302,56,42]}
+{"kind":"textbox","id":"sh/3q9w3uxc","slide":2,"name":"cls-table-cell-text-2-1","text":"$480","textPreview":"$480","textChars":4,"textLines":1,"bbox":[906,307,48,32]}
+{"kind":"shape","id":"sh/ret8r2dk","slide":2,"name":"cls-table-cell-2-2","bbox":[958,302,58,42]}
+{"kind":"textbox","id":"sh/6tk7yxcz","slide":2,"name":"cls-table-cell-text-2-2","text":"$80","textPreview":"$80","textChars":3,"textLines":1,"bbox":[962,307,50,32]}
+{"kind":"shape","id":"sh/tgvqtcva","slide":2,"name":"cls-table-cell-2-3","bbox":[1016,302,64,42]}
+{"kind":"textbox","id":"sh/sf2p07up","slide":2,"name":"cls-table-cell-text-2-3","text":"PayPal","textPreview":"PayPal","textChars":6,"textLines":1,"bbox":[1020,307,56,32]}
+{"kind":"shape","id":"sh/jqt8nid8","slide":2,"name":"cls-table-cell-2-4","bbox":[1080,302,72,42]}
+{"kind":"textbox","id":"sh/ipk7udcn","slide":2,"name":"cls-table-cell-text-2-4","text":"50%","textPreview":"50%","textChars":3,"textLines":1,"bbox":[1084,307,64,32]}
+{"kind":"shape","id":"sh/5sbqpsve","slide":2,"name":"cls-table-cell-2-5","bbox":[1152,302,51,42]}
+{"kind":"textbox","id":"sh/4r2pwnut","slide":2,"name":"cls-table-cell-text-2-5","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[1156,307,43,32]}
+{"kind":"shape","id":"sh/3md8zmtc","slide":2,"name":"cls-table-cell-2-6","bbox":[680,356,523,72]}
+{"kind":"textbox","id":"sh/2l4r6hc7","slide":2,"name":"cls-table-cell-text-2-6","text":"porcentaje_cancelados_previos =\n(cancelados anteriores ÷ pedidos anteriores) × 100","textPreview":"porcentaje_cancelados_previos = | (cancelados anteriores ÷ pedidos anteriores) × 100","textChars":82,"textLines":2,"bbox":[697,366,489,52]}
+{"kind":"shape","id":"sh/kry50jap","slide":2,"name":"cls-analysis-callout","bbox":[686,478,523,112]}
+{"kind":"textbox","id":"sh/ls7mtobu","slide":2,"name":"cls-analysis-icon","text":"◎","textPreview":"◎","textChars":1,"textLines":1,"bbox":[704,493,55,56]}
+{"kind":"textbox","id":"sh/ypgny9sj","slide":2,"name":"cls-analysis-title","text":"¿Qué se va a predecir?","textPreview":"¿Qué se va a predecir?","textChars":22,"textLines":1,"bbox":[770,492,410,25]}
+{"kind":"textbox","id":"sh/zqp4ret4","slide":2,"name":"cls-analysis-body","text":"Predecir si un pedido pendiente terminará cancelado: Cancelado = 1 y Entregado = 0.","textPreview":"Predecir si un pedido pendiente terminará cancelado: Cancelado = 1 y Entregado = 0.","textChars":83,"textLines":1,"bbox":[770,525,410,48]}
+{"kind":"notes","id":"nt/hwbqtkby","slide":2,"text":""}
+{"kind":"slide","id":"sl/ofy9wn61","slide":3,"title":"PROPUESTA 2 · SISTEMA DE RECOMENDACIÓN","textShapes":42}
+{"kind":"textbox","id":"sh/hgvm1gvq","slide":3,"name":"rec-kicker","text":"PROPUESTA 2 · SISTEMA DE RECOMENDACIÓN","textPreview":"PROPUESTA 2 · SISTEMA DE RECOMENDACIÓN","textChars":38,"textLines":1,"bbox":[50,20,500,24]}
+{"kind":"textbox","id":"sh/cza94vmx","slide":3,"name":"rec-title","text":"Recomendar productos mediante similitud entre ítems","textPreview":"Recomendar productos mediante similitud entre ítems","textChars":51,"textLines":1,"bbox":[50,50,1180,48]}
+{"kind":"textbox","id":"sh/d0jax03i","slide":3,"name":"rec-page","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[1200,682,28,18]}
+{"kind":"shape","id":"sh/298ryl4v","slide":3,"name":"rec-database-panel","bbox":[34,112,500,510]}
+{"kind":"shape","id":"sh/3ah8rqlg","slide":3,"name":"rec-database-banner","bbox":[145,124,280,42]}
+{"kind":"textbox","id":"sh/obq90bml","slide":3,"name":"rec-database-banner-text","text":"▰  COLECCIONES MONGODB","textPreview":"▰  COLECCIONES MONGODB","textChars":22,"textLines":1,"bbox":[155,133,260,24]}
+{"kind":"shape","id":"sh/pcjqtg36","slide":3,"name":"rec-full-USUARIOS","bbox":[52,178,109.5,270]}
+{"kind":"shape","id":"sh/m5cra54z","slide":3,"name":"rec-full-head-USUARIOS","bbox":[52,178,109.5,30]}
+{"kind":"textbox","id":"sh/n6ls3alk","slide":3,"name":"rec-full-title-USUARIOS","text":"USUARIOS","textPreview":"USUARIOS","textChars":8,"textLines":1,"bbox":[57,182,215,22]}
+{"kind":"textbox","id":"sh/n2l4fq98","slide":3,"name":"rec-full-fields-USUARIOS-0","text":"_id · PK\nnombre\nap\nam\nusername\nemail\npassword\ntelefono\npreguntaSecreta\nrespuestaSecreta\nrol\ndirecciones[]\n","textPreview":"_id · PK | nombre | ap | am | username | email | password | telefono | preguntaSecreta | respuestaSecreta | rol | direcciones[] |","textChars":106,"textLines":13,"bbox":[60,213,96.5,232]}
+{"kind":"shape","id":"sh/m1c3mlsn","slide":3,"name":"rec-full-fields-USUARIOS-1","bbox":[164.5,213,96.5,232]}
+{"kind":"shape","id":"sh/83ulovat","slide":3,"name":"rec-full-PEDIDOS","bbox":[291,178,99.5,270]}
+{"kind":"shape","id":"sh/v6l4jq94","slide":3,"name":"rec-full-head-PEDIDOS","bbox":[291,178,99.5,30]}
+{"kind":"textbox","id":"sh/a5c3ql8z","slide":3,"name":"rec-full-title-PEDIDOS","text":"PEDIDOS","textPreview":"PEDIDOS","textChars":7,"textLines":1,"bbox":[296,182,215,22]}
+{"kind":"textbox","id":"sh/x8nml0ra","slide":3,"name":"rec-full-fields-PEDIDOS-0","text":"_id · PK\nusuario · FK\nproductos[]\nmetodoPago\ntotal\nestado\ncostoEnvio\nfecha\ncreatedAt\nupdatedAt\n","textPreview":"_id · PK | usuario · FK | productos[] | metodoPago | total | estado | costoEnvio | fecha | createdAt | updatedAt |","textChars":95,"textLines":11,"bbox":[299,213,96.5,232]}
+{"kind":"shape","id":"sh/w7ulsvqp","slide":3,"name":"rec-full-fields-PEDIDOS-1","bbox":[403.5,213,96.5,232]}
+{"kind":"shape","id":"sh/i9w3u58v","slide":3,"name":"rec-full-PRODUCTOS","bbox":[82,460,404,132]}
+{"kind":"shape","id":"sh/e10f2twf","slide":3,"name":"rec-full-head-PRODUCTOS","bbox":[82,460,404,30]}
+{"kind":"textbox","id":"sh/f29gbyx0","slide":3,"name":"rec-full-title-PRODUCTOS","text":"PRODUCTOS","textPreview":"PRODUCTOS","textChars":9,"textLines":1,"bbox":[87,464,394,22]}
+{"kind":"textbox","id":"sh/03ix43e5","slide":3,"name":"rec-full-fields-PRODUCTOS-0","text":"_id · PK\nnombre\ndescripcion\nprecioNormal\nskuNormal\nprecioMayoreo\nskuMayoreo\nprecioCaja\nskuCaja","textPreview":"_id · PK | nombre | descripcion | precioNormal | skuNormal | precioMayoreo | skuMayoreo | precioCaja | skuCaja","textChars":94,"textLines":9,"bbox":[90,495,186,94]}
+{"kind":"textbox","id":"sh/14ryd8fq","slide":3,"name":"rec-full-fields-PRODUCTOS-1","text":"stock\nmarca · FK\nfamilia · FK\nactivo\nimagenUrl\ncreatedAt\nupdatedAt\n__v","textPreview":"stock | marca · FK | familia · FK | activo | imagenUrl | createdAt | updatedAt | __v","textChars":70,"textLines":8,"bbox":[284,495,186,94]}
+{"kind":"shape","id":"sh/6d0fytg3","slide":3,"name":"rec-full-divider-PRODUCTOS-1","bbox":[280,494,1,93]}
+{"kind":"shape","id":"sh/re9g7yxo","slide":3,"name":"rec-keys-legend","bbox":[82,598,404,18]}
+{"kind":"textbox","id":"sh/sfix03y9","slide":3,"name":"rec-keys-legend-text","text":"PK: _id   ·   FK: ObjectId   ·   [ ]: arreglo   ·   ↳: campo anidado","textPreview":"PK: _id   ·   FK: ObjectId   ·   [ ]: arreglo   ·   ↳: campo anidado","textChars":68,"textLines":1,"bbox":[88,600,392,14]}
+{"kind":"shape","id":"sh/tgry9ofu","slide":3,"name":"rec-flow-arrow","bbox":[548,300,84,58]}
+{"kind":"textbox","id":"sh/a9kfadwn","slide":3,"name":"rec-flow-caption","text":"Extracción, unión\ny codificación","textPreview":"Extracción, unión | y codificación","textChars":32,"textLines":2,"bbox":[538,370,105,55]}
+{"kind":"shape","id":"sh/batgjixs","slide":3,"name":"rec-dataset-panel","bbox":[650,112,595,510]}
+{"kind":"shape","id":"sh/l4fi9cza","slide":3,"name":"rec-dataset-banner","bbox":[810,124,275,42]}
+{"kind":"textbox","id":"sh/k3m1g7yp","slide":3,"name":"rec-dataset-banner-text","text":"▦  DATASET DE INTERACCIONES","textPreview":"▦  DATASET DE INTERACCIONES","textChars":27,"textLines":1,"bbox":[820,133,255,24]}
+{"kind":"textbox","id":"sh/z2d07mh4","slide":3,"name":"rec-x-label","text":"Datos utilizados para comparar productos","textPreview":"Datos utilizados para comparar productos","textChars":40,"textLines":1,"bbox":[680,178,405,24]}
+{"kind":"shape","id":"sh/y14jehgj","slide":3,"name":"rec-table-header-0","bbox":[680,214,78,38]}
+{"kind":"textbox","id":"sh/x0vi5czy","slide":3,"name":"rec-table-header-text-0","text":"pedido","textPreview":"pedido","textChars":6,"textLines":1,"bbox":[684,220,70,28]}
+{"kind":"shape","id":"sh/czmhc7id","slide":3,"name":"rec-table-header-1","bbox":[758,214,80,38]}
+{"kind":"textbox","id":"sh/byd032h8","slide":3,"name":"rec-table-header-text-1","text":"usuario","textPreview":"usuario","textChars":7,"textLines":1,"bbox":[762,220,72,28]}
+{"kind":"shape","id":"sh/ax4zax0n","slide":3,"name":"rec-table-header-2","bbox":[838,214,86,38]}
+{"kind":"textbox","id":"sh/hwzihwzi","slide":3,"name":"rec-table-header-text-2","text":"producto","textPreview":"producto","textChars":8,"textLines":1,"bbox":[842,220,78,28]}
+{"kind":"shape","id":"sh/wv61obyx","slide":3,"name":"rec-table-header-3","bbox":[924,214,76,38]}
+{"kind":"textbox","id":"sh/4nuhs7uh","slide":3,"name":"rec-table-header-text-3","text":"cant.","textPreview":"cant.","textChars":5,"textLines":1,"bbox":[928,220,68,28]}
+{"kind":"shape","id":"sh/po3ilcvm","slide":3,"name":"rec-table-header-4","bbox":[1000,214,82,38]}
+{"kind":"textbox","id":"sh/21szqxcb","slide":3,"name":"rec-table-header-text-4","text":"fecha","textPreview":"fecha","textChars":5,"textLines":1,"bbox":[1004,220,74,28]}
+{"kind":"shape","id":"sh/32l0j2dw","slide":3,"name":"rec-table-header-5","bbox":[1082,214,121,38]}
+{"kind":"textbox","id":"sh/cruhwrud","slide":3,"name":"rec-table-header-text-5","text":"estado","textPreview":"estado","textChars":6,"textLines":1,"bbox":[1086,220,113,28]}
+{"kind":"shape","id":"sh/ds3ipcvy","slide":3,"name":"rec-table-cell-0-0","bbox":[680,252,78,38]}
+{"kind":"textbox","id":"sh/qpczuhc7","slide":3,"name":"rec-table-cell-text-0-0","text":"PED01","textPreview":"PED01","textChars":5,"textLines":1,"bbox":[683,259,72,27]}
+{"kind":"shape","id":"sh/rql0nmds","slide":3,"name":"rec-table-cell-0-1","bbox":[758,252,80,38]}
+{"kind":"textbox","id":"sh/0ve10ru9","slide":3,"name":"rec-table-cell-text-0-1","text":"U001","textPreview":"U001","textChars":4,"textLines":1,"bbox":[761,259,74,27]}
+{"kind":"shape","id":"sh/1wnitwvu","slide":3,"name":"rec-table-cell-0-2","bbox":[838,252,86,38]}
+{"kind":"textbox","id":"sh/v29cfu18","slide":3,"name":"rec-table-cell-text-0-2","text":"P001","textPreview":"P001","textChars":4,"textLines":1,"bbox":[841,259,80,27]}
+{"kind":"shape","id":"sh/a10b6p03","slide":3,"name":"rec-table-cell-0-3","bbox":[924,252,76,38]}
+{"kind":"textbox","id":"sh/xoruhkje","slide":3,"name":"rec-table-cell-text-0-3","text":"2","textPreview":"2","textChars":1,"textLines":1,"bbox":[927,259,70,27]}
+{"kind":"shape","id":"sh/w3it8zit","slide":3,"name":"rec-table-cell-0-4","bbox":[1000,252,82,38]}
+{"kind":"textbox","id":"sh/nypcba1c","slide":3,"name":"rec-table-cell-text-0-4","text":"12/06","textPreview":"12/06","textChars":5,"textLines":1,"bbox":[1003,259,76,27]}
+{"kind":"shape","id":"sh/mxgb250r","slide":3,"name":"rec-table-cell-0-5","bbox":[1082,252,121,38]}
+{"kind":"textbox","id":"sh/90rudkji","slide":3,"name":"rec-table-cell-text-0-5","text":"Entregado","textPreview":"Entregado","textChars":9,"textLines":1,"bbox":[1085,259,115,27]}
+{"kind":"shape","id":"sh/8zit4fix","slide":3,"name":"rec-table-cell-1-0","bbox":[680,290,78,38]}
+{"kind":"textbox","id":"sh/7utcne1g","slide":3,"name":"rec-table-cell-text-1-0","text":"PED01","textPreview":"PED01","textChars":5,"textLines":1,"bbox":[683,297,72,27]}
+{"kind":"shape","id":"sh/6tkve90v","slide":3,"name":"rec-table-cell-1-1","bbox":[758,290,80,38]}
+{"kind":"textbox","id":"sh/2p4f6dk3","slide":3,"name":"rec-table-cell-text-1-1","text":"U001","textPreview":"U001","textChars":4,"textLines":1,"bbox":[761,297,74,27]}
+{"kind":"shape","id":"sh/3qxwfilo","slide":3,"name":"rec-table-cell-1-2","bbox":[838,290,86,38]}
+{"kind":"textbox","id":"sh/or6x8329","slide":3,"name":"rec-table-cell-text-1-2","text":"P004","textPreview":"P004","textChars":4,"textLines":1,"bbox":[841,297,80,27]}
+{"kind":"shape","id":"sh/psfeh83u","slide":3,"name":"rec-table-cell-1-3","bbox":[924,290,76,38]}
+{"kind":"textbox","id":"sh/qtofadkf","slide":3,"name":"rec-table-cell-text-1-3","text":"1","textPreview":"1","textChars":1,"textLines":1,"bbox":[927,297,70,27]}
+{"kind":"shape","id":"sh/bexwjil0","slide":3,"name":"rec-table-cell-1-4","bbox":[1000,290,82,38]}
+{"kind":"textbox","id":"sh/cf6xcn2l","slide":3,"name":"rec-table-cell-text-1-4","text":"12/06","textPreview":"12/06","textChars":5,"textLines":1,"bbox":[1003,297,76,27]}
+{"kind":"shape","id":"sh/dgfyls3q","slide":3,"name":"rec-table-cell-1-5","bbox":[1082,290,121,38]}
+{"kind":"textbox","id":"sh/6xkvytkb","slide":3,"name":"rec-table-cell-text-1-5","text":"Entregado","textPreview":"Entregado","textChars":9,"textLines":1,"bbox":[1085,297,115,27]}
+{"kind":"shape","id":"sh/7idw7ylg","slide":3,"name":"rec-table-cell-2-0","bbox":[680,328,78,38]}
+{"kind":"textbox","id":"sh/9cjidwny","slide":3,"name":"rec-table-cell-text-2-0","text":"PED02","textPreview":"PED02","textChars":5,"textLines":1,"bbox":[683,335,72,27]}
+{"kind":"shape","id":"sh/8bahkrmt","slide":3,"name":"rec-table-cell-2-1","bbox":[758,328,80,38]}
+{"kind":"textbox","id":"sh/na10bm58","slide":3,"name":"rec-table-cell-text-2-1","text":"U002","textPreview":"U002","textChars":4,"textLines":1,"bbox":[761,335,74,27]}
+{"kind":"shape","id":"sh/m9szih4n","slide":3,"name":"rec-table-cell-2-2","bbox":[838,328,86,38]}
+{"kind":"textbox","id":"sh/xg3ihwna","slide":3,"name":"rec-table-cell-text-2-2","text":"P001","textPreview":"P001","textChars":4,"textLines":1,"bbox":[841,335,80,27]}
+{"kind":"shape","id":"sh/wfahormp","slide":3,"name":"rec-table-cell-2-3","bbox":[924,328,76,38]}
+{"kind":"textbox","id":"sh/ve10fm54","slide":3,"name":"rec-table-cell-text-2-3","text":"3","textPreview":"3","textChars":1,"textLines":1,"bbox":[927,335,70,27]}
+{"kind":"shape","id":"sh/adszm14j","slide":3,"name":"rec-table-cell-2-4","bbox":[1000,328,82,38]}
+{"kind":"textbox","id":"sh/dkzy5cn6","slide":3,"name":"rec-table-cell-text-2-4","text":"13/06","textPreview":"13/06","textChars":5,"textLines":1,"bbox":[1003,335,76,27]}
+{"kind":"shape","id":"sh/cjqhc7ml","slide":3,"name":"rec-table-cell-2-5","bbox":[1082,328,121,38]}
+{"kind":"textbox","id":"sh/436lcve1","slide":3,"name":"rec-table-cell-text-2-5","text":"Entregado","textPreview":"Entregado","textChars":9,"textLines":1,"bbox":[1085,335,115,27]}
+{"kind":"shape","id":"sh/54fm50vm","slide":3,"name":"rec-analysis-callout","bbox":[686,478,523,112]}
+{"kind":"textbox","id":"sh/ih43alwv","slide":3,"name":"rec-analysis-icon","text":"◎","textPreview":"◎","textChars":1,"textLines":1,"bbox":[704,493,55,56]}
+{"kind":"textbox","id":"sh/3id43qdg","slide":3,"name":"rec-analysis-title","text":"¿Qué se va a analizar?","textPreview":"¿Qué se va a analizar?","textChars":22,"textLines":1,"bbox":[770,492,410,25]}
+{"kind":"textbox","id":"sh/gfml8ve5","slide":3,"name":"rec-analysis-body","text":"Qué productos son similares porque fueron comprados por los mismos usuarios; salida: Top-N ítems.","textPreview":"Qué productos son similares porque fueron comprados por los mismos usuarios; salida: Top-N ítems.","textChars":97,"textLines":1,"bbox":[770,525,410,48]}
+{"kind":"notes","id":"nt/ofy9wn61","slide":3,"text":""}
+{"kind":"slide","id":"sl/jyx0ra1s","slide":4,"title":"IMPLEMENTACIÓN VISUAL · CLASIFICACIÓN","textShapes":43}
+{"kind":"textbox","id":"sh/y1crqhcz","slide":4,"name":"ui-cls-kicker","text":"IMPLEMENTACIÓN VISUAL · CLASIFICACIÓN","textPreview":"IMPLEMENTACIÓN VISUAL · CLASIFICACIÓN","textChars":37,"textLines":1,"bbox":[50,18,700,23]}
+{"kind":"textbox","id":"sh/1cj2d8b6","slide":4,"name":"ui-cls-title","text":"El riesgo aparece dentro de Gestión de Pedidos","textPreview":"El riesgo aparece dentro de Gestión de Pedidos","textChars":46,"textLines":1,"bbox":[50,48,1180,44]}
+{"kind":"textbox","id":"sh/0ba143al","slide":4,"name":"ui-cls-subtitle","text":"La tabla muestra solo pedidos pendientes para priorizar los casos con mayor probabilidad de cancelación.","textPreview":"La tabla muestra solo pedidos pendientes para priorizar los casos con mayor probabilidad de cancelación.","textChars":104,"textLines":1,"bbox":[50,96,1180,28]}
+{"kind":"textbox","id":"sh/rm1k7yt4","slide":4,"name":"ui-cls-page","text":"4","textPreview":"4","textChars":1,"textLines":1,"bbox":[1200,682,28,18]}
+{"kind":"shape","id":"sh/ql8jytsj","slide":4,"name":"ui-cls-browser","bbox":[50,140,1180,500]}
+{"kind":"shape","id":"sh/doj29oba","slide":4,"name":"ui-cls-browserbar","bbox":[50,140,1180,38]}
+{"kind":"shape","id":"sh/sna103ap","slide":4,"name":"ui-cls-dot0","bbox":[66,153,10,10]}
+{"kind":"shape","id":"sh/3ihk3et8","slide":4,"name":"ui-cls-dot1","bbox":[85,153,10,10]}
+{"kind":"shape","id":"sh/ih8ju9sn","slide":4,"name":"ui-cls-dot2","bbox":[104,153,10,10]}
+{"kind":"shape","id":"sh/kbm987y5","slide":4,"name":"ui-cls-url","bbox":[178,148,930,22]}
+{"kind":"textbox","id":"sh/5cva1cfq","slide":4,"name":"ui-cls-urltext","text":"distribuidora-panamericana.com/admin/pedidos/listado","textPreview":"distribuidora-panamericana.com/admin/pedidos/listado","textChars":52,"textLines":1,"bbox":[195,151,895,16]}
+{"kind":"shape","id":"sh/i94r6xgz","slide":4,"name":"ui-cls-adminbar","bbox":[51,178,1178,44]}
+{"kind":"textbox","id":"sh/jadsz2xk","slide":4,"name":"ui-cls-brand","text":"DISTRIBUIDORA PANAMERICANA  ·  PANEL ADMINISTRATIVO","textPreview":"DISTRIBUIDORA PANAMERICANA  ·  PANEL ADMINISTRATIVO","textChars":51,"textLines":1,"bbox":[74,191,510,18]}
+{"kind":"textbox","id":"sh/w72947yt","slide":4,"name":"ui-cls-session","text":"Administrador     Cerrar sesión","textPreview":"Administrador     Cerrar sesión","textChars":31,"textLines":1,"bbox":[955,191,240,18]}
+{"kind":"textbox","id":"sh/x8vaxsfe","slide":4,"name":"ui-cls-heading","text":"Gestión de Pedidos","textPreview":"Gestión de Pedidos","textChars":18,"textLines":1,"bbox":[78,238,390,28]}
+{"kind":"textbox","id":"sh/a5kr2xg3","slide":4,"name":"ui-cls-crumb","text":"Inicio  /  Pedidos  /  Listado","textPreview":"Inicio  /  Pedidos  /  Listado","textChars":30,"textLines":1,"bbox":[78,270,340,18]}
+{"kind":"shape","id":"sh/v6tsv2xo","slide":4,"name":"ui-cls-search","bbox":[760,239,305,32]}
+{"kind":"textbox","id":"sh/g36tgryd","slide":4,"name":"ui-cls-searcht","text":"Buscar por cliente o pedido…","textPreview":"Buscar por cliente o pedido…","textChars":28,"textLines":1,"bbox":[777,247,250,18]}
+{"kind":"shape","id":"sh/h4fa9wfy","slide":4,"name":"ui-cls-filter","bbox":[1076,239,120,32]}
+{"kind":"textbox","id":"sh/p0batw72","slide":4,"name":"ui-cls-filtert","text":"Filtrar","textPreview":"Filtrar","textChars":7,"textLines":1,"bbox":[1090,247,92,18]}
+{"kind":"shape","id":"sh/oz29krqh","slide":4,"name":"ui-cls-th0","bbox":[78,298,68,36]}
+{"kind":"textbox","id":"sh/3ytsrmpw","slide":4,"name":"ui-cls-tht0","text":"ID","textPreview":"ID","textChars":2,"textLines":1,"bbox":[82,309,60,15]}
+{"kind":"shape","id":"sh/2xkrih8b","slide":4,"name":"ui-cls-th1","bbox":[146,298,175,36]}
+{"kind":"textbox","id":"sh/1wbapc7q","slide":4,"name":"ui-cls-tht1","text":"CLIENTE","textPreview":"CLIENTE","textChars":7,"textLines":1,"bbox":[150,309,167,15]}
+{"kind":"shape","id":"sh/gv29g7q5","slide":4,"name":"ui-cls-th2","bbox":[321,298,105,36]}
+{"kind":"textbox","id":"sh/fu9sn2p0","slide":4,"name":"ui-cls-tht2","text":"FECHA","textPreview":"FECHA","textChars":5,"textLines":1,"bbox":[325,309,97,15]}
+{"kind":"shape","id":"sh/et0reh8f","slide":4,"name":"ui-cls-th3","bbox":[426,298,90,36]}
+{"kind":"textbox","id":"sh/tsrqlc7u","slide":4,"name":"ui-cls-tht3","text":"TOTAL","textPreview":"TOTAL","textChars":5,"textLines":1,"bbox":[430,309,82,15]}
+{"kind":"shape","id":"sh/sri9s7q9","slide":4,"name":"ui-cls-th4","bbox":[516,298,105,36]}
+{"kind":"textbox","id":"sh/ilwf69kv","slide":4,"name":"ui-cls-tht4","text":"ESTADO","textPreview":"ESTADO","textChars":6,"textLines":1,"bbox":[520,309,97,15]}
+{"kind":"shape","id":"sh/jm5gze1g","slide":4,"name":"ui-cls-th5","bbox":[621,298,130,36]}
+{"kind":"textbox","id":"sh/knex8j21","slide":4,"name":"ui-cls-tht5","text":"RIESGO ML","textPreview":"RIESGO ML","textChars":9,"textLines":1,"bbox":[625,309,122,15]}
+{"kind":"shape","id":"sh/5ony1oj6","slide":4,"name":"ui-cls-th6","bbox":[751,298,92,36]}
+{"kind":"textbox","id":"sh/axcf29kj","slide":4,"name":"ui-cls-tht6","text":"ACCIÓN","textPreview":"ACCIÓN","textChars":6,"textLines":1,"bbox":[755,309,84,15]}
+{"kind":"shape","id":"sh/vy5gbe14","slide":4,"name":"ui-cls-cell0-0","bbox":[78,334,68,62]}
+{"kind":"textbox","id":"sh/wzex4z2p","slide":4,"name":"ui-cls-cellt0-0","text":"#A104","textPreview":"#A104","textChars":5,"textLines":1,"bbox":[85,355,54,20]}
+{"kind":"shape","id":"sh/xknyx4ja","slide":4,"name":"ui-cls-cell0-1","bbox":[146,334,175,62]}
+{"kind":"textbox","id":"sh/mtcfypkn","slide":4,"name":"ui-cls-cellt0-1","text":"María López\nmaria@email.com","textPreview":"María López | maria@email.com","textChars":27,"textLines":2,"bbox":[153,346,161,34]}
+{"kind":"shape","id":"sh/nulw7u18","slide":4,"name":"ui-cls-cell0-2","bbox":[321,334,105,62]}
+{"kind":"textbox","id":"sh/fm5c3q54","slide":4,"name":"ui-cls-cellt0-2","text":"18/07/26","textPreview":"18/07/26","textChars":8,"textLines":1,"bbox":[328,355,91,20]}
+{"kind":"shape","id":"sh/elwba54j","slide":4,"name":"ui-cls-cell0-3","bbox":[426,334,90,62]}
+{"kind":"textbox","id":"sh/18nu50nu","slide":4,"name":"ui-cls-cellt0-3","text":"$1,305","textPreview":"$1,305","textChars":6,"textLines":1,"bbox":[433,355,76,20]}
+{"kind":"shape","id":"sh/0netcvm9","slide":4,"name":"ui-cls-cell0-4","bbox":[516,334,105,62]}
+{"kind":"textbox","id":"sh/rilczq5s","slide":4,"name":"ui-cls-cellt0-4","text":"Pendiente","textPreview":"Pendiente","textChars":9,"textLines":1,"bbox":[523,355,91,20]}
+{"kind":"shape","id":"sh/qhcb6l47","slide":4,"name":"ui-cls-cell0-5","bbox":[621,334,130,62]}
+{"kind":"shape","id":"sh/dknu10ny","slide":4,"name":"ui-cls-risk0","bbox":[632,352,108,25]}
+{"kind":"textbox","id":"sh/sjut8vmd","slide":4,"name":"ui-cls-risk0t","text":"78% · ALTO","textPreview":"78% · ALTO","textChars":10,"textLines":1,"bbox":[635,357,102,16]}
+{"kind":"shape","id":"sh/3elcv65w","slide":4,"name":"ui-cls-cell0-6","bbox":[751,334,92,62]}
+{"kind":"shape","id":"sh/idcb2lob","slide":4,"name":"ui-cls-act0","bbox":[764,350,66,29]}
+{"kind":"textbox","id":"sh/8jq9c72t","slide":4,"name":"ui-cls-actt0","text":"Revisar","textPreview":"Revisar","textChars":7,"textLines":1,"bbox":[766,357,62,16]}
+{"kind":"shape","id":"sh/tkjq5c3e","slide":4,"name":"ui-cls-cell1-0","bbox":[78,396,68,62]}
+{"kind":"textbox","id":"sh/6x8rahk3","slide":4,"name":"ui-cls-cellt1-0","text":"#A103","textPreview":"#A103","textChars":5,"textLines":1,"bbox":[85,417,54,20]}
+{"kind":"shape","id":"sh/7ih83mlo","slide":4,"name":"ui-cls-cell1-1","bbox":[146,396,175,62]}
+{"kind":"textbox","id":"sh/gna9gr25","slide":4,"name":"ui-cls-cellt1-1","text":"Carlos Ruiz\ncarlos@email.com","textPreview":"Carlos Ruiz | carlos@email.com","textChars":28,"textLines":2,"bbox":[153,408,161,34]}
+{"kind":"shape","id":"sh/hoja9w3q","slide":4,"name":"ui-cls-cell1-2","bbox":[321,396,105,62]}
+{"kind":"textbox","id":"sh/ulsrehkz","slide":4,"name":"ui-cls-cellt1-2","text":"18/07/26","textPreview":"18/07/26","textChars":8,"textLines":1,"bbox":[328,417,91,20]}
+{"kind":"shape","id":"sh/vm1s7mlk","slide":4,"name":"ui-cls-cell1-3","bbox":[426,396,90,62]}
+{"kind":"textbox","id":"sh/wr694nm1","slide":4,"name":"ui-cls-cellt1-3","text":"$860","textPreview":"$860","textChars":4,"textLines":1,"bbox":[433,417,76,20]}
+{"kind":"shape","id":"sh/xsfqxs36","slide":4,"name":"ui-cls-cell1-4","bbox":[516,396,105,62]}
+{"kind":"textbox","id":"sh/do761ova","slide":4,"name":"ui-cls-cellt1-4","text":"Pendiente","textPreview":"Pendiente","textChars":9,"textLines":1,"bbox":[523,417,91,20]}
+{"kind":"shape","id":"sh/cnyp8jep","slide":4,"name":"ui-cls-cell1-5","bbox":[621,396,130,62]}
+{"kind":"shape","id":"sh/bmpozed4","slide":4,"name":"ui-cls-risk1","bbox":[632,414,108,25]}
+{"kind":"textbox","id":"sh/qlg769wj","slide":4,"name":"ui-cls-risk1t","text":"41% · MEDIO","textPreview":"41% · MEDIO","textChars":11,"textLines":1,"bbox":[635,419,102,16]}
+{"kind":"shape","id":"sh/lcr658v6","slide":4,"name":"ui-cls-cell1-6","bbox":[751,396,92,62]}
+{"kind":"shape","id":"sh/0bipc3el","slide":4,"name":"ui-cls-act1","bbox":[764,412,66,29]}
+{"kind":"textbox","id":"sh/zq9o3ydg","slide":4,"name":"ui-cls-actt1","text":"Revisar","textPreview":"Revisar","textChars":7,"textLines":1,"bbox":[766,419,62,16]}
+{"kind":"shape","id":"sh/yp07atwv","slide":4,"name":"ui-cls-cell2-0","bbox":[78,458,68,62]}
+{"kind":"textbox","id":"sh/9grq98vi","slide":4,"name":"ui-cls-cellt2-0","text":"#A102","textPreview":"#A102","textChars":5,"textLines":1,"bbox":[85,479,54,20]}
+{"kind":"shape","id":"sh/8fipg3ex","slide":4,"name":"ui-cls-cell2-1","bbox":[146,458,175,62]}
+{"kind":"textbox","id":"sh/6psve183","slide":4,"name":"ui-cls-cellt2-1","text":"Ana Torres\nana@email.com","textPreview":"Ana Torres | ana@email.com","textChars":24,"textLines":2,"bbox":[153,470,161,34]}
+{"kind":"shape","id":"sh/7a1cn6po","slide":4,"name":"ui-cls-cell2-2","bbox":[321,458,105,62]}
+{"kind":"textbox","id":"sh/8badgbq9","slide":4,"name":"ui-cls-cellt2-2","text":"17/07/26","textPreview":"17/07/26","textChars":8,"textLines":1,"bbox":[328,479,91,20]}
+{"kind":"shape","id":"sh/tcjupg7u","slide":4,"name":"ui-cls-cell2-3","bbox":[426,458,90,62]}
+{"kind":"textbox","id":"sh/udcvil8z","slide":4,"name":"ui-cls-cellt2-3","text":"$1,120","textPreview":"$1,120","textChars":6,"textLines":1,"bbox":[433,479,76,20]}
+{"kind":"shape","id":"sh/velcrqpk","slide":4,"name":"ui-cls-cell2-4","bbox":[516,458,105,62]}
+{"kind":"textbox","id":"sh/gfudkvq5","slide":4,"name":"ui-cls-cellt2-4","text":"Pendiente","textPreview":"Pendiente","textChars":9,"textLines":1,"bbox":[523,479,91,20]}
+{"kind":"shape","id":"sh/hg3et07q","slide":4,"name":"ui-cls-cell2-5","bbox":[621,458,130,62]}
+{"kind":"shape","id":"sh/ihcvml8b","slide":4,"name":"ui-cls-risk2","bbox":[632,476,108,25]}
+{"kind":"textbox","id":"sh/3ilwvqpw","slide":4,"name":"ui-cls-risk2t","text":"12% · BAJO","textPreview":"12% · BAJO","textChars":10,"textLines":1,"bbox":[635,481,102,16]}
+{"kind":"shape","id":"sh/na18b2tc","slide":4,"name":"ui-cls-cell2-6","bbox":[751,458,92,62]}
+{"kind":"shape","id":"sh/29srixcr","slide":4,"name":"ui-cls-act2","bbox":[764,474,66,29]}
+{"kind":"textbox","id":"sh/pcjadsb2","slide":4,"name":"ui-cls-actt2","text":"Revisar","textPreview":"Revisar","textChars":7,"textLines":1,"bbox":[766,481,62,16]}
+{"kind":"shape","id":"sh/oba9k7uh","slide":4,"name":"ui-cls-callout","bbox":[890,319,306,190]}
+{"kind":"shape","id":"sh/bylsf2t8","slide":4,"name":"ui-cls-new","bbox":[912,337,116,25]}
+{"kind":"textbox","id":"sh/axsrmxcn","slide":4,"name":"ui-cls-newt","text":"NUEVA SECCIÓN","textPreview":"NUEVA SECCIÓN","textChars":13,"textLines":1,"bbox":[915,342,110,16]}
+{"kind":"textbox","id":"sh/x03ahcbe","slide":4,"name":"ui-cls-calltitle","text":"Riesgo de cancelación","textPreview":"Riesgo de cancelación","textChars":21,"textLines":1,"bbox":[912,373,250,25]}
+{"kind":"textbox","id":"sh/czu9o7ut","slide":4,"name":"ui-cls-callbody","text":"• Muestra una probabilidad por pedido.\n• Ordena la atención del personal.\n• Alto, medio y bajo se distinguen por color.\n• No cancela pedidos automáticamente.","textPreview":"• Muestra una probabilidad por pedido. | • Ordena la atención del personal. | • Alto, medio y bajo se distinguen por color. | • No cancel...","textChars":157,"textLines":4,"bbox":[912,406,250,88]}
+{"kind":"textbox","id":"sh/z2lsjmtk","slide":4,"name":"ui-cls-note","text":"Los pedidos entregados y cancelados alimentan el historial; la tabla operativa muestra exclusivamente pedidos pendientes.","textPreview":"Los pedidos entregados y cancelados alimentan el historial; la tabla operativa muestra exclusivamente pedidos pendientes.","textChars":121,"textLines":1,"bbox":[78,542,1080,24]}
+{"kind":"notes","id":"nt/jyx0ra1s","slide":4,"text":""}
+{"kind":"slide","id":"sl/i107q5of","slide":5,"title":"IMPLEMENTACIÓN VISUAL · RECOMENDACIÓN","textShapes":38}
+{"kind":"textbox","id":"sh/5436hcv2","slide":5,"name":"ui-rec-kicker","text":"IMPLEMENTACIÓN VISUAL · RECOMENDACIÓN","textPreview":"IMPLEMENTACIÓN VISUAL · RECOMENDACIÓN","textChars":37,"textLines":1,"bbox":[50,18,700,23]}
+{"kind":"textbox","id":"sh/dgbulwnm","slide":5,"name":"ui-rec-title","text":"Productos relacionados dentro del carrito","textPreview":"Productos relacionados dentro del carrito","textChars":41,"textLines":1,"bbox":[50,48,1180,44]}
+{"kind":"textbox","id":"sh/cf2tcr61","slide":5,"name":"ui-rec-subtitle","text":"El filtrado colaborativo item-item aprovecha compras anteriores para sugerir artículos que suelen adquirirse juntos.","textPreview":"El filtrado colaborativo item-item aprovecha compras anteriores para sugerir artículos que suelen adquirirse juntos.","textChars":116,"textLines":1,"bbox":[50,96,1180,28]}
+{"kind":"textbox","id":"sh/z2tcnm5s","slide":5,"name":"ui-rec-page","text":"5","textPreview":"5","textChars":1,"textLines":1,"bbox":[1200,682,28,18]}
+{"kind":"shape","id":"sh/yhkbe1o7","slide":5,"name":"ui-rec-browser","bbox":[50,140,1180,500]}
+{"kind":"shape","id":"sh/l4bupwny","slide":5,"name":"ui-rec-browserbar","bbox":[50,140,1180,38]}
+{"kind":"shape","id":"sh/032tgr6d","slide":5,"name":"ui-rec-dot0","bbox":[66,153,10,10]}
+{"kind":"shape","id":"sh/n6dcr65o","slide":5,"name":"ui-rec-dot1","bbox":[85,153,10,10]}
+{"kind":"shape","id":"sh/m5kbi1oj","slide":5,"name":"ui-rec-dot2","bbox":[104,153,10,10]}
+{"kind":"shape","id":"sh/w32dkbuh","slide":5,"name":"ui-rec-url","bbox":[178,148,930,22]}
+{"kind":"textbox","id":"sh/x4vedgvm","slide":5,"name":"ui-rec-urltext","text":"distribuidora-panamericana.com/carrito","textPreview":"distribuidora-panamericana.com/carrito","textChars":38,"textLines":1,"bbox":[195,151,895,16]}
+{"kind":"shape","id":"sh/ahkvi1cb","slide":5,"name":"ui-rec-nav","bbox":[51,178,1178,46]}
+{"kind":"textbox","id":"sh/v2twb6dw","slide":5,"name":"ui-rec-logo","text":"PANAMERICANA","textPreview":"PANAMERICANA","textChars":12,"textLines":1,"bbox":[73,192,150,19]}
+{"kind":"textbox","id":"sh/k7mxovud","slide":5,"name":"ui-rec-links","text":"Catálogo     Productos     Ubicación     Contacto","textPreview":"Catálogo     Productos     Ubicación     Contacto","textChars":49,"textLines":1,"bbox":[266,192,450,19]}
+{"kind":"shape","id":"sh/58vehgvy","slide":5,"name":"ui-rec-search","bbox":[929,187,190,28]}
+{"kind":"textbox","id":"sh/i54fmlc7","slide":5,"name":"ui-rec-searcht","text":"Buscar producto","textPreview":"Buscar producto","textChars":15,"textLines":1,"bbox":[944,194,150,15]}
+{"kind":"textbox","id":"sh/j6dwfqds","slide":5,"name":"ui-rec-icons","text":"☾   ▣   ♙","textPreview":"☾   ▣   ♙","textChars":9,"textLines":1,"bbox":[1137,192,80,18]}
+{"kind":"textbox","id":"sh/sb6xsvu9","slide":5,"name":"ui-rec-heading","text":"Tu Carrito de Compras","textPreview":"Tu Carrito de Compras","textChars":21,"textLines":1,"bbox":[78,238,410,28]}
+{"kind":"shape","id":"sh/tcfel0vu","slide":5,"name":"ui-rec-item0","bbox":[78,276,670,62]}
+{"kind":"shape","id":"sh/hgrmpwj2","slide":5,"name":"ui-rec-pic0","bbox":[90,285,46,44]}
+{"kind":"textbox","id":"sh/gfi5grih","slide":5,"name":"ui-rec-picicon0","text":"GEL","textPreview":"GEL","textChars":3,"textLines":1,"bbox":[94,299,38,14]}
+{"kind":"textbox","id":"sh/fe94nm1w","slide":5,"name":"ui-rec-itemname0","text":"4x4 Gel para afeitar menta 485 ml","textPreview":"4x4 Gel para afeitar menta 485 ml","textChars":33,"textLines":1,"bbox":[151,286,390,21]}
+{"kind":"textbox","id":"sh/ud0ne10b","slide":5,"name":"ui-rec-qty0","text":"Cantidad: 3","textPreview":"Cantidad: 3","textChars":11,"textLines":1,"bbox":[151,310,200,17]}
+{"kind":"textbox","id":"sh/pkr6tgjy","slide":5,"name":"ui-rec-price0","text":"$255","textPreview":"$255","textChars":4,"textLines":1,"bbox":[646,297,80,20]}
+{"kind":"shape","id":"sh/4ji5kbid","slide":5,"name":"ui-rec-item1","bbox":[78,348,670,62]}
+{"kind":"shape","id":"sh/3i94r61s","slide":5,"name":"ui-rec-pic1","bbox":[90,357,46,44]}
+{"kind":"textbox","id":"sh/2h0ni107","slide":5,"name":"ui-rec-picicon1","text":"4×4","textPreview":"4×4","textChars":3,"textLines":1,"bbox":[94,371,38,14]}
+{"kind":"textbox","id":"sh/5o7mhcju","slide":5,"name":"ui-rec-itemname1","text":"4x4 Papel cuello negro 5 pz","textPreview":"4x4 Papel cuello negro 5 pz","textChars":27,"textLines":1,"bbox":[151,358,390,21]}
+{"kind":"textbox","id":"sh/kny587i9","slide":5,"name":"ui-rec-qty1","text":"Cantidad: 2","textPreview":"Cantidad: 2","textChars":11,"textLines":1,"bbox":[151,382,200,17]}
+{"kind":"textbox","id":"sh/atcjidg7","slide":5,"name":"ui-rec-price1","text":"$300","textPreview":"$300","textChars":4,"textLines":1,"bbox":[646,369,80,20]}
+{"kind":"shape","id":"sh/vu5kbihc","slide":5,"name":"ui-rec-summary","bbox":[786,262,410,140]}
+{"kind":"textbox","id":"sh/wve1knyx","slide":5,"name":"ui-rec-summarytitle","text":"Resumen del Pedido","textPreview":"Resumen del Pedido","textChars":18,"textLines":1,"bbox":[808,278,250,23]}
+{"kind":"textbox","id":"sh/xwn2dszi","slide":5,"name":"ui-rec-summarylines","text":"Subtotal\nEnvío\nTotal","textPreview":"Subtotal | Envío | Total","textChars":20,"textLines":3,"bbox":[808,311,120,64]}
+{"kind":"textbox","id":"sh/ihw3mxg3","slide":5,"name":"ui-rec-summaryvals","text":"$555\n$0\n$555","textPreview":"$555 | $0 | $555","textChars":12,"textLines":3,"bbox":[1070,311,95,64]}
+{"kind":"shape","id":"sh/ji5kf2ho","slide":5,"name":"ui-rec-pay","bbox":[808,365,356,28]}
+{"kind":"textbox","id":"sh/kjelony9","slide":5,"name":"ui-rec-payt","text":"Continuar con el pedido","textPreview":"Continuar con el pedido","textChars":23,"textLines":1,"bbox":[820,372,332,16]}
+{"kind":"shape","id":"sh/5kn2hszu","slide":5,"name":"ui-rec-reco","bbox":[78,419,1118,182]}
+{"kind":"shape","id":"sh/e1sjatgz","slide":5,"name":"ui-rec-model","bbox":[96,435,202,25]}
+{"kind":"textbox","id":"sh/zmlk3yhk","slide":5,"name":"ui-rec-modelt","text":"RECOMENDACIÓN ITEM–ITEM","textPreview":"RECOMENDACIÓN ITEM–ITEM","textChars":23,"textLines":1,"bbox":[99,440,196,16]}
+{"kind":"textbox","id":"sh/fid07u98","slide":5,"name":"ui-rec-recotitle","text":"También te puede interesar","textPreview":"También te puede interesar","textChars":26,"textLines":1,"bbox":[96,468,330,24]}
+{"kind":"textbox","id":"sh/ehkzepsn","slide":5,"name":"ui-rec-recosub","text":"Comprados frecuentemente junto con los productos de tu carrito","textPreview":"Comprados frecuentemente junto con los productos de tu carrito","textChars":62,"textLines":1,"bbox":[96,493,360,34]}
+{"kind":"shape","id":"sh/1kvi94re","slide":5,"name":"ui-rec-card0","bbox":[470,439,214,140]}
+{"kind":"shape","id":"sh/gjmhgzqt","slide":5,"name":"ui-rec-cardpic0","bbox":[482,451,58,58]}
+{"kind":"textbox","id":"sh/3md0bu94","slide":5,"name":"ui-rec-cardicon0","text":"ACEITE","textPreview":"ACEITE","textChars":6,"textLines":1,"bbox":[485,473,52,14]}
+{"kind":"textbox","id":"sh/2l4zip8j","slide":5,"name":"ui-rec-cardname0","text":"Aceite para máquina","textPreview":"Aceite para máquina","textChars":19,"textLines":1,"bbox":[552,453,118,36]}
+{"kind":"textbox","id":"sh/povid4ra","slide":5,"name":"ui-rec-cardprice0","text":"$95","textPreview":"$95","textChars":3,"textLines":1,"bbox":[552,492,75,18]}
+{"kind":"shape","id":"sh/onmhkzqp","slide":5,"name":"ui-rec-add0","bbox":[552,523,112,28]}
+{"kind":"textbox","id":"sh/bqx0fe9g","slide":5,"name":"ui-rec-addt0","text":"Agregar","textPreview":"Agregar","textChars":7,"textLines":1,"bbox":[557,530,102,16]}
+{"kind":"shape","id":"sh/qp4jm98v","slide":5,"name":"ui-rec-card1","bbox":[702,439,214,140]}
+{"kind":"shape","id":"sh/8f6hcj6t","slide":5,"name":"ui-rec-cardpic1","bbox":[714,451,58,58]}
+{"kind":"textbox","id":"sh/9gfy5o7e","slide":5,"name":"ui-rec-cardicon1","text":"NAVAJA","textPreview":"NAVAJA","textChars":6,"textLines":1,"bbox":[717,473,52,14]}
+{"kind":"textbox","id":"sh/mdoza9o3","slide":5,"name":"ui-rec-cardname1","text":"Navaja profesional","textPreview":"Navaja profesional","textChars":18,"textLines":1,"bbox":[784,453,118,36]}
+{"kind":"textbox","id":"sh/nexg3epo","slide":5,"name":"ui-rec-cardprice1","text":"$210","textPreview":"$210","textChars":4,"textLines":1,"bbox":[784,492,75,18]}
+{"kind":"shape","id":"sh/0r6h8z6x","slide":5,"name":"ui-rec-add1","bbox":[784,523,112,28]}
+{"kind":"textbox","id":"sh/lcfy147i","slide":5,"name":"ui-rec-addt1","text":"Agregar","textPreview":"Agregar","textChars":7,"textLines":1,"bbox":[789,530,102,16]}
+{"kind":"shape","id":"sh/yp4z69or","slide":5,"name":"ui-rec-card2","bbox":[934,439,214,140]}
+{"kind":"shape","id":"sh/zqxgzupc","slide":5,"name":"ui-rec-cardpic2","bbox":[946,451,58,58]}
+{"kind":"textbox","id":"sh/cnmh4z61","slide":5,"name":"ui-rec-cardicon2","text":"TALCO","textPreview":"TALCO","textChars":5,"textLines":1,"bbox":[949,473,52,14]}
+{"kind":"textbox","id":"sh/dovyx476","slide":5,"name":"ui-rec-cardname2","text":"Talco para barbería","textPreview":"Talco para barbería","textChars":19,"textLines":1,"bbox":[1016,453,118,36]}
+{"kind":"textbox","id":"sh/t8n6lwvy","slide":5,"name":"ui-rec-cardprice2","text":"$120","textPreview":"$120","textChars":4,"textLines":1,"bbox":[1016,492,75,18]}
+{"kind":"shape","id":"sh/s7u5crud","slide":5,"name":"ui-rec-add2","bbox":[1016,523,112,28]}
+{"kind":"textbox","id":"sh/r6lojmds","slide":5,"name":"ui-rec-addt2","text":"Agregar","textPreview":"Agregar","textChars":7,"textLines":1,"bbox":[1021,530,102,16]}
+{"kind":"textbox","id":"sh/65cnahc7","slide":5,"name":"ui-rec-note","text":"Ubicación propuesta: debajo de los artículos del carrito · Salida del modelo: Top-N productos similares disponibles.","textPreview":"Ubicación propuesta: debajo de los artículos del carrito · Salida del modelo: Top-N productos similares disponibles.","textChars":116,"textLines":1,"bbox":[96,607,1050,20]}
+{"kind":"notes","id":"nt/i107q5of","slide":5,"text":""}
