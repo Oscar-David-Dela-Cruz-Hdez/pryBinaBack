@@ -232,8 +232,6 @@ const obtenerRiesgosCancelacion = async () => {
           nivel: porcentaje >= 60 ? 'Alto' : porcentaje >= 35 ? 'Medio' : 'Bajo',
           arbolesUsados: prediccion.arbolesUsados,
           factores: [
-            `Random Forest entrenado con ${historicos.length} pedidos finalizados`,
-            `${prediccion.arbolesUsados} arboles votaron sobre este pedido`,
             `Edad: ${calcularEdad(pedido.usuario?.fechaNacimiento, pedido.createdAt) ?? 'no disponible'}`,
             `Metodo de pago: ${pedido.metodoPago || 'no disponible'}`,
             `Total: $${Number(pedido.total || 0).toLocaleString('es-MX')}`,
