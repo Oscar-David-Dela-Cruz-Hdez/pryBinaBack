@@ -131,11 +131,34 @@ const valoresProductos = pedido => {
 
 const vectorizar = (pedido, esquema, tasaCanceladosPrevios) => {
   const { cantidades, precios } = valoresProductos(pedido);
+  const total = Number(pedido.total) || 0;
+  const costoEnvio = Number(pedido.costoEnvio) || 0;
+  const prodsList = pedido.productos || [];
+  const numProductos = prodsList.length > 0 ? prodsList.length : 1;
+  const totalUnidades = prodsList.reduce((acc, p) => acc + (Number(p.cantidad) || 0), 0) || 1;
+
+  const fPed = pedido.createdAt ? new Date(pedido.createdAt) : new Date();
+  const horaCompra = fPed.getUTCHours();
+  const diaSemana = fPed.getUTCDay();
+  const esFinDeSemana = (diaSemana === 0 || diaSemana === 6) ? 1 : 0;
+  const fRegUser = pedido.usuario?.createdAt ? new Date(pedido.usuario.createdAt) : new Date('2023-01-01');
+  const antiguedadDias = Math.max(0, Math.round((fPed - fRegUser) / (1000 * 60 * 60 * 24)));
+
   const fila = [
     calcularEdad(pedido.usuario?.fechaNacimiento, pedido.createdAt),
-    Number(pedido.total) || 0,
-    Number(pedido.costoEnvio) || 0,
-    tasaCanceladosPrevios * 100
+    total,
+    costoEnvio,
+    tasaCanceladosPrevios * 100,
+    numProductos,
+    totalUnidades,
+    horaCompra,
+    esFinDeSemana,
+    antiguedadDias,
+    total / totalUnidades, // precio promedio por unidad
+    totalUnidades / numProductos, // unidades por producto
+    costoEnvio / (total > 0 ? total : 1), // prop costo envio
+    costoEnvio === 0 ? 1 : 0, // envio gratis
+    total + costoEnvio // total real
   ];
   for (const metodo of esquema.metodos) fila.push((pedido.metodoPago || 'Sin definir') === metodo ? 1 : 0);
   for (const productoId of esquema.productos) {
@@ -172,10 +195,10 @@ const entrenarRandomForest = (historicos, configuracion = {}) => {
   if (!historicos.length) throw new Error('No hay pedidos históricos para entrenar el Random Forest');
   const dataset = prepararDataset(historicos);
   const opciones = {
-    arboles: configuracion.arboles || 31,
-    profundidadMaxima: configuracion.profundidadMaxima || 9,
-    minimoDivision: configuracion.minimoDivision || 24,
-    minimoHoja: configuracion.minimoHoja || 10
+    arboles: configuracion.arboles || 300,
+    profundidadMaxima: configuracion.profundidadMaxima || 12,
+    minimoDivision: configuracion.minimoDivision || 10,
+    minimoHoja: configuracion.minimoHoja || 4
   };
   const random = crearAleatorio(configuracion.semilla || 20260722);
   const indicesBase = Array.from({ length: dataset.X.length }, (_, indice) => indice);
