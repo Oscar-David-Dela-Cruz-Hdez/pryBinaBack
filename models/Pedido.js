@@ -51,4 +51,8 @@ const pedidoSchema = new mongoose.Schema({
     fecha: { type: Date, default: Date.now }
 }, { timestamps: true });
 
+pedidoSchema.index({ usuario: 1, createdAt: -1 });
+pedidoSchema.index({ estado: 1, createdAt: -1 });
+pedidoSchema.index({ createdAt: -1 });
+
 module.exports = mongoose.model("Pedido", pedidoSchema);

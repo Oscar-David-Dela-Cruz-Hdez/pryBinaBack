@@ -201,16 +201,16 @@ const obtenerBosqueEntrenado = (historicos) => {
 
 const obtenerRiesgosCancelacion = async () => {
   const [historicos, pendientes] = await Promise.all([
-    // Todo el historial finalizado alimenta el entrenamiento; no hay limite de vecinos.
     Pedido.find({ estado: { $in: ['Entregado', 'Cancelado'] } })
       .select('_id usuario productos total costoEnvio metodoPago estado createdAt updatedAt')
       .populate('usuario', 'fechaNacimiento')
-      .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })
+      .limit(1000)
       .lean(),
     Pedido.find({ estado: 'Pendiente' })
       .populate('usuario', 'nombre email fechaNacimiento')
       .sort({ createdAt: -1 })
-      .limit(200)
+      .limit(100)
       .lean()
   ]);
 
@@ -263,7 +263,7 @@ const obtenerRiesgosCancelacion = async () => {
 const recomendarProductos = async (productoIds, limite = 6) => {
   const semillas = [...new Set((productoIds || []).map(String).filter(Boolean))];
   if (!semillas.length) return [];
-  const pedidos = await Pedido.find({ estado: 'Entregado' }).select('productos.producto').lean();
+  const pedidos = await Pedido.find({ estado: 'Entregado' }).select('productos.producto').sort({ createdAt: -1 }).limit(1000).lean();
   const frecuencia = new Map();
   const coocurrencia = new Map();
   for (const pedido of pedidos) {
