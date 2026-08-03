@@ -1,0 +1,324 @@
+[
+  {
+    "_id": "69db27c72b56cc0c1597f77b",
+    "nombre": "Barbería",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:07.677Z",
+    "updatedAt": "2026-04-12T05:04:07.677Z"
+  },
+  {
+    "_id": "69db27c82b56cc0c1597f78b",
+    "nombre": "Desechables",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:08.418Z",
+    "updatedAt": "2026-04-12T05:04:08.418Z"
+  },
+  {
+    "_id": "69db27c82b56cc0c1597f794",
+    "nombre": "Máquinas y Eléctricos",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:08.831Z",
+    "updatedAt": "2026-04-12T05:04:08.831Z"
+  },
+  {
+    "_id": "69db27c92b56cc0c1597f7a4",
+    "nombre": "General",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:09.581Z",
+    "updatedAt": "2026-04-12T05:04:09.581Z"
+  },
+  {
+    "_id": "69db27ca2b56cc0c1597f7b4",
+    "nombre": "Styling y Peinado",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:10.318Z",
+    "updatedAt": "2026-04-12T05:04:10.318Z"
+  },
+  {
+    "_id": "69db27cc2b56cc0c1597f7e7",
+    "nombre": "Cuidado Capilar",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:12.726Z",
+    "updatedAt": "2026-04-12T05:04:12.726Z"
+  },
+  {
+    "_id": "69db27d22b56cc0c1597f859",
+    "nombre": "Cosméticos y Cuidado Facial",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:18.442Z",
+    "updatedAt": "2026-04-12T05:04:18.442Z"
+  },
+  {
+    "_id": "69db27d72b56cc0c1597f8c4",
+    "nombre": "Tintes y Coloración",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:23.507Z",
+    "updatedAt": "2026-04-12T05:04:23.507Z"
+  },
+  {
+    "_id": "69db27d72b56cc0c1597f8cd",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db27c72b56cc0c1597f778",
+    "createdAt": "2026-04-12T05:04:23.920Z",
+    "updatedAt": "2026-04-12T05:04:23.920Z"
+  },
+  {
+    "_id": "69db27df2b56cc0c1597f96b",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db27df2b56cc0c1597f968",
+    "createdAt": "2026-04-12T05:04:31.546Z",
+    "updatedAt": "2026-04-12T05:04:31.546Z"
+  },
+  {
+    "_id": "69db27df2b56cc0c1597f974",
+    "nombre": "General",
+    "marca": "69db27df2b56cc0c1597f968",
+    "createdAt": "2026-04-12T05:04:31.947Z",
+    "updatedAt": "2026-04-12T05:04:31.947Z"
+  },
+  {
+    "_id": "69db27e22b56cc0c1597f9a2",
+    "nombre": "Cuidado Capilar",
+    "marca": "69db27e12b56cc0c1597f99f",
+    "createdAt": "2026-04-12T05:04:34.082Z",
+    "updatedAt": "2026-04-12T05:04:34.082Z"
+  },
+  {
+    "_id": "69db27e22b56cc0c1597f9ad",
+    "nombre": "Pestañas y Cejas",
+    "marca": "69db27e22b56cc0c1597f9aa",
+    "createdAt": "2026-04-12T05:04:34.551Z",
+    "updatedAt": "2026-04-12T05:04:34.551Z"
+  },
+  {
+    "_id": "69db27e22b56cc0c1597f9b6",
+    "nombre": "General",
+    "marca": "69db27e22b56cc0c1597f9aa",
+    "createdAt": "2026-04-12T05:04:34.952Z",
+    "updatedAt": "2026-04-12T05:04:34.952Z"
+  },
+  {
+    "_id": "69db27e32b56cc0c1597f9c1",
+    "nombre": "Uñas y Manicure",
+    "marca": "69db27e32b56cc0c1597f9be",
+    "createdAt": "2026-04-12T05:04:35.420Z",
+    "updatedAt": "2026-04-12T05:04:35.420Z"
+  },
+  {
+    "_id": "69db27e32b56cc0c1597f9cc",
+    "nombre": "Uñas y Manicure",
+    "marca": "69db27e32b56cc0c1597f9c9",
+    "createdAt": "2026-04-12T05:04:35.889Z",
+    "updatedAt": "2026-04-12T05:04:35.889Z"
+  },
+  {
+    "_id": "69db27e42b56cc0c1597f9d7",
+    "nombre": "Uñas y Manicure",
+    "marca": "69db27e42b56cc0c1597f9d4",
+    "createdAt": "2026-04-12T05:04:36.357Z",
+    "updatedAt": "2026-04-12T05:04:36.357Z"
+  },
+  {
+    "_id": "69db27e42b56cc0c1597f9e0",
+    "nombre": "Uñas y Manicure",
+    "marca": "69db27e22b56cc0c1597f9aa",
+    "createdAt": "2026-04-12T05:04:36.756Z",
+    "updatedAt": "2026-04-12T05:04:36.756Z"
+  },
+  {
+    "_id": "69db27e62b56cc0c1597fa05",
+    "nombre": "Cuidado Capilar",
+    "marca": "69db27e22b56cc0c1597f9aa",
+    "createdAt": "2026-04-12T05:04:38.493Z",
+    "updatedAt": "2026-04-12T05:04:38.493Z"
+  },
+  {
+    "_id": "69db27e92b56cc0c1597fa3f",
+    "nombre": "Styling y Peinado",
+    "marca": "69db27e32b56cc0c1597f9be",
+    "createdAt": "2026-04-12T05:04:41.259Z",
+    "updatedAt": "2026-04-12T05:04:41.259Z"
+  },
+  {
+    "_id": "69db27ea2b56cc0c1597fa51",
+    "nombre": "Pestañas y Cejas",
+    "marca": "69db27e92b56cc0c1597fa4e",
+    "createdAt": "2026-04-12T05:04:42.061Z",
+    "updatedAt": "2026-04-12T05:04:42.061Z"
+  },
+  {
+    "_id": "69db27ec2b56cc0c1597fa86",
+    "nombre": "Pestañas y Cejas",
+    "marca": "69db27ec2b56cc0c1597fa83",
+    "createdAt": "2026-04-12T05:04:44.551Z",
+    "updatedAt": "2026-04-12T05:04:44.551Z"
+  },
+  {
+    "_id": "69db27ee2b56cc0c1597fab9",
+    "nombre": "Tintes y Coloración",
+    "marca": "69db27e22b56cc0c1597f9aa",
+    "createdAt": "2026-04-12T05:04:46.996Z",
+    "updatedAt": "2026-04-12T05:04:46.996Z"
+  },
+  {
+    "_id": "69db27ef2b56cc0c1597fac9",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db27e22b56cc0c1597f9aa",
+    "createdAt": "2026-04-12T05:04:47.754Z",
+    "updatedAt": "2026-04-12T05:04:47.754Z"
+  },
+  {
+    "_id": "69db27f02b56cc0c1597fadb",
+    "nombre": "Cuidado Capilar",
+    "marca": "69db27f02b56cc0c1597fad8",
+    "createdAt": "2026-04-12T05:04:48.588Z",
+    "updatedAt": "2026-04-12T05:04:48.588Z"
+  },
+  {
+    "_id": "69db27f02b56cc0c1597fae4",
+    "nombre": "General",
+    "marca": "69db27f02b56cc0c1597fad8",
+    "createdAt": "2026-04-12T05:04:48.991Z",
+    "updatedAt": "2026-04-12T05:04:48.991Z"
+  },
+  {
+    "_id": "69db27f22b56cc0c1597fb04",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db27f22b56cc0c1597fb01",
+    "createdAt": "2026-04-12T05:04:50.480Z",
+    "updatedAt": "2026-04-12T05:04:50.480Z"
+  },
+  {
+    "_id": "69db27f32b56cc0c1597fb24",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db27f32b56cc0c1597fb21",
+    "createdAt": "2026-04-12T05:04:51.959Z",
+    "updatedAt": "2026-04-12T05:04:51.959Z"
+  },
+  {
+    "_id": "69db27f52b56cc0c1597fb3d",
+    "nombre": "General",
+    "marca": "69db27f52b56cc0c1597fb3a",
+    "createdAt": "2026-04-12T05:04:53.134Z",
+    "updatedAt": "2026-04-12T05:04:53.134Z"
+  },
+  {
+    "_id": "69db27f52b56cc0c1597fb4d",
+    "nombre": "Tintes y Coloración",
+    "marca": "69db27f52b56cc0c1597fb3a",
+    "createdAt": "2026-04-12T05:04:53.867Z",
+    "updatedAt": "2026-04-12T05:04:53.867Z"
+  },
+  {
+    "_id": "69db27f62b56cc0c1597fb56",
+    "nombre": "Cuidado Capilar",
+    "marca": "69db27f52b56cc0c1597fb3a",
+    "createdAt": "2026-04-12T05:04:54.270Z",
+    "updatedAt": "2026-04-12T05:04:54.270Z"
+  },
+  {
+    "_id": "69db28262b56cc0c1597ff2f",
+    "nombre": "Styling y Peinado",
+    "marca": "69db27f52b56cc0c1597fb3a",
+    "createdAt": "2026-04-12T05:05:42.310Z",
+    "updatedAt": "2026-04-12T05:05:42.310Z"
+  },
+  {
+    "_id": "69db28262b56cc0c1597ff38",
+    "nombre": "Desechables",
+    "marca": "69db27e22b56cc0c1597f9aa",
+    "createdAt": "2026-04-12T05:05:42.714Z",
+    "updatedAt": "2026-04-12T05:05:42.714Z"
+  },
+  {
+    "_id": "69db28282b56cc0c1597ff58",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db28282b56cc0c1597ff55",
+    "createdAt": "2026-04-12T05:05:44.253Z",
+    "updatedAt": "2026-04-12T05:05:44.253Z"
+  },
+  {
+    "_id": "69db28282b56cc0c1597ff63",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db28282b56cc0c1597ff60",
+    "createdAt": "2026-04-12T05:05:44.722Z",
+    "updatedAt": "2026-04-12T05:05:44.722Z"
+  },
+  {
+    "_id": "69db28292b56cc0c1597ff75",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db28292b56cc0c1597ff72",
+    "createdAt": "2026-04-12T05:05:45.531Z",
+    "updatedAt": "2026-04-12T05:05:45.531Z"
+  },
+  {
+    "_id": "69db282a2b56cc0c1597ff80",
+    "nombre": "Herramientas y Accesorios",
+    "marca": "69db28292b56cc0c1597ff7d",
+    "createdAt": "2026-04-12T05:05:46.005Z",
+    "updatedAt": "2026-04-12T05:05:46.005Z"
+  },
+  {
+    "_id": "69db282a2b56cc0c1597ff8b",
+    "nombre": "Cosméticos y Cuidado Facial",
+    "marca": "69db282a2b56cc0c1597ff88",
+    "createdAt": "2026-04-12T05:05:46.472Z",
+    "updatedAt": "2026-04-12T05:05:46.472Z"
+  },
+  {
+    "_id": "69db282b2b56cc0c1597ff9d",
+    "nombre": "Desechables",
+    "marca": "69db282b2b56cc0c1597ff9a",
+    "createdAt": "2026-04-12T05:05:47.279Z",
+    "updatedAt": "2026-04-12T05:05:47.279Z"
+  },
+  {
+    "_id": "69db282b2b56cc0c1597ffa8",
+    "nombre": "Cosméticos y Cuidado Facial",
+    "marca": "69db282b2b56cc0c1597ffa5",
+    "createdAt": "2026-04-12T05:05:47.747Z",
+    "updatedAt": "2026-04-12T05:05:47.747Z"
+  },
+  {
+    "_id": "69db282c2b56cc0c1597ffb1",
+    "nombre": "Pestañas y Cejas",
+    "marca": "69db282b2b56cc0c1597ffa5",
+    "createdAt": "2026-04-12T05:05:48.129Z",
+    "updatedAt": "2026-04-12T05:05:48.129Z"
+  },
+  {
+    "_id": "69db282c2b56cc0c1597ffba",
+    "nombre": "General",
+    "marca": "69db282b2b56cc0c1597ffa5",
+    "createdAt": "2026-04-12T05:05:48.545Z",
+    "updatedAt": "2026-04-12T05:05:48.545Z"
+  },
+  {
+    "_id": "69db282e2b56cc0c1597ffe1",
+    "nombre": "Cuidado Capilar",
+    "marca": "69db282e2b56cc0c1597ffde",
+    "createdAt": "2026-04-12T05:05:50.353Z",
+    "updatedAt": "2026-04-12T05:05:50.353Z"
+  },
+  {
+    "_id": "69db282e2b56cc0c1597ffec",
+    "nombre": "Cuidado Capilar",
+    "marca": "69db282e2b56cc0c1597ffe9",
+    "createdAt": "2026-04-12T05:05:50.822Z",
+    "updatedAt": "2026-04-12T05:05:50.822Z"
+  },
+  {
+    "_id": "69db28302b56cc0c1598001a",
+    "nombre": "General",
+    "marca": "69db28302b56cc0c15980017",
+    "createdAt": "2026-04-12T05:05:52.974Z",
+    "updatedAt": "2026-04-12T05:05:52.974Z"
+  },
+  {
+    "_id": "69db28322b56cc0c15980031",
+    "nombre": "Máquinas y Eléctricos",
+    "marca": "69db28302b56cc0c15980017",
+    "createdAt": "2026-04-12T05:05:54.053Z",
+    "updatedAt": "2026-04-12T05:05:54.053Z"
+  }
+]

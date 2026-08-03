@@ -1,0 +1,13 @@
+[
+  {
+    "_id": "69a90ca96a23361f619b9d42",
+    "nombre": "Envio Estandar",
+    "descripcion": "envio por estafeta",
+    "costo": 100,
+    "tipo": "nacional",
+    "tiempoEstimado": "3 - 5 Días",
+    "activo": true,
+    "createdAt": "2026-03-05T04:55:05.457Z",
+    "updatedAt": "2026-03-05T04:55:05.457Z"
+  }
+]
