@@ -1,0 +1,4520 @@
+[
+  {
+    "_id": "6a610c84a678609cfae0efa5",
+    "nombre": "Lizbet",
+    "ap": "Olvera",
+    "am": "Morales",
+    "fechaNacimiento": "2005-07-03T00:00:00.000Z",
+    "email": "lizbetolvera2005@gmail.com",
+    "telefono": "7717011736",
+    "preguntaSecreta": "pelicula-favorita",
+    "respuestaSecreta": "$2b$10$wfe2uEkgbv5Vlga/IFIPouh6TZQTIWu4mCC19HVm3D7BUjrqLGNEC",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a611ac2fab13c48304f9579",
+    "nombre": "deivid",
+    "ap": "hernandez",
+    "am": "hernandez",
+    "fechaNacimiento": "1999-08-03T00:00:00.000Z",
+    "email": "odlc31230@gmail.com",
+    "telefono": "7713398997",
+    "preguntaSecreta": "personaje-favorito",
+    "respuestaSecreta": "$2b$10$aDJS5TEyEUTbTbXYRRBWj.djuwUGd7zOR2TZ9YiTHAC0iTSyWTJty",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a611b18fab13c48304f958c",
+    "nombre": "oscar",
+    "ap": "hernandez",
+    "am": "dela cruz",
+    "fechaNacimiento": "2009-11-28T00:00:00.000Z",
+    "email": "20221019@uthh.edu.mx",
+    "telefono": "7758994412",
+    "preguntaSecreta": "pelicula-favorita",
+    "respuestaSecreta": "$2b$10$pQwk81A9VESdIAon2AlUtOHZ1QJV8lzuUoIJU1wcTbgDPvtkp4NFS",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a611b68fab13c48304f9592",
+    "nombre": "David",
+    "ap": "Dela Cruz",
+    "am": "Cruz",
+    "fechaNacimiento": "1985-08-19T00:00:00.000Z",
+    "email": "delaruzhernandezoscardavid@outlook.com",
+    "telefono": "8899224338",
+    "preguntaSecreta": "nombre-mascota",
+    "respuestaSecreta": "$2b$10$oeIejx.8FFdA9dxS61rjkOwDFYrvPsPRhppoolmDiCvf0WUdFIK.q",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a611cb5fab13c48304f95b7",
+    "nombre": "Natalia",
+    "ap": "Hernadez",
+    "am": "Azuara",
+    "fechaNacimiento": "2000-02-18T00:00:00.000Z",
+    "email": "lizm051458@gmail.com",
+    "telefono": "7711518332",
+    "preguntaSecreta": "personaje-favorito",
+    "respuestaSecreta": "$2b$10$ZVYSGQTECljcokPP8fBw5uvhAXCvak9SXqBJFPI0lo2BBHqNtFRPO",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a611d60fab13c48304f95db",
+    "nombre": "Alicia",
+    "ap": "Cruz",
+    "am": "Garcia",
+    "fechaNacimiento": "2003-10-06T00:00:00.000Z",
+    "email": "20230068@uthh.edu.mx",
+    "telefono": "7714061527",
+    "preguntaSecreta": "mejor-amigo",
+    "respuestaSecreta": "$2b$10$9yyL7uopHl3bcJXFrwINsutnwF6T2Hl7pCWe/pjYHylp0ZmTC1Ryi",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f8b",
+    "nombre": "Jorge",
+    "ap": "Vásquez",
+    "am": "Sánchez",
+    "fechaNacimiento": "1970-11-06T00:00:00.000Z",
+    "email": "cliente_sintetico_7@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f8c",
+    "nombre": "Elena",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1969-12-23T00:00:00.000Z",
+    "email": "cliente_sintetico_8@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f8d",
+    "nombre": "Valeria",
+    "ap": "González",
+    "am": "González",
+    "fechaNacimiento": "1996-09-26T00:00:00.000Z",
+    "email": "cliente_sintetico_9@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f8e",
+    "nombre": "Sofia",
+    "ap": "Ramírez",
+    "am": "González",
+    "fechaNacimiento": "1982-08-19T00:00:00.000Z",
+    "email": "cliente_sintetico_10@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f8f",
+    "nombre": "Elena",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1995-12-11T00:00:00.000Z",
+    "email": "cliente_sintetico_11@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f90",
+    "nombre": "Fernando",
+    "ap": "Ramírez",
+    "am": "Gómez",
+    "fechaNacimiento": "2004-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_12@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f91",
+    "nombre": "Daniela",
+    "ap": "Hernández",
+    "am": "Pérez",
+    "fechaNacimiento": "1993-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_13@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f92",
+    "nombre": "Elena",
+    "ap": "González",
+    "am": "Ramírez",
+    "fechaNacimiento": "1972-07-17T00:00:00.000Z",
+    "email": "cliente_sintetico_14@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f93",
+    "nombre": "Gabriel",
+    "ap": "Martínez",
+    "am": "Pérez",
+    "fechaNacimiento": "1976-08-24T00:00:00.000Z",
+    "email": "cliente_sintetico_15@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f94",
+    "nombre": "Camila",
+    "ap": "Gómez",
+    "am": "Cruz",
+    "fechaNacimiento": "1997-12-04T00:00:00.000Z",
+    "email": "cliente_sintetico_16@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f95",
+    "nombre": "Alejandro",
+    "ap": "Vásquez",
+    "am": "García",
+    "fechaNacimiento": "2005-05-06T00:00:00.000Z",
+    "email": "cliente_sintetico_17@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f96",
+    "nombre": "Valeria",
+    "ap": "Flores",
+    "am": "González",
+    "fechaNacimiento": "1979-02-23T00:00:00.000Z",
+    "email": "cliente_sintetico_18@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f97",
+    "nombre": "Fernando",
+    "ap": "Pérez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1997-12-12T00:00:00.000Z",
+    "email": "cliente_sintetico_19@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f98",
+    "nombre": "Carlos",
+    "ap": "Cruz",
+    "am": "López",
+    "fechaNacimiento": "1973-07-06T00:00:00.000Z",
+    "email": "cliente_sintetico_20@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f99",
+    "nombre": "Luis",
+    "ap": "Sánchez",
+    "am": "Gómez",
+    "fechaNacimiento": "1983-03-28T00:00:00.000Z",
+    "email": "cliente_sintetico_21@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f9a",
+    "nombre": "Daniela",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1985-02-15T00:00:00.000Z",
+    "email": "cliente_sintetico_22@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f9b",
+    "nombre": "Luis",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "1983-12-05T00:00:00.000Z",
+    "email": "cliente_sintetico_23@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f9c",
+    "nombre": "Diego",
+    "ap": "Vásquez",
+    "am": "Morales",
+    "fechaNacimiento": "1987-09-08T00:00:00.000Z",
+    "email": "cliente_sintetico_24@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f9d",
+    "nombre": "Sofia",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1980-12-18T00:00:00.000Z",
+    "email": "cliente_sintetico_25@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f9e",
+    "nombre": "Gabriel",
+    "ap": "Pérez",
+    "am": "Flores",
+    "fechaNacimiento": "1977-10-22T00:00:00.000Z",
+    "email": "cliente_sintetico_26@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53f9f",
+    "nombre": "Mateo",
+    "ap": "Morales",
+    "am": "Cruz",
+    "fechaNacimiento": "1996-03-09T00:00:00.000Z",
+    "email": "cliente_sintetico_27@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa0",
+    "nombre": "Jorge",
+    "ap": "Vásquez",
+    "am": "Hernández",
+    "fechaNacimiento": "1990-06-26T00:00:00.000Z",
+    "email": "cliente_sintetico_28@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa1",
+    "nombre": "Mateo",
+    "ap": "Vásquez",
+    "am": "Hernández",
+    "fechaNacimiento": "1984-03-25T00:00:00.000Z",
+    "email": "cliente_sintetico_29@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa2",
+    "nombre": "Ana",
+    "ap": "Vásquez",
+    "am": "Morales",
+    "fechaNacimiento": "1995-02-24T00:00:00.000Z",
+    "email": "cliente_sintetico_30@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa3",
+    "nombre": "Luis",
+    "ap": "Morales",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1994-07-12T00:00:00.000Z",
+    "email": "cliente_sintetico_31@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa4",
+    "nombre": "Gabriel",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1989-06-12T00:00:00.000Z",
+    "email": "cliente_sintetico_32@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa5",
+    "nombre": "Jorge",
+    "ap": "Gómez",
+    "am": "Flores",
+    "fechaNacimiento": "2005-09-04T00:00:00.000Z",
+    "email": "cliente_sintetico_33@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa6",
+    "nombre": "Jorge",
+    "ap": "García",
+    "am": "Ramírez",
+    "fechaNacimiento": "1969-07-21T00:00:00.000Z",
+    "email": "cliente_sintetico_34@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa7",
+    "nombre": "Alejandro",
+    "ap": "Sánchez",
+    "am": "Flores",
+    "fechaNacimiento": "1983-11-22T00:00:00.000Z",
+    "email": "cliente_sintetico_35@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa8",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "Ramírez",
+    "fechaNacimiento": "1982-03-14T00:00:00.000Z",
+    "email": "cliente_sintetico_36@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fa9",
+    "nombre": "María",
+    "ap": "Martínez",
+    "am": "García",
+    "fechaNacimiento": "1993-03-15T00:00:00.000Z",
+    "email": "cliente_sintetico_37@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53faa",
+    "nombre": "Gabriel",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1994-09-03T00:00:00.000Z",
+    "email": "cliente_sintetico_38@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fab",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Cruz",
+    "fechaNacimiento": "1977-08-16T00:00:00.000Z",
+    "email": "cliente_sintetico_39@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fac",
+    "nombre": "Luis",
+    "ap": "Rodríguez",
+    "am": "Martínez",
+    "fechaNacimiento": "2001-09-10T00:00:00.000Z",
+    "email": "cliente_sintetico_40@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fad",
+    "nombre": "Gabriel",
+    "ap": "Morales",
+    "am": "Flores",
+    "fechaNacimiento": "1985-06-19T00:00:00.000Z",
+    "email": "cliente_sintetico_41@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fae",
+    "nombre": "Camila",
+    "ap": "Gómez",
+    "am": "Flores",
+    "fechaNacimiento": "1997-08-28T00:00:00.000Z",
+    "email": "cliente_sintetico_42@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53faf",
+    "nombre": "Diego",
+    "ap": "Ramírez",
+    "am": "García",
+    "fechaNacimiento": "1972-09-24T00:00:00.000Z",
+    "email": "cliente_sintetico_43@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb0",
+    "nombre": "Camila",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1972-04-08T00:00:00.000Z",
+    "email": "cliente_sintetico_44@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb1",
+    "nombre": "Luis",
+    "ap": "Pérez",
+    "am": "Sánchez",
+    "fechaNacimiento": "1974-12-28T00:00:00.000Z",
+    "email": "cliente_sintetico_45@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb2",
+    "nombre": "Lucía",
+    "ap": "González",
+    "am": "Flores",
+    "fechaNacimiento": "1980-02-10T00:00:00.000Z",
+    "email": "cliente_sintetico_46@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb3",
+    "nombre": "Diego",
+    "ap": "Gómez",
+    "am": "Martínez",
+    "fechaNacimiento": "1980-03-25T00:00:00.000Z",
+    "email": "cliente_sintetico_47@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb4",
+    "nombre": "Carlos",
+    "ap": "Sánchez",
+    "am": "Cruz",
+    "fechaNacimiento": "1983-06-19T00:00:00.000Z",
+    "email": "cliente_sintetico_48@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb5",
+    "nombre": "Mateo",
+    "ap": "Flores",
+    "am": "Pérez",
+    "fechaNacimiento": "1970-07-03T00:00:00.000Z",
+    "email": "cliente_sintetico_49@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb6",
+    "nombre": "Diego",
+    "ap": "Sánchez",
+    "am": "López",
+    "fechaNacimiento": "1994-09-16T00:00:00.000Z",
+    "email": "cliente_sintetico_50@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb7",
+    "nombre": "Fernando",
+    "ap": "Vásquez",
+    "am": "Flores",
+    "fechaNacimiento": "1998-12-28T00:00:00.000Z",
+    "email": "cliente_sintetico_51@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb8",
+    "nombre": "María",
+    "ap": "Sánchez",
+    "am": "García",
+    "fechaNacimiento": "1972-04-27T00:00:00.000Z",
+    "email": "cliente_sintetico_52@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fb9",
+    "nombre": "Carlos",
+    "ap": "Ramírez",
+    "am": "Hernández",
+    "fechaNacimiento": "1991-12-22T00:00:00.000Z",
+    "email": "cliente_sintetico_53@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fba",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "López",
+    "fechaNacimiento": "2004-05-20T00:00:00.000Z",
+    "email": "cliente_sintetico_54@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fbb",
+    "nombre": "Lucía",
+    "ap": "Rodríguez",
+    "am": "Hernández",
+    "fechaNacimiento": "1989-07-23T00:00:00.000Z",
+    "email": "cliente_sintetico_55@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fbc",
+    "nombre": "Fernando",
+    "ap": "González",
+    "am": "Martínez",
+    "fechaNacimiento": "2004-07-22T00:00:00.000Z",
+    "email": "cliente_sintetico_56@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fbd",
+    "nombre": "Daniela",
+    "ap": "Martínez",
+    "am": "Hernández",
+    "fechaNacimiento": "1992-05-12T00:00:00.000Z",
+    "email": "cliente_sintetico_57@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fbe",
+    "nombre": "Mateo",
+    "ap": "Gómez",
+    "am": "González",
+    "fechaNacimiento": "2004-06-08T00:00:00.000Z",
+    "email": "cliente_sintetico_58@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fbf",
+    "nombre": "Gabriel",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "1983-04-02T00:00:00.000Z",
+    "email": "cliente_sintetico_59@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc0",
+    "nombre": "Carlos",
+    "ap": "Gómez",
+    "am": "García",
+    "fechaNacimiento": "1994-08-05T00:00:00.000Z",
+    "email": "cliente_sintetico_60@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc1",
+    "nombre": "Camila",
+    "ap": "González",
+    "am": "Pérez",
+    "fechaNacimiento": "1975-09-06T00:00:00.000Z",
+    "email": "cliente_sintetico_61@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc2",
+    "nombre": "Alejandro",
+    "ap": "Gómez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1983-05-11T00:00:00.000Z",
+    "email": "cliente_sintetico_62@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc3",
+    "nombre": "María",
+    "ap": "Martínez",
+    "am": "Hernández",
+    "fechaNacimiento": "1979-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_63@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc4",
+    "nombre": "Diego",
+    "ap": "Rodríguez",
+    "am": "López",
+    "fechaNacimiento": "1995-06-03T00:00:00.000Z",
+    "email": "cliente_sintetico_64@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc5",
+    "nombre": "Valeria",
+    "ap": "Martínez",
+    "am": "Morales",
+    "fechaNacimiento": "1974-09-20T00:00:00.000Z",
+    "email": "cliente_sintetico_65@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc6",
+    "nombre": "Jorge",
+    "ap": "Ramírez",
+    "am": "Gómez",
+    "fechaNacimiento": "2005-12-02T00:00:00.000Z",
+    "email": "cliente_sintetico_66@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc7",
+    "nombre": "Jorge",
+    "ap": "Morales",
+    "am": "Vásquez",
+    "fechaNacimiento": "1970-06-20T00:00:00.000Z",
+    "email": "cliente_sintetico_67@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc8",
+    "nombre": "Lucía",
+    "ap": "Martínez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1982-05-28T00:00:00.000Z",
+    "email": "cliente_sintetico_68@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fc9",
+    "nombre": "Elena",
+    "ap": "Morales",
+    "am": "Cruz",
+    "fechaNacimiento": "1999-05-18T00:00:00.000Z",
+    "email": "cliente_sintetico_69@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fca",
+    "nombre": "Elena",
+    "ap": "López",
+    "am": "Hernández",
+    "fechaNacimiento": "1968-04-17T00:00:00.000Z",
+    "email": "cliente_sintetico_70@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fcb",
+    "nombre": "Ana",
+    "ap": "Pérez",
+    "am": "Cruz",
+    "fechaNacimiento": "1969-12-23T00:00:00.000Z",
+    "email": "cliente_sintetico_71@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fcc",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "Gómez",
+    "fechaNacimiento": "1971-10-28T00:00:00.000Z",
+    "email": "cliente_sintetico_72@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fcd",
+    "nombre": "Elena",
+    "ap": "Rodríguez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1988-09-04T00:00:00.000Z",
+    "email": "cliente_sintetico_73@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fce",
+    "nombre": "Jorge",
+    "ap": "Flores",
+    "am": "Gómez",
+    "fechaNacimiento": "1976-07-25T00:00:00.000Z",
+    "email": "cliente_sintetico_74@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fcf",
+    "nombre": "Elena",
+    "ap": "López",
+    "am": "Vásquez",
+    "fechaNacimiento": "1987-09-16T00:00:00.000Z",
+    "email": "cliente_sintetico_75@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd0",
+    "nombre": "Daniela",
+    "ap": "García",
+    "am": "Pérez",
+    "fechaNacimiento": "1996-03-08T00:00:00.000Z",
+    "email": "cliente_sintetico_76@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd1",
+    "nombre": "Carlos",
+    "ap": "Gómez",
+    "am": "Hernández",
+    "fechaNacimiento": "1985-05-06T00:00:00.000Z",
+    "email": "cliente_sintetico_77@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd2",
+    "nombre": "Daniela",
+    "ap": "Cruz",
+    "am": "Gómez",
+    "fechaNacimiento": "2004-10-28T00:00:00.000Z",
+    "email": "cliente_sintetico_78@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd3",
+    "nombre": "Camila",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1998-09-15T00:00:00.000Z",
+    "email": "cliente_sintetico_79@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd4",
+    "nombre": "Valeria",
+    "ap": "Pérez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1994-10-05T00:00:00.000Z",
+    "email": "cliente_sintetico_80@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd5",
+    "nombre": "Mateo",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1968-02-26T00:00:00.000Z",
+    "email": "cliente_sintetico_81@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd6",
+    "nombre": "Daniela",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1998-12-26T00:00:00.000Z",
+    "email": "cliente_sintetico_82@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd7",
+    "nombre": "Alejandro",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1982-06-22T00:00:00.000Z",
+    "email": "cliente_sintetico_83@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd8",
+    "nombre": "Diego",
+    "ap": "Morales",
+    "am": "García",
+    "fechaNacimiento": "1990-09-24T00:00:00.000Z",
+    "email": "cliente_sintetico_84@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fd9",
+    "nombre": "Sofia",
+    "ap": "Gómez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1986-01-03T00:00:00.000Z",
+    "email": "cliente_sintetico_85@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fda",
+    "nombre": "Gabriel",
+    "ap": "García",
+    "am": "Hernández",
+    "fechaNacimiento": "1990-09-05T00:00:00.000Z",
+    "email": "cliente_sintetico_86@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fdb",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1969-08-21T00:00:00.000Z",
+    "email": "cliente_sintetico_87@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fdc",
+    "nombre": "Jorge",
+    "ap": "López",
+    "am": "González",
+    "fechaNacimiento": "2004-08-18T00:00:00.000Z",
+    "email": "cliente_sintetico_88@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fdd",
+    "nombre": "Fernando",
+    "ap": "López",
+    "am": "Cruz",
+    "fechaNacimiento": "2004-08-13T00:00:00.000Z",
+    "email": "cliente_sintetico_89@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fde",
+    "nombre": "Fernando",
+    "ap": "Pérez",
+    "am": "Flores",
+    "fechaNacimiento": "1975-01-26T00:00:00.000Z",
+    "email": "cliente_sintetico_90@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fdf",
+    "nombre": "Ana",
+    "ap": "Hernández",
+    "am": "García",
+    "fechaNacimiento": "1996-08-16T00:00:00.000Z",
+    "email": "cliente_sintetico_91@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe0",
+    "nombre": "Mateo",
+    "ap": "González",
+    "am": "Sánchez",
+    "fechaNacimiento": "1982-06-26T00:00:00.000Z",
+    "email": "cliente_sintetico_92@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe1",
+    "nombre": "Jorge",
+    "ap": "Martínez",
+    "am": "García",
+    "fechaNacimiento": "1994-09-25T00:00:00.000Z",
+    "email": "cliente_sintetico_93@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe2",
+    "nombre": "Diego",
+    "ap": "Pérez",
+    "am": "Sánchez",
+    "fechaNacimiento": "2002-04-20T00:00:00.000Z",
+    "email": "cliente_sintetico_94@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe3",
+    "nombre": "Diego",
+    "ap": "López",
+    "am": "Sánchez",
+    "fechaNacimiento": "1970-02-22T00:00:00.000Z",
+    "email": "cliente_sintetico_95@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe4",
+    "nombre": "Carlos",
+    "ap": "García",
+    "am": "Flores",
+    "fechaNacimiento": "1971-02-16T00:00:00.000Z",
+    "email": "cliente_sintetico_96@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe5",
+    "nombre": "Diego",
+    "ap": "Pérez",
+    "am": "Cruz",
+    "fechaNacimiento": "1993-05-04T00:00:00.000Z",
+    "email": "cliente_sintetico_97@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe6",
+    "nombre": "Lucía",
+    "ap": "Pérez",
+    "am": "García",
+    "fechaNacimiento": "1991-08-23T00:00:00.000Z",
+    "email": "cliente_sintetico_98@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe7",
+    "nombre": "Lucía",
+    "ap": "Vásquez",
+    "am": "Vásquez",
+    "fechaNacimiento": "2001-06-14T00:00:00.000Z",
+    "email": "cliente_sintetico_99@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e40420c7e024088e53fe8",
+    "nombre": "Luis",
+    "ap": "Cruz",
+    "am": "Cruz",
+    "fechaNacimiento": "1976-11-15T00:00:00.000Z",
+    "email": "cliente_sintetico_100@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6688",
+    "nombre": "Jorge",
+    "ap": "Vásquez",
+    "am": "Sánchez",
+    "fechaNacimiento": "1970-11-06T00:00:00.000Z",
+    "email": "cliente_sintetico_101@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6689",
+    "nombre": "Elena",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1969-12-23T00:00:00.000Z",
+    "email": "cliente_sintetico_102@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d668a",
+    "nombre": "Valeria",
+    "ap": "González",
+    "am": "González",
+    "fechaNacimiento": "1996-09-26T00:00:00.000Z",
+    "email": "cliente_sintetico_103@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d668b",
+    "nombre": "Sofia",
+    "ap": "Ramírez",
+    "am": "González",
+    "fechaNacimiento": "1982-08-19T00:00:00.000Z",
+    "email": "cliente_sintetico_104@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d668c",
+    "nombre": "Elena",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1995-12-11T00:00:00.000Z",
+    "email": "cliente_sintetico_105@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d668d",
+    "nombre": "Fernando",
+    "ap": "Ramírez",
+    "am": "Gómez",
+    "fechaNacimiento": "2004-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_106@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d668e",
+    "nombre": "Daniela",
+    "ap": "Hernández",
+    "am": "Pérez",
+    "fechaNacimiento": "1993-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_107@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d668f",
+    "nombre": "Elena",
+    "ap": "González",
+    "am": "Ramírez",
+    "fechaNacimiento": "1972-07-17T00:00:00.000Z",
+    "email": "cliente_sintetico_108@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6690",
+    "nombre": "Gabriel",
+    "ap": "Martínez",
+    "am": "Pérez",
+    "fechaNacimiento": "1976-08-24T00:00:00.000Z",
+    "email": "cliente_sintetico_109@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6691",
+    "nombre": "Camila",
+    "ap": "Gómez",
+    "am": "Cruz",
+    "fechaNacimiento": "1997-12-04T00:00:00.000Z",
+    "email": "cliente_sintetico_110@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6692",
+    "nombre": "Alejandro",
+    "ap": "Vásquez",
+    "am": "García",
+    "fechaNacimiento": "2005-05-06T00:00:00.000Z",
+    "email": "cliente_sintetico_111@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6693",
+    "nombre": "Valeria",
+    "ap": "Flores",
+    "am": "González",
+    "fechaNacimiento": "1979-02-23T00:00:00.000Z",
+    "email": "cliente_sintetico_112@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6694",
+    "nombre": "Fernando",
+    "ap": "Pérez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1997-12-12T00:00:00.000Z",
+    "email": "cliente_sintetico_113@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6695",
+    "nombre": "Carlos",
+    "ap": "Cruz",
+    "am": "López",
+    "fechaNacimiento": "1973-07-06T00:00:00.000Z",
+    "email": "cliente_sintetico_114@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6696",
+    "nombre": "Luis",
+    "ap": "Sánchez",
+    "am": "Gómez",
+    "fechaNacimiento": "1983-03-28T00:00:00.000Z",
+    "email": "cliente_sintetico_115@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6697",
+    "nombre": "Daniela",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1985-02-15T00:00:00.000Z",
+    "email": "cliente_sintetico_116@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6698",
+    "nombre": "Luis",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "1983-12-05T00:00:00.000Z",
+    "email": "cliente_sintetico_117@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d6699",
+    "nombre": "Diego",
+    "ap": "Vásquez",
+    "am": "Morales",
+    "fechaNacimiento": "1987-09-08T00:00:00.000Z",
+    "email": "cliente_sintetico_118@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d669a",
+    "nombre": "Sofia",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1980-12-18T00:00:00.000Z",
+    "email": "cliente_sintetico_119@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d669b",
+    "nombre": "Gabriel",
+    "ap": "Pérez",
+    "am": "Flores",
+    "fechaNacimiento": "1977-10-22T00:00:00.000Z",
+    "email": "cliente_sintetico_120@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d669c",
+    "nombre": "Mateo",
+    "ap": "Morales",
+    "am": "Cruz",
+    "fechaNacimiento": "1996-03-09T00:00:00.000Z",
+    "email": "cliente_sintetico_121@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d669d",
+    "nombre": "Jorge",
+    "ap": "Vásquez",
+    "am": "Hernández",
+    "fechaNacimiento": "1990-06-26T00:00:00.000Z",
+    "email": "cliente_sintetico_122@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d669e",
+    "nombre": "Mateo",
+    "ap": "Vásquez",
+    "am": "Hernández",
+    "fechaNacimiento": "1984-03-25T00:00:00.000Z",
+    "email": "cliente_sintetico_123@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d669f",
+    "nombre": "Ana",
+    "ap": "Vásquez",
+    "am": "Morales",
+    "fechaNacimiento": "1995-02-24T00:00:00.000Z",
+    "email": "cliente_sintetico_124@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a0",
+    "nombre": "Luis",
+    "ap": "Morales",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1994-07-12T00:00:00.000Z",
+    "email": "cliente_sintetico_125@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a1",
+    "nombre": "Gabriel",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1989-06-12T00:00:00.000Z",
+    "email": "cliente_sintetico_126@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a2",
+    "nombre": "Jorge",
+    "ap": "Gómez",
+    "am": "Flores",
+    "fechaNacimiento": "2005-09-04T00:00:00.000Z",
+    "email": "cliente_sintetico_127@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a3",
+    "nombre": "Jorge",
+    "ap": "García",
+    "am": "Ramírez",
+    "fechaNacimiento": "1969-07-21T00:00:00.000Z",
+    "email": "cliente_sintetico_128@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a4",
+    "nombre": "Alejandro",
+    "ap": "Sánchez",
+    "am": "Flores",
+    "fechaNacimiento": "1983-11-22T00:00:00.000Z",
+    "email": "cliente_sintetico_129@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a5",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "Ramírez",
+    "fechaNacimiento": "1982-03-14T00:00:00.000Z",
+    "email": "cliente_sintetico_130@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a6",
+    "nombre": "María",
+    "ap": "Martínez",
+    "am": "García",
+    "fechaNacimiento": "1993-03-15T00:00:00.000Z",
+    "email": "cliente_sintetico_131@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a7",
+    "nombre": "Gabriel",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1994-09-03T00:00:00.000Z",
+    "email": "cliente_sintetico_132@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a8",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Cruz",
+    "fechaNacimiento": "1977-08-16T00:00:00.000Z",
+    "email": "cliente_sintetico_133@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66a9",
+    "nombre": "Luis",
+    "ap": "Rodríguez",
+    "am": "Martínez",
+    "fechaNacimiento": "2001-09-10T00:00:00.000Z",
+    "email": "cliente_sintetico_134@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66aa",
+    "nombre": "Gabriel",
+    "ap": "Morales",
+    "am": "Flores",
+    "fechaNacimiento": "1985-06-19T00:00:00.000Z",
+    "email": "cliente_sintetico_135@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66ab",
+    "nombre": "Camila",
+    "ap": "Gómez",
+    "am": "Flores",
+    "fechaNacimiento": "1997-08-28T00:00:00.000Z",
+    "email": "cliente_sintetico_136@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66ac",
+    "nombre": "Diego",
+    "ap": "Ramírez",
+    "am": "García",
+    "fechaNacimiento": "1972-09-24T00:00:00.000Z",
+    "email": "cliente_sintetico_137@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66ad",
+    "nombre": "Camila",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1972-04-08T00:00:00.000Z",
+    "email": "cliente_sintetico_138@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66ae",
+    "nombre": "Luis",
+    "ap": "Pérez",
+    "am": "Sánchez",
+    "fechaNacimiento": "1974-12-28T00:00:00.000Z",
+    "email": "cliente_sintetico_139@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66af",
+    "nombre": "Lucía",
+    "ap": "González",
+    "am": "Flores",
+    "fechaNacimiento": "1980-02-10T00:00:00.000Z",
+    "email": "cliente_sintetico_140@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b0",
+    "nombre": "Diego",
+    "ap": "Gómez",
+    "am": "Martínez",
+    "fechaNacimiento": "1980-03-25T00:00:00.000Z",
+    "email": "cliente_sintetico_141@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b1",
+    "nombre": "Carlos",
+    "ap": "Sánchez",
+    "am": "Cruz",
+    "fechaNacimiento": "1983-06-19T00:00:00.000Z",
+    "email": "cliente_sintetico_142@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b2",
+    "nombre": "Mateo",
+    "ap": "Flores",
+    "am": "Pérez",
+    "fechaNacimiento": "1970-07-03T00:00:00.000Z",
+    "email": "cliente_sintetico_143@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b3",
+    "nombre": "Diego",
+    "ap": "Sánchez",
+    "am": "López",
+    "fechaNacimiento": "1994-09-16T00:00:00.000Z",
+    "email": "cliente_sintetico_144@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b4",
+    "nombre": "Fernando",
+    "ap": "Vásquez",
+    "am": "Flores",
+    "fechaNacimiento": "1998-12-28T00:00:00.000Z",
+    "email": "cliente_sintetico_145@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b5",
+    "nombre": "María",
+    "ap": "Sánchez",
+    "am": "García",
+    "fechaNacimiento": "1972-04-27T00:00:00.000Z",
+    "email": "cliente_sintetico_146@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b6",
+    "nombre": "Carlos",
+    "ap": "Ramírez",
+    "am": "Hernández",
+    "fechaNacimiento": "1991-12-22T00:00:00.000Z",
+    "email": "cliente_sintetico_147@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b7",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "López",
+    "fechaNacimiento": "2004-05-20T00:00:00.000Z",
+    "email": "cliente_sintetico_148@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b8",
+    "nombre": "Lucía",
+    "ap": "Rodríguez",
+    "am": "Hernández",
+    "fechaNacimiento": "1989-07-23T00:00:00.000Z",
+    "email": "cliente_sintetico_149@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66b9",
+    "nombre": "Fernando",
+    "ap": "González",
+    "am": "Martínez",
+    "fechaNacimiento": "2004-07-22T00:00:00.000Z",
+    "email": "cliente_sintetico_150@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66ba",
+    "nombre": "Daniela",
+    "ap": "Martínez",
+    "am": "Hernández",
+    "fechaNacimiento": "1992-05-12T00:00:00.000Z",
+    "email": "cliente_sintetico_151@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66bb",
+    "nombre": "Mateo",
+    "ap": "Gómez",
+    "am": "González",
+    "fechaNacimiento": "2004-06-08T00:00:00.000Z",
+    "email": "cliente_sintetico_152@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66bc",
+    "nombre": "Gabriel",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "1983-04-02T00:00:00.000Z",
+    "email": "cliente_sintetico_153@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66bd",
+    "nombre": "Carlos",
+    "ap": "Gómez",
+    "am": "García",
+    "fechaNacimiento": "1994-08-05T00:00:00.000Z",
+    "email": "cliente_sintetico_154@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66be",
+    "nombre": "Camila",
+    "ap": "González",
+    "am": "Pérez",
+    "fechaNacimiento": "1975-09-06T00:00:00.000Z",
+    "email": "cliente_sintetico_155@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66bf",
+    "nombre": "Alejandro",
+    "ap": "Gómez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1983-05-11T00:00:00.000Z",
+    "email": "cliente_sintetico_156@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c0",
+    "nombre": "María",
+    "ap": "Martínez",
+    "am": "Hernández",
+    "fechaNacimiento": "1979-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_157@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c1",
+    "nombre": "Diego",
+    "ap": "Rodríguez",
+    "am": "López",
+    "fechaNacimiento": "1995-06-03T00:00:00.000Z",
+    "email": "cliente_sintetico_158@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c2",
+    "nombre": "Valeria",
+    "ap": "Martínez",
+    "am": "Morales",
+    "fechaNacimiento": "1974-09-20T00:00:00.000Z",
+    "email": "cliente_sintetico_159@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c3",
+    "nombre": "Jorge",
+    "ap": "Ramírez",
+    "am": "Gómez",
+    "fechaNacimiento": "2005-12-02T00:00:00.000Z",
+    "email": "cliente_sintetico_160@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c4",
+    "nombre": "Jorge",
+    "ap": "Morales",
+    "am": "Vásquez",
+    "fechaNacimiento": "1970-06-20T00:00:00.000Z",
+    "email": "cliente_sintetico_161@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c5",
+    "nombre": "Lucía",
+    "ap": "Martínez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1982-05-28T00:00:00.000Z",
+    "email": "cliente_sintetico_162@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c6",
+    "nombre": "Elena",
+    "ap": "Morales",
+    "am": "Cruz",
+    "fechaNacimiento": "1999-05-18T00:00:00.000Z",
+    "email": "cliente_sintetico_163@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c7",
+    "nombre": "Elena",
+    "ap": "López",
+    "am": "Hernández",
+    "fechaNacimiento": "1968-04-17T00:00:00.000Z",
+    "email": "cliente_sintetico_164@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c8",
+    "nombre": "Ana",
+    "ap": "Pérez",
+    "am": "Cruz",
+    "fechaNacimiento": "1969-12-23T00:00:00.000Z",
+    "email": "cliente_sintetico_165@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66c9",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "Gómez",
+    "fechaNacimiento": "1971-10-28T00:00:00.000Z",
+    "email": "cliente_sintetico_166@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66ca",
+    "nombre": "Elena",
+    "ap": "Rodríguez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1988-09-04T00:00:00.000Z",
+    "email": "cliente_sintetico_167@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66cb",
+    "nombre": "Jorge",
+    "ap": "Flores",
+    "am": "Gómez",
+    "fechaNacimiento": "1976-07-25T00:00:00.000Z",
+    "email": "cliente_sintetico_168@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66cc",
+    "nombre": "Elena",
+    "ap": "López",
+    "am": "Vásquez",
+    "fechaNacimiento": "1987-09-16T00:00:00.000Z",
+    "email": "cliente_sintetico_169@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66cd",
+    "nombre": "Daniela",
+    "ap": "García",
+    "am": "Pérez",
+    "fechaNacimiento": "1996-03-08T00:00:00.000Z",
+    "email": "cliente_sintetico_170@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66ce",
+    "nombre": "Carlos",
+    "ap": "Gómez",
+    "am": "Hernández",
+    "fechaNacimiento": "1985-05-06T00:00:00.000Z",
+    "email": "cliente_sintetico_171@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66cf",
+    "nombre": "Daniela",
+    "ap": "Cruz",
+    "am": "Gómez",
+    "fechaNacimiento": "2004-10-28T00:00:00.000Z",
+    "email": "cliente_sintetico_172@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d0",
+    "nombre": "Camila",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1998-09-15T00:00:00.000Z",
+    "email": "cliente_sintetico_173@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d1",
+    "nombre": "Valeria",
+    "ap": "Pérez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1994-10-05T00:00:00.000Z",
+    "email": "cliente_sintetico_174@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d2",
+    "nombre": "Mateo",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1968-02-26T00:00:00.000Z",
+    "email": "cliente_sintetico_175@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d3",
+    "nombre": "Daniela",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1998-12-26T00:00:00.000Z",
+    "email": "cliente_sintetico_176@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d4",
+    "nombre": "Alejandro",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1982-06-22T00:00:00.000Z",
+    "email": "cliente_sintetico_177@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d5",
+    "nombre": "Diego",
+    "ap": "Morales",
+    "am": "García",
+    "fechaNacimiento": "1990-09-24T00:00:00.000Z",
+    "email": "cliente_sintetico_178@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d6",
+    "nombre": "Sofia",
+    "ap": "Gómez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1986-01-03T00:00:00.000Z",
+    "email": "cliente_sintetico_179@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d7",
+    "nombre": "Gabriel",
+    "ap": "García",
+    "am": "Hernández",
+    "fechaNacimiento": "1990-09-05T00:00:00.000Z",
+    "email": "cliente_sintetico_180@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d8",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1969-08-21T00:00:00.000Z",
+    "email": "cliente_sintetico_181@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66d9",
+    "nombre": "Jorge",
+    "ap": "López",
+    "am": "González",
+    "fechaNacimiento": "2004-08-18T00:00:00.000Z",
+    "email": "cliente_sintetico_182@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66da",
+    "nombre": "Fernando",
+    "ap": "López",
+    "am": "Cruz",
+    "fechaNacimiento": "2004-08-13T00:00:00.000Z",
+    "email": "cliente_sintetico_183@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66db",
+    "nombre": "Fernando",
+    "ap": "Pérez",
+    "am": "Flores",
+    "fechaNacimiento": "1975-01-26T00:00:00.000Z",
+    "email": "cliente_sintetico_184@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66dc",
+    "nombre": "Ana",
+    "ap": "Hernández",
+    "am": "García",
+    "fechaNacimiento": "1996-08-16T00:00:00.000Z",
+    "email": "cliente_sintetico_185@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66dd",
+    "nombre": "Mateo",
+    "ap": "González",
+    "am": "Sánchez",
+    "fechaNacimiento": "1982-06-26T00:00:00.000Z",
+    "email": "cliente_sintetico_186@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66de",
+    "nombre": "Jorge",
+    "ap": "Martínez",
+    "am": "García",
+    "fechaNacimiento": "1994-09-25T00:00:00.000Z",
+    "email": "cliente_sintetico_187@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66df",
+    "nombre": "Diego",
+    "ap": "Pérez",
+    "am": "Sánchez",
+    "fechaNacimiento": "2002-04-20T00:00:00.000Z",
+    "email": "cliente_sintetico_188@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e0",
+    "nombre": "Diego",
+    "ap": "López",
+    "am": "Sánchez",
+    "fechaNacimiento": "1970-02-22T00:00:00.000Z",
+    "email": "cliente_sintetico_189@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e1",
+    "nombre": "Carlos",
+    "ap": "García",
+    "am": "Flores",
+    "fechaNacimiento": "1971-02-16T00:00:00.000Z",
+    "email": "cliente_sintetico_190@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e2",
+    "nombre": "Diego",
+    "ap": "Pérez",
+    "am": "Cruz",
+    "fechaNacimiento": "1993-05-04T00:00:00.000Z",
+    "email": "cliente_sintetico_191@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e3",
+    "nombre": "Lucía",
+    "ap": "Pérez",
+    "am": "García",
+    "fechaNacimiento": "1991-08-23T00:00:00.000Z",
+    "email": "cliente_sintetico_192@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e4",
+    "nombre": "Lucía",
+    "ap": "Vásquez",
+    "am": "Vásquez",
+    "fechaNacimiento": "2001-06-14T00:00:00.000Z",
+    "email": "cliente_sintetico_193@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e5",
+    "nombre": "Luis",
+    "ap": "Cruz",
+    "am": "Cruz",
+    "fechaNacimiento": "1976-11-15T00:00:00.000Z",
+    "email": "cliente_sintetico_194@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e6",
+    "nombre": "Elena",
+    "ap": "Morales",
+    "am": "Vásquez",
+    "fechaNacimiento": "1999-07-24T00:00:00.000Z",
+    "email": "cliente_sintetico_195@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e7",
+    "nombre": "Mateo",
+    "ap": "López",
+    "am": "Vásquez",
+    "fechaNacimiento": "1978-11-19T00:00:00.000Z",
+    "email": "cliente_sintetico_196@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e8",
+    "nombre": "Gabriel",
+    "ap": "Vásquez",
+    "am": "García",
+    "fechaNacimiento": "1996-09-18T00:00:00.000Z",
+    "email": "cliente_sintetico_197@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66e9",
+    "nombre": "Daniela",
+    "ap": "Flores",
+    "am": "Cruz",
+    "fechaNacimiento": "2002-08-12T00:00:00.000Z",
+    "email": "cliente_sintetico_198@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66ea",
+    "nombre": "Lucía",
+    "ap": "Ramírez",
+    "am": "González",
+    "fechaNacimiento": "1994-01-12T00:00:00.000Z",
+    "email": "cliente_sintetico_199@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e423bc67baa40f00d66eb",
+    "nombre": "Jorge",
+    "ap": "Gómez",
+    "am": "Cruz",
+    "fechaNacimiento": "2004-06-14T00:00:00.000Z",
+    "email": "cliente_sintetico_200@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f58",
+    "nombre": "Jorge",
+    "ap": "Vásquez",
+    "am": "Sánchez",
+    "fechaNacimiento": "1970-11-06T00:00:00.000Z",
+    "email": "cliente_sintetico_201@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f59",
+    "nombre": "Elena",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1969-12-23T00:00:00.000Z",
+    "email": "cliente_sintetico_202@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f5a",
+    "nombre": "Valeria",
+    "ap": "González",
+    "am": "González",
+    "fechaNacimiento": "1996-09-26T00:00:00.000Z",
+    "email": "cliente_sintetico_203@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f5b",
+    "nombre": "Sofia",
+    "ap": "Ramírez",
+    "am": "González",
+    "fechaNacimiento": "1982-08-19T00:00:00.000Z",
+    "email": "cliente_sintetico_204@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f5c",
+    "nombre": "Elena",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1995-12-11T00:00:00.000Z",
+    "email": "cliente_sintetico_205@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f5d",
+    "nombre": "Fernando",
+    "ap": "Ramírez",
+    "am": "Gómez",
+    "fechaNacimiento": "2004-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_206@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f5e",
+    "nombre": "Daniela",
+    "ap": "Hernández",
+    "am": "Pérez",
+    "fechaNacimiento": "1993-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_207@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f5f",
+    "nombre": "Elena",
+    "ap": "González",
+    "am": "Ramírez",
+    "fechaNacimiento": "1972-07-17T00:00:00.000Z",
+    "email": "cliente_sintetico_208@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f60",
+    "nombre": "Gabriel",
+    "ap": "Martínez",
+    "am": "Pérez",
+    "fechaNacimiento": "1976-08-24T00:00:00.000Z",
+    "email": "cliente_sintetico_209@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f61",
+    "nombre": "Camila",
+    "ap": "Gómez",
+    "am": "Cruz",
+    "fechaNacimiento": "1997-12-04T00:00:00.000Z",
+    "email": "cliente_sintetico_210@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f62",
+    "nombre": "Alejandro",
+    "ap": "Vásquez",
+    "am": "García",
+    "fechaNacimiento": "2005-05-06T00:00:00.000Z",
+    "email": "cliente_sintetico_211@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f63",
+    "nombre": "Valeria",
+    "ap": "Flores",
+    "am": "González",
+    "fechaNacimiento": "1979-02-23T00:00:00.000Z",
+    "email": "cliente_sintetico_212@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f64",
+    "nombre": "Fernando",
+    "ap": "Pérez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1997-12-12T00:00:00.000Z",
+    "email": "cliente_sintetico_213@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f65",
+    "nombre": "Carlos",
+    "ap": "Cruz",
+    "am": "López",
+    "fechaNacimiento": "1973-07-06T00:00:00.000Z",
+    "email": "cliente_sintetico_214@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f66",
+    "nombre": "Luis",
+    "ap": "Sánchez",
+    "am": "Gómez",
+    "fechaNacimiento": "1983-03-28T00:00:00.000Z",
+    "email": "cliente_sintetico_215@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f67",
+    "nombre": "Daniela",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1985-02-15T00:00:00.000Z",
+    "email": "cliente_sintetico_216@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f68",
+    "nombre": "Luis",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "1983-12-05T00:00:00.000Z",
+    "email": "cliente_sintetico_217@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f69",
+    "nombre": "Diego",
+    "ap": "Vásquez",
+    "am": "Morales",
+    "fechaNacimiento": "1987-09-08T00:00:00.000Z",
+    "email": "cliente_sintetico_218@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f6a",
+    "nombre": "Sofia",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1980-12-18T00:00:00.000Z",
+    "email": "cliente_sintetico_219@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f6b",
+    "nombre": "Gabriel",
+    "ap": "Pérez",
+    "am": "Flores",
+    "fechaNacimiento": "1977-10-22T00:00:00.000Z",
+    "email": "cliente_sintetico_220@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f6c",
+    "nombre": "Mateo",
+    "ap": "Morales",
+    "am": "Cruz",
+    "fechaNacimiento": "1996-03-09T00:00:00.000Z",
+    "email": "cliente_sintetico_221@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f6d",
+    "nombre": "Jorge",
+    "ap": "Vásquez",
+    "am": "Hernández",
+    "fechaNacimiento": "1990-06-26T00:00:00.000Z",
+    "email": "cliente_sintetico_222@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f6e",
+    "nombre": "Mateo",
+    "ap": "Vásquez",
+    "am": "Hernández",
+    "fechaNacimiento": "1984-03-25T00:00:00.000Z",
+    "email": "cliente_sintetico_223@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f6f",
+    "nombre": "Ana",
+    "ap": "Vásquez",
+    "am": "Morales",
+    "fechaNacimiento": "1995-02-24T00:00:00.000Z",
+    "email": "cliente_sintetico_224@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f70",
+    "nombre": "Luis",
+    "ap": "Morales",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1994-07-12T00:00:00.000Z",
+    "email": "cliente_sintetico_225@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f71",
+    "nombre": "Gabriel",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1989-06-12T00:00:00.000Z",
+    "email": "cliente_sintetico_226@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f72",
+    "nombre": "Jorge",
+    "ap": "Gómez",
+    "am": "Flores",
+    "fechaNacimiento": "2005-09-04T00:00:00.000Z",
+    "email": "cliente_sintetico_227@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f73",
+    "nombre": "Jorge",
+    "ap": "García",
+    "am": "Ramírez",
+    "fechaNacimiento": "1969-07-21T00:00:00.000Z",
+    "email": "cliente_sintetico_228@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f74",
+    "nombre": "Alejandro",
+    "ap": "Sánchez",
+    "am": "Flores",
+    "fechaNacimiento": "1983-11-22T00:00:00.000Z",
+    "email": "cliente_sintetico_229@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f75",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "Ramírez",
+    "fechaNacimiento": "1982-03-14T00:00:00.000Z",
+    "email": "cliente_sintetico_230@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f76",
+    "nombre": "María",
+    "ap": "Martínez",
+    "am": "García",
+    "fechaNacimiento": "1993-03-15T00:00:00.000Z",
+    "email": "cliente_sintetico_231@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f77",
+    "nombre": "Gabriel",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1994-09-03T00:00:00.000Z",
+    "email": "cliente_sintetico_232@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f78",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Cruz",
+    "fechaNacimiento": "1977-08-16T00:00:00.000Z",
+    "email": "cliente_sintetico_233@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f79",
+    "nombre": "Luis",
+    "ap": "Rodríguez",
+    "am": "Martínez",
+    "fechaNacimiento": "2001-09-10T00:00:00.000Z",
+    "email": "cliente_sintetico_234@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f7a",
+    "nombre": "Gabriel",
+    "ap": "Morales",
+    "am": "Flores",
+    "fechaNacimiento": "1985-06-19T00:00:00.000Z",
+    "email": "cliente_sintetico_235@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f7b",
+    "nombre": "Camila",
+    "ap": "Gómez",
+    "am": "Flores",
+    "fechaNacimiento": "1997-08-28T00:00:00.000Z",
+    "email": "cliente_sintetico_236@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f7c",
+    "nombre": "Diego",
+    "ap": "Ramírez",
+    "am": "García",
+    "fechaNacimiento": "1972-09-24T00:00:00.000Z",
+    "email": "cliente_sintetico_237@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f7d",
+    "nombre": "Camila",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1972-04-08T00:00:00.000Z",
+    "email": "cliente_sintetico_238@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f7e",
+    "nombre": "Luis",
+    "ap": "Pérez",
+    "am": "Sánchez",
+    "fechaNacimiento": "1974-12-28T00:00:00.000Z",
+    "email": "cliente_sintetico_239@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f7f",
+    "nombre": "Lucía",
+    "ap": "González",
+    "am": "Flores",
+    "fechaNacimiento": "1980-02-10T00:00:00.000Z",
+    "email": "cliente_sintetico_240@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f80",
+    "nombre": "Diego",
+    "ap": "Gómez",
+    "am": "Martínez",
+    "fechaNacimiento": "1980-03-25T00:00:00.000Z",
+    "email": "cliente_sintetico_241@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f81",
+    "nombre": "Carlos",
+    "ap": "Sánchez",
+    "am": "Cruz",
+    "fechaNacimiento": "1983-06-19T00:00:00.000Z",
+    "email": "cliente_sintetico_242@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f82",
+    "nombre": "Mateo",
+    "ap": "Flores",
+    "am": "Pérez",
+    "fechaNacimiento": "1970-07-03T00:00:00.000Z",
+    "email": "cliente_sintetico_243@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f83",
+    "nombre": "Diego",
+    "ap": "Sánchez",
+    "am": "López",
+    "fechaNacimiento": "1994-09-16T00:00:00.000Z",
+    "email": "cliente_sintetico_244@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f84",
+    "nombre": "Fernando",
+    "ap": "Vásquez",
+    "am": "Flores",
+    "fechaNacimiento": "1998-12-28T00:00:00.000Z",
+    "email": "cliente_sintetico_245@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f85",
+    "nombre": "María",
+    "ap": "Sánchez",
+    "am": "García",
+    "fechaNacimiento": "1972-04-27T00:00:00.000Z",
+    "email": "cliente_sintetico_246@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f86",
+    "nombre": "Carlos",
+    "ap": "Ramírez",
+    "am": "Hernández",
+    "fechaNacimiento": "1991-12-22T00:00:00.000Z",
+    "email": "cliente_sintetico_247@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f87",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "López",
+    "fechaNacimiento": "2004-05-20T00:00:00.000Z",
+    "email": "cliente_sintetico_248@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f88",
+    "nombre": "Lucía",
+    "ap": "Rodríguez",
+    "am": "Hernández",
+    "fechaNacimiento": "1989-07-23T00:00:00.000Z",
+    "email": "cliente_sintetico_249@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f89",
+    "nombre": "Fernando",
+    "ap": "González",
+    "am": "Martínez",
+    "fechaNacimiento": "2004-07-22T00:00:00.000Z",
+    "email": "cliente_sintetico_250@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f8a",
+    "nombre": "Daniela",
+    "ap": "Martínez",
+    "am": "Hernández",
+    "fechaNacimiento": "1992-05-12T00:00:00.000Z",
+    "email": "cliente_sintetico_251@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f8b",
+    "nombre": "Mateo",
+    "ap": "Gómez",
+    "am": "González",
+    "fechaNacimiento": "2004-06-08T00:00:00.000Z",
+    "email": "cliente_sintetico_252@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f8c",
+    "nombre": "Gabriel",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "1983-04-02T00:00:00.000Z",
+    "email": "cliente_sintetico_253@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f8d",
+    "nombre": "Carlos",
+    "ap": "Gómez",
+    "am": "García",
+    "fechaNacimiento": "1994-08-05T00:00:00.000Z",
+    "email": "cliente_sintetico_254@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f8e",
+    "nombre": "Camila",
+    "ap": "González",
+    "am": "Pérez",
+    "fechaNacimiento": "1975-09-06T00:00:00.000Z",
+    "email": "cliente_sintetico_255@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f8f",
+    "nombre": "Alejandro",
+    "ap": "Gómez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1983-05-11T00:00:00.000Z",
+    "email": "cliente_sintetico_256@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f90",
+    "nombre": "María",
+    "ap": "Martínez",
+    "am": "Hernández",
+    "fechaNacimiento": "1979-05-27T00:00:00.000Z",
+    "email": "cliente_sintetico_257@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f91",
+    "nombre": "Diego",
+    "ap": "Rodríguez",
+    "am": "López",
+    "fechaNacimiento": "1995-06-03T00:00:00.000Z",
+    "email": "cliente_sintetico_258@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f92",
+    "nombre": "Valeria",
+    "ap": "Martínez",
+    "am": "Morales",
+    "fechaNacimiento": "1974-09-20T00:00:00.000Z",
+    "email": "cliente_sintetico_259@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f93",
+    "nombre": "Jorge",
+    "ap": "Ramírez",
+    "am": "Gómez",
+    "fechaNacimiento": "2005-12-02T00:00:00.000Z",
+    "email": "cliente_sintetico_260@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f94",
+    "nombre": "Jorge",
+    "ap": "Morales",
+    "am": "Vásquez",
+    "fechaNacimiento": "1970-06-20T00:00:00.000Z",
+    "email": "cliente_sintetico_261@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f95",
+    "nombre": "Lucía",
+    "ap": "Martínez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1982-05-28T00:00:00.000Z",
+    "email": "cliente_sintetico_262@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f96",
+    "nombre": "Elena",
+    "ap": "Morales",
+    "am": "Cruz",
+    "fechaNacimiento": "1999-05-18T00:00:00.000Z",
+    "email": "cliente_sintetico_263@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f97",
+    "nombre": "Elena",
+    "ap": "López",
+    "am": "Hernández",
+    "fechaNacimiento": "1968-04-17T00:00:00.000Z",
+    "email": "cliente_sintetico_264@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f98",
+    "nombre": "Ana",
+    "ap": "Pérez",
+    "am": "Cruz",
+    "fechaNacimiento": "1969-12-23T00:00:00.000Z",
+    "email": "cliente_sintetico_265@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f99",
+    "nombre": "Diego",
+    "ap": "Hernández",
+    "am": "Gómez",
+    "fechaNacimiento": "1971-10-28T00:00:00.000Z",
+    "email": "cliente_sintetico_266@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f9a",
+    "nombre": "Elena",
+    "ap": "Rodríguez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1988-09-04T00:00:00.000Z",
+    "email": "cliente_sintetico_267@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f9b",
+    "nombre": "Jorge",
+    "ap": "Flores",
+    "am": "Gómez",
+    "fechaNacimiento": "1976-07-25T00:00:00.000Z",
+    "email": "cliente_sintetico_268@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f9c",
+    "nombre": "Elena",
+    "ap": "López",
+    "am": "Vásquez",
+    "fechaNacimiento": "1987-09-16T00:00:00.000Z",
+    "email": "cliente_sintetico_269@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f9d",
+    "nombre": "Daniela",
+    "ap": "García",
+    "am": "Pérez",
+    "fechaNacimiento": "1996-03-08T00:00:00.000Z",
+    "email": "cliente_sintetico_270@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f9e",
+    "nombre": "Carlos",
+    "ap": "Gómez",
+    "am": "Hernández",
+    "fechaNacimiento": "1985-05-06T00:00:00.000Z",
+    "email": "cliente_sintetico_271@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3f9f",
+    "nombre": "Daniela",
+    "ap": "Cruz",
+    "am": "Gómez",
+    "fechaNacimiento": "2004-10-28T00:00:00.000Z",
+    "email": "cliente_sintetico_272@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa0",
+    "nombre": "Camila",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1998-09-15T00:00:00.000Z",
+    "email": "cliente_sintetico_273@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa1",
+    "nombre": "Valeria",
+    "ap": "Pérez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1994-10-05T00:00:00.000Z",
+    "email": "cliente_sintetico_274@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa2",
+    "nombre": "Mateo",
+    "ap": "Sánchez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1968-02-26T00:00:00.000Z",
+    "email": "cliente_sintetico_275@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa3",
+    "nombre": "Daniela",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "1998-12-26T00:00:00.000Z",
+    "email": "cliente_sintetico_276@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa4",
+    "nombre": "Alejandro",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1982-06-22T00:00:00.000Z",
+    "email": "cliente_sintetico_277@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa5",
+    "nombre": "Diego",
+    "ap": "Morales",
+    "am": "García",
+    "fechaNacimiento": "1990-09-24T00:00:00.000Z",
+    "email": "cliente_sintetico_278@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa6",
+    "nombre": "Sofia",
+    "ap": "Gómez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1986-01-03T00:00:00.000Z",
+    "email": "cliente_sintetico_279@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa7",
+    "nombre": "Gabriel",
+    "ap": "García",
+    "am": "Hernández",
+    "fechaNacimiento": "1990-09-05T00:00:00.000Z",
+    "email": "cliente_sintetico_280@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa8",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1969-08-21T00:00:00.000Z",
+    "email": "cliente_sintetico_281@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fa9",
+    "nombre": "Jorge",
+    "ap": "López",
+    "am": "González",
+    "fechaNacimiento": "2004-08-18T00:00:00.000Z",
+    "email": "cliente_sintetico_282@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3faa",
+    "nombre": "Fernando",
+    "ap": "López",
+    "am": "Cruz",
+    "fechaNacimiento": "2004-08-13T00:00:00.000Z",
+    "email": "cliente_sintetico_283@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fab",
+    "nombre": "Fernando",
+    "ap": "Pérez",
+    "am": "Flores",
+    "fechaNacimiento": "1975-01-26T00:00:00.000Z",
+    "email": "cliente_sintetico_284@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fac",
+    "nombre": "Ana",
+    "ap": "Hernández",
+    "am": "García",
+    "fechaNacimiento": "1996-08-16T00:00:00.000Z",
+    "email": "cliente_sintetico_285@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fad",
+    "nombre": "Mateo",
+    "ap": "González",
+    "am": "Sánchez",
+    "fechaNacimiento": "1982-06-26T00:00:00.000Z",
+    "email": "cliente_sintetico_286@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fae",
+    "nombre": "Jorge",
+    "ap": "Martínez",
+    "am": "García",
+    "fechaNacimiento": "1994-09-25T00:00:00.000Z",
+    "email": "cliente_sintetico_287@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3faf",
+    "nombre": "Diego",
+    "ap": "Pérez",
+    "am": "Sánchez",
+    "fechaNacimiento": "2002-04-20T00:00:00.000Z",
+    "email": "cliente_sintetico_288@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb0",
+    "nombre": "Diego",
+    "ap": "López",
+    "am": "Sánchez",
+    "fechaNacimiento": "1970-02-22T00:00:00.000Z",
+    "email": "cliente_sintetico_289@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb1",
+    "nombre": "Carlos",
+    "ap": "García",
+    "am": "Flores",
+    "fechaNacimiento": "1971-02-16T00:00:00.000Z",
+    "email": "cliente_sintetico_290@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb2",
+    "nombre": "Diego",
+    "ap": "Pérez",
+    "am": "Cruz",
+    "fechaNacimiento": "1993-05-04T00:00:00.000Z",
+    "email": "cliente_sintetico_291@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb3",
+    "nombre": "Lucía",
+    "ap": "Pérez",
+    "am": "García",
+    "fechaNacimiento": "1991-08-23T00:00:00.000Z",
+    "email": "cliente_sintetico_292@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb4",
+    "nombre": "Lucía",
+    "ap": "Vásquez",
+    "am": "Vásquez",
+    "fechaNacimiento": "2001-06-14T00:00:00.000Z",
+    "email": "cliente_sintetico_293@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb5",
+    "nombre": "Luis",
+    "ap": "Cruz",
+    "am": "Cruz",
+    "fechaNacimiento": "1976-11-15T00:00:00.000Z",
+    "email": "cliente_sintetico_294@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb6",
+    "nombre": "Elena",
+    "ap": "Morales",
+    "am": "Vásquez",
+    "fechaNacimiento": "1999-07-24T00:00:00.000Z",
+    "email": "cliente_sintetico_295@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb7",
+    "nombre": "Mateo",
+    "ap": "López",
+    "am": "Vásquez",
+    "fechaNacimiento": "1978-11-19T00:00:00.000Z",
+    "email": "cliente_sintetico_296@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb8",
+    "nombre": "Gabriel",
+    "ap": "Vásquez",
+    "am": "García",
+    "fechaNacimiento": "1996-09-18T00:00:00.000Z",
+    "email": "cliente_sintetico_297@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fb9",
+    "nombre": "Daniela",
+    "ap": "Flores",
+    "am": "Cruz",
+    "fechaNacimiento": "2002-08-12T00:00:00.000Z",
+    "email": "cliente_sintetico_298@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fba",
+    "nombre": "Lucía",
+    "ap": "Ramírez",
+    "am": "González",
+    "fechaNacimiento": "1994-01-12T00:00:00.000Z",
+    "email": "cliente_sintetico_299@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fbb",
+    "nombre": "Jorge",
+    "ap": "Gómez",
+    "am": "Cruz",
+    "fechaNacimiento": "2004-06-14T00:00:00.000Z",
+    "email": "cliente_sintetico_300@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fbc",
+    "nombre": "Jorge",
+    "ap": "González",
+    "am": "Martínez",
+    "fechaNacimiento": "2002-07-12T00:00:00.000Z",
+    "email": "cliente_sintetico_301@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fbd",
+    "nombre": "Daniela",
+    "ap": "Hernández",
+    "am": "Martínez",
+    "fechaNacimiento": "1987-10-20T00:00:00.000Z",
+    "email": "cliente_sintetico_302@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fbe",
+    "nombre": "Gabriel",
+    "ap": "Pérez",
+    "am": "Vásquez",
+    "fechaNacimiento": "2005-09-11T00:00:00.000Z",
+    "email": "cliente_sintetico_303@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fbf",
+    "nombre": "Diego",
+    "ap": "Vásquez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1980-05-03T00:00:00.000Z",
+    "email": "cliente_sintetico_304@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc0",
+    "nombre": "Ana",
+    "ap": "Cruz",
+    "am": "Sánchez",
+    "fechaNacimiento": "1969-04-27T00:00:00.000Z",
+    "email": "cliente_sintetico_305@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc1",
+    "nombre": "Valeria",
+    "ap": "Flores",
+    "am": "García",
+    "fechaNacimiento": "1986-10-16T00:00:00.000Z",
+    "email": "cliente_sintetico_306@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc2",
+    "nombre": "Valeria",
+    "ap": "Vásquez",
+    "am": "Gómez",
+    "fechaNacimiento": "1999-06-04T00:00:00.000Z",
+    "email": "cliente_sintetico_307@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc3",
+    "nombre": "Alejandro",
+    "ap": "Ramírez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1989-11-20T00:00:00.000Z",
+    "email": "cliente_sintetico_308@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc4",
+    "nombre": "Sofia",
+    "ap": "Cruz",
+    "am": "González",
+    "fechaNacimiento": "1982-02-27T00:00:00.000Z",
+    "email": "cliente_sintetico_309@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc5",
+    "nombre": "Fernando",
+    "ap": "Flores",
+    "am": "Cruz",
+    "fechaNacimiento": "1996-11-11T00:00:00.000Z",
+    "email": "cliente_sintetico_310@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc6",
+    "nombre": "María",
+    "ap": "Martínez",
+    "am": "Gómez",
+    "fechaNacimiento": "1989-02-04T00:00:00.000Z",
+    "email": "cliente_sintetico_311@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc7",
+    "nombre": "Valeria",
+    "ap": "Flores",
+    "am": "Cruz",
+    "fechaNacimiento": "1975-07-22T00:00:00.000Z",
+    "email": "cliente_sintetico_312@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc8",
+    "nombre": "Fernando",
+    "ap": "Cruz",
+    "am": "González",
+    "fechaNacimiento": "1981-11-16T00:00:00.000Z",
+    "email": "cliente_sintetico_313@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fc9",
+    "nombre": "Alejandro",
+    "ap": "Rodríguez",
+    "am": "González",
+    "fechaNacimiento": "2001-08-10T00:00:00.000Z",
+    "email": "cliente_sintetico_314@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fca",
+    "nombre": "Alejandro",
+    "ap": "Cruz",
+    "am": "Morales",
+    "fechaNacimiento": "2003-06-16T00:00:00.000Z",
+    "email": "cliente_sintetico_315@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fcb",
+    "nombre": "Jorge",
+    "ap": "Sánchez",
+    "am": "González",
+    "fechaNacimiento": "1990-09-11T00:00:00.000Z",
+    "email": "cliente_sintetico_316@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fcc",
+    "nombre": "Diego",
+    "ap": "Sánchez",
+    "am": "Gómez",
+    "fechaNacimiento": "1986-11-28T00:00:00.000Z",
+    "email": "cliente_sintetico_317@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fcd",
+    "nombre": "Daniela",
+    "ap": "Vásquez",
+    "am": "García",
+    "fechaNacimiento": "1995-01-15T00:00:00.000Z",
+    "email": "cliente_sintetico_318@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fce",
+    "nombre": "Jorge",
+    "ap": "Pérez",
+    "am": "González",
+    "fechaNacimiento": "1979-03-13T00:00:00.000Z",
+    "email": "cliente_sintetico_319@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fcf",
+    "nombre": "Lucía",
+    "ap": "Hernández",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1981-02-09T00:00:00.000Z",
+    "email": "cliente_sintetico_320@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd0",
+    "nombre": "Ana",
+    "ap": "Vásquez",
+    "am": "Gómez",
+    "fechaNacimiento": "1999-12-25T00:00:00.000Z",
+    "email": "cliente_sintetico_321@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd1",
+    "nombre": "Daniela",
+    "ap": "Martínez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1997-07-20T00:00:00.000Z",
+    "email": "cliente_sintetico_322@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd2",
+    "nombre": "Fernando",
+    "ap": "Rodríguez",
+    "am": "Cruz",
+    "fechaNacimiento": "1985-06-10T00:00:00.000Z",
+    "email": "cliente_sintetico_323@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd3",
+    "nombre": "Ana",
+    "ap": "Morales",
+    "am": "Morales",
+    "fechaNacimiento": "1979-04-26T00:00:00.000Z",
+    "email": "cliente_sintetico_324@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd4",
+    "nombre": "Elena",
+    "ap": "Martínez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1986-07-23T00:00:00.000Z",
+    "email": "cliente_sintetico_325@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd5",
+    "nombre": "Mateo",
+    "ap": "Rodríguez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1999-03-07T00:00:00.000Z",
+    "email": "cliente_sintetico_326@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd6",
+    "nombre": "Elena",
+    "ap": "Sánchez",
+    "am": "González",
+    "fechaNacimiento": "1974-03-25T00:00:00.000Z",
+    "email": "cliente_sintetico_327@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd7",
+    "nombre": "Alejandro",
+    "ap": "González",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1986-11-10T00:00:00.000Z",
+    "email": "cliente_sintetico_328@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd8",
+    "nombre": "Gabriel",
+    "ap": "Rodríguez",
+    "am": "Flores",
+    "fechaNacimiento": "1975-12-21T00:00:00.000Z",
+    "email": "cliente_sintetico_329@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fd9",
+    "nombre": "Daniela",
+    "ap": "García",
+    "am": "Ramírez",
+    "fechaNacimiento": "1985-12-17T00:00:00.000Z",
+    "email": "cliente_sintetico_330@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fda",
+    "nombre": "María",
+    "ap": "López",
+    "am": "Gómez",
+    "fechaNacimiento": "1981-12-12T00:00:00.000Z",
+    "email": "cliente_sintetico_331@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fdb",
+    "nombre": "Alejandro",
+    "ap": "Ramírez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1993-02-25T00:00:00.000Z",
+    "email": "cliente_sintetico_332@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fdc",
+    "nombre": "Sofia",
+    "ap": "Gómez",
+    "am": "Martínez",
+    "fechaNacimiento": "1975-11-20T00:00:00.000Z",
+    "email": "cliente_sintetico_333@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fdd",
+    "nombre": "Mateo",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "2000-08-03T00:00:00.000Z",
+    "email": "cliente_sintetico_334@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fde",
+    "nombre": "Elena",
+    "ap": "Sánchez",
+    "am": "Sánchez",
+    "fechaNacimiento": "1972-10-14T00:00:00.000Z",
+    "email": "cliente_sintetico_335@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fdf",
+    "nombre": "María",
+    "ap": "Flores",
+    "am": "García",
+    "fechaNacimiento": "1995-11-15T00:00:00.000Z",
+    "email": "cliente_sintetico_336@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe0",
+    "nombre": "Diego",
+    "ap": "Martínez",
+    "am": "González",
+    "fechaNacimiento": "2005-02-20T00:00:00.000Z",
+    "email": "cliente_sintetico_337@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe1",
+    "nombre": "Carlos",
+    "ap": "López",
+    "am": "Vásquez",
+    "fechaNacimiento": "2005-11-07T00:00:00.000Z",
+    "email": "cliente_sintetico_338@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe2",
+    "nombre": "Diego",
+    "ap": "Pérez",
+    "am": "González",
+    "fechaNacimiento": "1997-08-12T00:00:00.000Z",
+    "email": "cliente_sintetico_339@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe3",
+    "nombre": "Gabriel",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "1984-09-13T00:00:00.000Z",
+    "email": "cliente_sintetico_340@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe4",
+    "nombre": "Elena",
+    "ap": "López",
+    "am": "Vásquez",
+    "fechaNacimiento": "1985-07-25T00:00:00.000Z",
+    "email": "cliente_sintetico_341@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe5",
+    "nombre": "María",
+    "ap": "López",
+    "am": "Sánchez",
+    "fechaNacimiento": "2001-01-08T00:00:00.000Z",
+    "email": "cliente_sintetico_342@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe6",
+    "nombre": "Gabriel",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1975-10-28T00:00:00.000Z",
+    "email": "cliente_sintetico_343@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe7",
+    "nombre": "Carlos",
+    "ap": "Cruz",
+    "am": "González",
+    "fechaNacimiento": "1991-12-22T00:00:00.000Z",
+    "email": "cliente_sintetico_344@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe8",
+    "nombre": "Luis",
+    "ap": "Gómez",
+    "am": "Cruz",
+    "fechaNacimiento": "1979-06-24T00:00:00.000Z",
+    "email": "cliente_sintetico_345@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fe9",
+    "nombre": "Valeria",
+    "ap": "Rodríguez",
+    "am": "Flores",
+    "fechaNacimiento": "1971-08-05T00:00:00.000Z",
+    "email": "cliente_sintetico_346@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fea",
+    "nombre": "Valeria",
+    "ap": "González",
+    "am": "Rodríguez",
+    "fechaNacimiento": "2002-05-20T00:00:00.000Z",
+    "email": "cliente_sintetico_347@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3feb",
+    "nombre": "Mateo",
+    "ap": "Morales",
+    "am": "Hernández",
+    "fechaNacimiento": "1998-06-09T00:00:00.000Z",
+    "email": "cliente_sintetico_348@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fec",
+    "nombre": "Elena",
+    "ap": "García",
+    "am": "López",
+    "fechaNacimiento": "1974-10-25T00:00:00.000Z",
+    "email": "cliente_sintetico_349@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fed",
+    "nombre": "Luis",
+    "ap": "Cruz",
+    "am": "Ramírez",
+    "fechaNacimiento": "2004-08-06T00:00:00.000Z",
+    "email": "cliente_sintetico_350@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fee",
+    "nombre": "Diego",
+    "ap": "González",
+    "am": "García",
+    "fechaNacimiento": "1970-04-14T00:00:00.000Z",
+    "email": "cliente_sintetico_351@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fef",
+    "nombre": "Sofia",
+    "ap": "Hernández",
+    "am": "Martínez",
+    "fechaNacimiento": "1984-03-09T00:00:00.000Z",
+    "email": "cliente_sintetico_352@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff0",
+    "nombre": "Fernando",
+    "ap": "Ramírez",
+    "am": "Gómez",
+    "fechaNacimiento": "1971-10-02T00:00:00.000Z",
+    "email": "cliente_sintetico_353@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff1",
+    "nombre": "Lucía",
+    "ap": "González",
+    "am": "Cruz",
+    "fechaNacimiento": "1973-10-18T00:00:00.000Z",
+    "email": "cliente_sintetico_354@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff2",
+    "nombre": "Alejandro",
+    "ap": "Sánchez",
+    "am": "Cruz",
+    "fechaNacimiento": "1971-03-02T00:00:00.000Z",
+    "email": "cliente_sintetico_355@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff3",
+    "nombre": "Fernando",
+    "ap": "Pérez",
+    "am": "Hernández",
+    "fechaNacimiento": "1985-04-03T00:00:00.000Z",
+    "email": "cliente_sintetico_356@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff4",
+    "nombre": "Luis",
+    "ap": "Morales",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1971-10-22T00:00:00.000Z",
+    "email": "cliente_sintetico_357@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff5",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Hernández",
+    "fechaNacimiento": "1974-05-21T00:00:00.000Z",
+    "email": "cliente_sintetico_358@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff6",
+    "nombre": "Fernando",
+    "ap": "Vásquez",
+    "am": "Pérez",
+    "fechaNacimiento": "1985-01-18T00:00:00.000Z",
+    "email": "cliente_sintetico_359@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff7",
+    "nombre": "Lucía",
+    "ap": "Morales",
+    "am": "Vásquez",
+    "fechaNacimiento": "1999-06-19T00:00:00.000Z",
+    "email": "cliente_sintetico_360@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff8",
+    "nombre": "Fernando",
+    "ap": "Hernández",
+    "am": "González",
+    "fechaNacimiento": "2002-04-03T00:00:00.000Z",
+    "email": "cliente_sintetico_361@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ff9",
+    "nombre": "Ana",
+    "ap": "Rodríguez",
+    "am": "Hernández",
+    "fechaNacimiento": "1986-01-16T00:00:00.000Z",
+    "email": "cliente_sintetico_362@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ffa",
+    "nombre": "Diego",
+    "ap": "Martínez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1994-04-27T00:00:00.000Z",
+    "email": "cliente_sintetico_363@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ffb",
+    "nombre": "Gabriel",
+    "ap": "García",
+    "am": "Gómez",
+    "fechaNacimiento": "1973-10-28T00:00:00.000Z",
+    "email": "cliente_sintetico_364@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ffc",
+    "nombre": "Sofia",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1988-10-01T00:00:00.000Z",
+    "email": "cliente_sintetico_365@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ffd",
+    "nombre": "Camila",
+    "ap": "Pérez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1978-10-15T00:00:00.000Z",
+    "email": "cliente_sintetico_366@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3ffe",
+    "nombre": "Daniela",
+    "ap": "Rodríguez",
+    "am": "Gómez",
+    "fechaNacimiento": "1988-10-11T00:00:00.000Z",
+    "email": "cliente_sintetico_367@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a3fff",
+    "nombre": "Alejandro",
+    "ap": "López",
+    "am": "Morales",
+    "fechaNacimiento": "1996-04-17T00:00:00.000Z",
+    "email": "cliente_sintetico_368@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4000",
+    "nombre": "Jorge",
+    "ap": "García",
+    "am": "Ramírez",
+    "fechaNacimiento": "1997-11-13T00:00:00.000Z",
+    "email": "cliente_sintetico_369@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4001",
+    "nombre": "Mateo",
+    "ap": "Flores",
+    "am": "Vásquez",
+    "fechaNacimiento": "1979-05-04T00:00:00.000Z",
+    "email": "cliente_sintetico_370@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4002",
+    "nombre": "Lucía",
+    "ap": "Morales",
+    "am": "Flores",
+    "fechaNacimiento": "1974-05-08T00:00:00.000Z",
+    "email": "cliente_sintetico_371@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4003",
+    "nombre": "Fernando",
+    "ap": "Hernández",
+    "am": "Pérez",
+    "fechaNacimiento": "1979-06-08T00:00:00.000Z",
+    "email": "cliente_sintetico_372@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4004",
+    "nombre": "Lucía",
+    "ap": "Hernández",
+    "am": "Cruz",
+    "fechaNacimiento": "1978-06-01T00:00:00.000Z",
+    "email": "cliente_sintetico_373@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4005",
+    "nombre": "Lucía",
+    "ap": "García",
+    "am": "Hernández",
+    "fechaNacimiento": "1999-11-04T00:00:00.000Z",
+    "email": "cliente_sintetico_374@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4006",
+    "nombre": "Valeria",
+    "ap": "Flores",
+    "am": "Sánchez",
+    "fechaNacimiento": "2000-11-07T00:00:00.000Z",
+    "email": "cliente_sintetico_375@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4007",
+    "nombre": "Daniela",
+    "ap": "Cruz",
+    "am": "Cruz",
+    "fechaNacimiento": "1976-05-22T00:00:00.000Z",
+    "email": "cliente_sintetico_376@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4008",
+    "nombre": "Mateo",
+    "ap": "González",
+    "am": "Gómez",
+    "fechaNacimiento": "1980-10-01T00:00:00.000Z",
+    "email": "cliente_sintetico_377@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4009",
+    "nombre": "Fernando",
+    "ap": "Martínez",
+    "am": "Flores",
+    "fechaNacimiento": "2005-09-21T00:00:00.000Z",
+    "email": "cliente_sintetico_378@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a400a",
+    "nombre": "Valeria",
+    "ap": "Cruz",
+    "am": "Vásquez",
+    "fechaNacimiento": "1977-02-14T00:00:00.000Z",
+    "email": "cliente_sintetico_379@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a400b",
+    "nombre": "Alejandro",
+    "ap": "Vásquez",
+    "am": "Ramírez",
+    "fechaNacimiento": "2005-02-11T00:00:00.000Z",
+    "email": "cliente_sintetico_380@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a400c",
+    "nombre": "Alejandro",
+    "ap": "Cruz",
+    "am": "Vásquez",
+    "fechaNacimiento": "1975-07-25T00:00:00.000Z",
+    "email": "cliente_sintetico_381@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a400d",
+    "nombre": "Diego",
+    "ap": "Morales",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1975-01-12T00:00:00.000Z",
+    "email": "cliente_sintetico_382@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a400e",
+    "nombre": "María",
+    "ap": "Pérez",
+    "am": "González",
+    "fechaNacimiento": "1974-11-13T00:00:00.000Z",
+    "email": "cliente_sintetico_383@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a400f",
+    "nombre": "Daniela",
+    "ap": "González",
+    "am": "Cruz",
+    "fechaNacimiento": "1995-07-14T00:00:00.000Z",
+    "email": "cliente_sintetico_384@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4010",
+    "nombre": "Valeria",
+    "ap": "Martínez",
+    "am": "López",
+    "fechaNacimiento": "2001-01-22T00:00:00.000Z",
+    "email": "cliente_sintetico_385@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4011",
+    "nombre": "Jorge",
+    "ap": "Vásquez",
+    "am": "Sánchez",
+    "fechaNacimiento": "1974-12-16T00:00:00.000Z",
+    "email": "cliente_sintetico_386@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4012",
+    "nombre": "Alejandro",
+    "ap": "Rodríguez",
+    "am": "Gómez",
+    "fechaNacimiento": "2001-02-16T00:00:00.000Z",
+    "email": "cliente_sintetico_387@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4013",
+    "nombre": "Luis",
+    "ap": "Gómez",
+    "am": "Hernández",
+    "fechaNacimiento": "1984-06-04T00:00:00.000Z",
+    "email": "cliente_sintetico_388@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4014",
+    "nombre": "Valeria",
+    "ap": "López",
+    "am": "García",
+    "fechaNacimiento": "2005-06-03T00:00:00.000Z",
+    "email": "cliente_sintetico_389@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4015",
+    "nombre": "Gabriel",
+    "ap": "Martínez",
+    "am": "Pérez",
+    "fechaNacimiento": "1999-02-11T00:00:00.000Z",
+    "email": "cliente_sintetico_390@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4016",
+    "nombre": "Ana",
+    "ap": "López",
+    "am": "Vásquez",
+    "fechaNacimiento": "1997-11-10T00:00:00.000Z",
+    "email": "cliente_sintetico_391@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4017",
+    "nombre": "Daniela",
+    "ap": "Pérez",
+    "am": "Martínez",
+    "fechaNacimiento": "1972-03-15T00:00:00.000Z",
+    "email": "cliente_sintetico_392@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4018",
+    "nombre": "Daniela",
+    "ap": "Morales",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1989-03-02T00:00:00.000Z",
+    "email": "cliente_sintetico_393@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4019",
+    "nombre": "Camila",
+    "ap": "González",
+    "am": "Rodríguez",
+    "fechaNacimiento": "2005-10-03T00:00:00.000Z",
+    "email": "cliente_sintetico_394@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a401a",
+    "nombre": "Lucía",
+    "ap": "Gómez",
+    "am": "Sánchez",
+    "fechaNacimiento": "2000-12-28T00:00:00.000Z",
+    "email": "cliente_sintetico_395@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a401b",
+    "nombre": "Fernando",
+    "ap": "García",
+    "am": "García",
+    "fechaNacimiento": "1968-07-01T00:00:00.000Z",
+    "email": "cliente_sintetico_396@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a401c",
+    "nombre": "Diego",
+    "ap": "López",
+    "am": "Pérez",
+    "fechaNacimiento": "1973-09-22T00:00:00.000Z",
+    "email": "cliente_sintetico_397@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a401d",
+    "nombre": "Gabriel",
+    "ap": "Sánchez",
+    "am": "Flores",
+    "fechaNacimiento": "1977-08-09T00:00:00.000Z",
+    "email": "cliente_sintetico_398@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a401e",
+    "nombre": "Lucía",
+    "ap": "Sánchez",
+    "am": "Martínez",
+    "fechaNacimiento": "1982-11-21T00:00:00.000Z",
+    "email": "cliente_sintetico_399@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a401f",
+    "nombre": "Mateo",
+    "ap": "Vásquez",
+    "am": "López",
+    "fechaNacimiento": "1978-05-20T00:00:00.000Z",
+    "email": "cliente_sintetico_400@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4020",
+    "nombre": "Luis",
+    "ap": "Ramírez",
+    "am": "Gómez",
+    "fechaNacimiento": "1969-10-03T00:00:00.000Z",
+    "email": "cliente_sintetico_401@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4021",
+    "nombre": "Valeria",
+    "ap": "Martínez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1975-03-01T00:00:00.000Z",
+    "email": "cliente_sintetico_402@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4022",
+    "nombre": "Jorge",
+    "ap": "Gómez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1972-03-15T00:00:00.000Z",
+    "email": "cliente_sintetico_403@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4023",
+    "nombre": "Luis",
+    "ap": "García",
+    "am": "López",
+    "fechaNacimiento": "1978-06-06T00:00:00.000Z",
+    "email": "cliente_sintetico_404@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4024",
+    "nombre": "Sofia",
+    "ap": "Vásquez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1973-03-19T00:00:00.000Z",
+    "email": "cliente_sintetico_405@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4025",
+    "nombre": "Gabriel",
+    "ap": "Ramírez",
+    "am": "Cruz",
+    "fechaNacimiento": "1994-01-17T00:00:00.000Z",
+    "email": "cliente_sintetico_406@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4026",
+    "nombre": "Alejandro",
+    "ap": "López",
+    "am": "Pérez",
+    "fechaNacimiento": "1978-09-18T00:00:00.000Z",
+    "email": "cliente_sintetico_407@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4027",
+    "nombre": "Valeria",
+    "ap": "Morales",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1993-07-11T00:00:00.000Z",
+    "email": "cliente_sintetico_408@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4028",
+    "nombre": "Lucía",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "2003-08-10T00:00:00.000Z",
+    "email": "cliente_sintetico_409@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4029",
+    "nombre": "Daniela",
+    "ap": "Vásquez",
+    "am": "González",
+    "fechaNacimiento": "1992-01-08T00:00:00.000Z",
+    "email": "cliente_sintetico_410@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a402a",
+    "nombre": "Carlos",
+    "ap": "Pérez",
+    "am": "Pérez",
+    "fechaNacimiento": "1980-04-18T00:00:00.000Z",
+    "email": "cliente_sintetico_411@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a402b",
+    "nombre": "Sofia",
+    "ap": "Gómez",
+    "am": "Gómez",
+    "fechaNacimiento": "2005-03-26T00:00:00.000Z",
+    "email": "cliente_sintetico_412@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a402c",
+    "nombre": "Camila",
+    "ap": "González",
+    "am": "Morales",
+    "fechaNacimiento": "1983-09-04T00:00:00.000Z",
+    "email": "cliente_sintetico_413@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a402d",
+    "nombre": "Ana",
+    "ap": "Rodríguez",
+    "am": "Vásquez",
+    "fechaNacimiento": "1987-04-27T00:00:00.000Z",
+    "email": "cliente_sintetico_414@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a402e",
+    "nombre": "Luis",
+    "ap": "Morales",
+    "am": "Morales",
+    "fechaNacimiento": "1974-02-11T00:00:00.000Z",
+    "email": "cliente_sintetico_415@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a402f",
+    "nombre": "Elena",
+    "ap": "Gómez",
+    "am": "Pérez",
+    "fechaNacimiento": "1994-12-18T00:00:00.000Z",
+    "email": "cliente_sintetico_416@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4030",
+    "nombre": "Diego",
+    "ap": "Morales",
+    "am": "Morales",
+    "fechaNacimiento": "1992-12-15T00:00:00.000Z",
+    "email": "cliente_sintetico_417@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4031",
+    "nombre": "Luis",
+    "ap": "Cruz",
+    "am": "Cruz",
+    "fechaNacimiento": "2001-09-11T00:00:00.000Z",
+    "email": "cliente_sintetico_418@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4032",
+    "nombre": "Diego",
+    "ap": "Gómez",
+    "am": "Martínez",
+    "fechaNacimiento": "1985-04-17T00:00:00.000Z",
+    "email": "cliente_sintetico_419@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4033",
+    "nombre": "María",
+    "ap": "Martínez",
+    "am": "García",
+    "fechaNacimiento": "1989-12-07T00:00:00.000Z",
+    "email": "cliente_sintetico_420@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4034",
+    "nombre": "Fernando",
+    "ap": "Ramírez",
+    "am": "González",
+    "fechaNacimiento": "1991-12-27T00:00:00.000Z",
+    "email": "cliente_sintetico_421@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4035",
+    "nombre": "Ana",
+    "ap": "Hernández",
+    "am": "Vásquez",
+    "fechaNacimiento": "2005-11-05T00:00:00.000Z",
+    "email": "cliente_sintetico_422@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4036",
+    "nombre": "Fernando",
+    "ap": "Pérez",
+    "am": "López",
+    "fechaNacimiento": "2004-05-08T00:00:00.000Z",
+    "email": "cliente_sintetico_423@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4037",
+    "nombre": "Valeria",
+    "ap": "Pérez",
+    "am": "López",
+    "fechaNacimiento": "1997-11-22T00:00:00.000Z",
+    "email": "cliente_sintetico_424@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4038",
+    "nombre": "Alejandro",
+    "ap": "Cruz",
+    "am": "Cruz",
+    "fechaNacimiento": "1992-02-05T00:00:00.000Z",
+    "email": "cliente_sintetico_425@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4039",
+    "nombre": "Lucía",
+    "ap": "Flores",
+    "am": "Vásquez",
+    "fechaNacimiento": "1977-07-12T00:00:00.000Z",
+    "email": "cliente_sintetico_426@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a403a",
+    "nombre": "Gabriel",
+    "ap": "Rodríguez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1969-01-06T00:00:00.000Z",
+    "email": "cliente_sintetico_427@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a403b",
+    "nombre": "Lucía",
+    "ap": "González",
+    "am": "Cruz",
+    "fechaNacimiento": "1986-05-12T00:00:00.000Z",
+    "email": "cliente_sintetico_428@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a403c",
+    "nombre": "Ana",
+    "ap": "Sánchez",
+    "am": "González",
+    "fechaNacimiento": "1987-05-09T00:00:00.000Z",
+    "email": "cliente_sintetico_429@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a403d",
+    "nombre": "Daniela",
+    "ap": "Cruz",
+    "am": "Hernández",
+    "fechaNacimiento": "1993-01-18T00:00:00.000Z",
+    "email": "cliente_sintetico_430@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a403e",
+    "nombre": "Ana",
+    "ap": "Morales",
+    "am": "López",
+    "fechaNacimiento": "1995-04-04T00:00:00.000Z",
+    "email": "cliente_sintetico_431@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a403f",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Ramírez",
+    "fechaNacimiento": "1997-12-18T00:00:00.000Z",
+    "email": "cliente_sintetico_432@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4040",
+    "nombre": "Sofia",
+    "ap": "García",
+    "am": "Ramírez",
+    "fechaNacimiento": "2002-12-17T00:00:00.000Z",
+    "email": "cliente_sintetico_433@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4041",
+    "nombre": "Carlos",
+    "ap": "Cruz",
+    "am": "López",
+    "fechaNacimiento": "1997-04-02T00:00:00.000Z",
+    "email": "cliente_sintetico_434@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4042",
+    "nombre": "Mateo",
+    "ap": "García",
+    "am": "Gómez",
+    "fechaNacimiento": "1988-10-17T00:00:00.000Z",
+    "email": "cliente_sintetico_435@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4043",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Hernández",
+    "fechaNacimiento": "1993-10-02T00:00:00.000Z",
+    "email": "cliente_sintetico_436@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4044",
+    "nombre": "Alejandro",
+    "ap": "Hernández",
+    "am": "López",
+    "fechaNacimiento": "2000-09-07T00:00:00.000Z",
+    "email": "cliente_sintetico_437@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4045",
+    "nombre": "Alejandro",
+    "ap": "Vásquez",
+    "am": "López",
+    "fechaNacimiento": "1995-06-21T00:00:00.000Z",
+    "email": "cliente_sintetico_438@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4046",
+    "nombre": "Luis",
+    "ap": "Martínez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1999-12-23T00:00:00.000Z",
+    "email": "cliente_sintetico_439@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4047",
+    "nombre": "Alejandro",
+    "ap": "Pérez",
+    "am": "Rodríguez",
+    "fechaNacimiento": "1992-04-24T00:00:00.000Z",
+    "email": "cliente_sintetico_440@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4048",
+    "nombre": "Sofia",
+    "ap": "Morales",
+    "am": "Ramírez",
+    "fechaNacimiento": "2001-08-01T00:00:00.000Z",
+    "email": "cliente_sintetico_441@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4049",
+    "nombre": "Fernando",
+    "ap": "Hernández",
+    "am": "Pérez",
+    "fechaNacimiento": "1975-12-16T00:00:00.000Z",
+    "email": "cliente_sintetico_442@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a404a",
+    "nombre": "Elena",
+    "ap": "Cruz",
+    "am": "Morales",
+    "fechaNacimiento": "1983-08-06T00:00:00.000Z",
+    "email": "cliente_sintetico_443@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a404b",
+    "nombre": "Sofia",
+    "ap": "Sánchez",
+    "am": "Morales",
+    "fechaNacimiento": "1986-01-09T00:00:00.000Z",
+    "email": "cliente_sintetico_444@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a404c",
+    "nombre": "Elena",
+    "ap": "Martínez",
+    "am": "García",
+    "fechaNacimiento": "1999-08-25T00:00:00.000Z",
+    "email": "cliente_sintetico_445@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a404d",
+    "nombre": "Fernando",
+    "ap": "Cruz",
+    "am": "García",
+    "fechaNacimiento": "1969-03-06T00:00:00.000Z",
+    "email": "cliente_sintetico_446@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a404e",
+    "nombre": "Sofia",
+    "ap": "Hernández",
+    "am": "Vásquez",
+    "fechaNacimiento": "1975-06-14T00:00:00.000Z",
+    "email": "cliente_sintetico_447@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a404f",
+    "nombre": "Gabriel",
+    "ap": "Martínez",
+    "am": "Gómez",
+    "fechaNacimiento": "1970-05-21T00:00:00.000Z",
+    "email": "cliente_sintetico_448@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4050",
+    "nombre": "Elena",
+    "ap": "Hernández",
+    "am": "Ramírez",
+    "fechaNacimiento": "1987-08-11T00:00:00.000Z",
+    "email": "cliente_sintetico_449@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  },
+  {
+    "_id": "6a6e43efa976faa4ec8a4051",
+    "nombre": "Valeria",
+    "ap": "Flores",
+    "am": "Ramírez",
+    "fechaNacimiento": "1972-07-16T00:00:00.000Z",
+    "email": "cliente_sintetico_450@panamericana.com",
+    "rol": "usuario",
+    "direcciones": []
+  }
+]

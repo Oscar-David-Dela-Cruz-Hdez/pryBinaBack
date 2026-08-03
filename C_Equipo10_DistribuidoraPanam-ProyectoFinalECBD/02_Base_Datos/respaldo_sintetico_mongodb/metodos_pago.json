@@ -1,0 +1,12 @@
+[
+  {
+    "_id": "699642b9cec2d854b7777591",
+    "nombre": "Tarjeta de Debito/Credito",
+    "descripcion": "Pago con tarjeta",
+    "instrucciones": "Ingresar la CLABE o Numero de tarjeta",
+    "icono": "credit_card",
+    "activo": true,
+    "createdAt": "2026-02-18T22:52:41.159Z",
+    "updatedAt": "2026-02-18T22:52:41.159Z"
+  }
+]

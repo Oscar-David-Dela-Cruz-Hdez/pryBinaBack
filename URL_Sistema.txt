@@ -1,0 +1,10 @@
+https://pry-bina-front.vercel.app/
+
+El sistema web de Distribuidora Panamericana se encuentra publicado y plenamente funcional en producción en la nube.
+
+* URL Pública del Sistema Web (Frontend Angular): https://pry-bina-front.vercel.app/
+* Repositorio GitHub Backend: https://github.com/Oscar-David-Dela-Cruz-Hdez/pryBinaBack
+* Repositorio GitHub Frontend: https://github.com/Oscar-David-Dela-Cruz-Hdez/pryBinaFront
+
+Las dos soluciones analíticas (Clasificación de Riesgo de Cancelación y Recomendación Colaborativa) están integradas y funcionando en la URL pública.
+Para consultar los pasos de instalación local alternativa y restauración de datos, remítase al archivo README.md.
