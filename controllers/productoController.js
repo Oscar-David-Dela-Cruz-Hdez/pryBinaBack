@@ -115,7 +115,7 @@ const getProductoById = async (req, res) => {
     res.status(500).json({ error: "Error al obtener el producto" });
   }
 };
-
+//obtrner las recomendaciones -------------------------
 const getRecomendaciones = async (req, res) => {
   try {
     const ids = Array.isArray(req.body?.productos) ? req.body.productos : [req.params.id].filter(Boolean);
