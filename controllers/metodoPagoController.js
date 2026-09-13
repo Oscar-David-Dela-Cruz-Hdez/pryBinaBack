@@ -21,6 +21,7 @@ const getMetodosPago = async (req, res) => {
         query.activo = true;
     }
     const metodos = await MetodoPago.find(query);
+    res.setHeader('Cache-Control', 'public, max-age=1800, s-maxage=3600');
     res.json(metodos);
   } catch (error) {
     res.status(500).json({ error: "Error al obtener métodos de pago" });

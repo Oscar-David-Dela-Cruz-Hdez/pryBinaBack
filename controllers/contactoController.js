@@ -9,6 +9,7 @@ const getContactos = async (req, res) => {
         if (activo === 'true') query.activo = true;
 
         const contactos = await Contacto.find(query);
+        res.setHeader('Cache-Control', 'public, max-age=1800, s-maxage=3600');
         res.json(contactos);
     } catch (error) {
         res.status(500).json({ error: "Error al obtener contactos" });

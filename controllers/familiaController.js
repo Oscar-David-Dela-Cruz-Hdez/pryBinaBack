@@ -9,6 +9,7 @@ const getFamilias = async (req, res) => {
       query.marca = marca;
     }
     const familias = await Familia.find(query).populate('marca', 'nombre');
+    res.setHeader('Cache-Control', 'public, max-age=1800, s-maxage=3600');
     res.json(familias);
   } catch (error) {
     console.error(error);

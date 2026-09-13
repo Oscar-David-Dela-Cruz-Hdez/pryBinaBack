@@ -4,6 +4,7 @@ const Marca = require('../models/Marca');
 const getMarcas = async (req, res) => {
   try {
     const marcas = await Marca.find();
+    res.setHeader('Cache-Control', 'public, max-age=1800, s-maxage=3600');
     res.json(marcas);
   } catch (error) {
     console.error(error);
