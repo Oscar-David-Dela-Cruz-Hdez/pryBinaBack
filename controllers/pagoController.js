@@ -3,6 +3,13 @@ const Producto = require("../models/Producto");
 const { crearOrden, capturarOrden } = require("../services/paypalService");
 const { cancelarPedidoPendiente, cancelarPedidosVencidos } = require("../services/pedidoPendienteService");
 
+// La URL de retorno usa configuración del servidor, nunca un origen del cliente.
+const retornoMovil = (req) => req.body?.canal === "flutter"
+  ? (process.env.PUBLIC_API_URL || "https://prybinaback.onrender.com").replace(/\/$/, "")
+  : undefined;
+const enlaceAprobacion = (orden) => orden.links?.find(link =>
+  link.rel === "approve" || link.rel === "payer-action")?.href;
+
 const UNA_HORA_MS = 60 * 60 * 1000;
 
 const liberarInventario = async (productos) => {
@@ -34,11 +41,12 @@ const crearOrdenPaypal = async (req, res) => {
       "pago.expiraEn": { $gt: new Date() }
     }).sort({ createdAt: -1 });
     if (pedidoVigente) {
-      const ordenVigente = await crearOrden(pedidoVigente);
+      const ordenVigente = await crearOrden(pedidoVigente, retornoMovil(req));
       pedidoVigente.pago.ordenExternaId = ordenVigente.id;
       await pedidoVigente.save();
       return res.status(200).json({
         orderId: ordenVigente.id,
+        approvalUrl: enlaceAprobacion(ordenVigente),
         pedidoId: pedidoVigente._id,
         total: pedidoVigente.total,
         expiraEn: pedidoVigente.pago.expiraEn,
@@ -84,12 +92,13 @@ const crearOrdenPaypal = async (req, res) => {
       }
     });
 
-    const ordenPaypal = await crearOrden(pedido);
+    const ordenPaypal = await crearOrden(pedido, retornoMovil(req));
     pedido.pago.ordenExternaId = ordenPaypal.id;
     await pedido.save();
 
     return res.status(201).json({
       orderId: ordenPaypal.id,
+      approvalUrl: enlaceAprobacion(ordenPaypal),
       pedidoId: pedido._id,
       total: pedido.total,
       expiraEn: pedido.pago.expiraEn
@@ -181,11 +190,12 @@ const reintentarOrdenPaypal = async (req, res) => {
       return res.status(410).json({ error: "El tiempo para pagar este pedido venció" });
     }
 
-    const ordenPaypal = await crearOrden(pedido);
+    const ordenPaypal = await crearOrden(pedido, retornoMovil(req));
     pedido.pago.ordenExternaId = ordenPaypal.id;
     await pedido.save();
     return res.status(201).json({
       orderId: ordenPaypal.id,
+      approvalUrl: enlaceAprobacion(ordenPaypal),
       pedidoId: pedido._id,
       total: pedido.total,
       expiraEn: pedido.pago.expiraEn
