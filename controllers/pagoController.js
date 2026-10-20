@@ -3,10 +3,7 @@ const Producto = require("../models/Producto");
 const { crearOrden, capturarOrden } = require("../services/paypalService");
 const { cancelarPedidoPendiente, cancelarPedidosVencidos } = require("../services/pedidoPendienteService");
 
-// La URL de retorno usa configuración del servidor, nunca un origen del cliente.
-const retornoMovil = (req) => req.body?.canal === "flutter"
-  ? (process.env.PUBLIC_API_URL || "https://prybinaback.onrender.com").replace(/\/$/, "")
-  : undefined;
+const { retornoFlutter } = require("../services/paypalRetornoService");
 const enlaceAprobacion = (orden) => orden.links?.find(link =>
   link.rel === "approve" || link.rel === "payer-action")?.href;
 
@@ -22,6 +19,7 @@ const crearOrdenPaypal = async (req, res) => {
   const reservados = [];
   let pedido;
   try {
+    const retorno = retornoFlutter(req);
     const { productos, direccionEnvio } = req.body;
     if (!Array.isArray(productos) || productos.length === 0) {
       return res.status(400).json({ error: "El carrito está vacío" });
@@ -41,7 +39,7 @@ const crearOrdenPaypal = async (req, res) => {
       "pago.expiraEn": { $gt: new Date() }
     }).sort({ createdAt: -1 });
     if (pedidoVigente) {
-      const ordenVigente = await crearOrden(pedidoVigente, retornoMovil(req));
+      const ordenVigente = await crearOrden(pedidoVigente, retorno);
       pedidoVigente.pago.ordenExternaId = ordenVigente.id;
       await pedidoVigente.save();
       return res.status(200).json({
@@ -92,7 +90,7 @@ const crearOrdenPaypal = async (req, res) => {
       }
     });
 
-    const ordenPaypal = await crearOrden(pedido, retornoMovil(req));
+    const ordenPaypal = await crearOrden(pedido, retorno);
     pedido.pago.ordenExternaId = ordenPaypal.id;
     await pedido.save();
 
@@ -177,6 +175,7 @@ const capturarOrdenPaypal = async (req, res) => {
 
 const reintentarOrdenPaypal = async (req, res) => {
   try {
+    const retorno = retornoFlutter(req);
     const pedido = await Pedido.findOne({ _id: req.params.pedidoId, usuario: req.user.id });
     if (!pedido) return res.status(404).json({ error: "Pedido no encontrado" });
     if (pedido.estado !== "Pendiente" || pedido.pago?.estado !== "pendiente") {
@@ -190,7 +189,7 @@ const reintentarOrdenPaypal = async (req, res) => {
       return res.status(410).json({ error: "El tiempo para pagar este pedido venció" });
     }
 
-    const ordenPaypal = await crearOrden(pedido, retornoMovil(req));
+    const ordenPaypal = await crearOrden(pedido, retorno);
     pedido.pago.ordenExternaId = ordenPaypal.id;
     await pedido.save();
     return res.status(201).json({
@@ -202,7 +201,7 @@ const reintentarOrdenPaypal = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al reintentar pago PayPal:", error.response?.data || error.message);
-    return res.status(error.response?.status || 500).json({ error: "No fue posible reiniciar el pago" });
+    return res.status(error.status || error.response?.status || 500).json({ error: error.status === 400 ? error.message : "No fue posible reiniciar el pago" });
   }
 };
 

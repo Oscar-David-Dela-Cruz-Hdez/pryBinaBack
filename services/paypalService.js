@@ -48,11 +48,11 @@ const paypalRequest = async (method, path, body) => {
   return response.data;
 };
 
-const crearOrden = (pedido, retornoBase) => paypalRequest("post", "/v2/checkout/orders", {
+const crearOrden = (pedido, retorno) => paypalRequest("post", "/v2/checkout/orders", {
   intent: "CAPTURE",
-  ...(retornoBase ? { application_context: {
-    return_url: `${retornoBase}/api/pagos/paypal/retorno`,
-    cancel_url: `${retornoBase}/api/pagos/paypal/cancelado`
+  ...(retorno ? { application_context: {
+    return_url: retorno.returnUrl,
+    cancel_url: retorno.cancelUrl
   } } : {}),
   purchase_units: [{
     reference_id: pedido._id.toString(),
