@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("cors");
+const { configureHttpSecurity, apiNotFound, apiErrorHandler } = require("./middlewares/httpSecurity");
 const path = require("path");
 const conectarDB = require("./config/db");
 const { httpMetricsMiddleware } = require("./middlewares/httpMetricsMiddleware");
@@ -10,6 +10,7 @@ require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 4000;
+configureHttpSecurity(app);
 
 // Ruta para el Webhook de Alexa (DEBE IR ANTES de express.json para que Amazon pueda validar la firma)
 app.use("/api/alexa", require("./routes/alexaRoutes"));
@@ -19,7 +20,6 @@ app.use("/assets", express.static(path.join(__dirname, "public")));
 
 // 1. PRIMERO le decimos a Express que entienda JSON y CORS
 app.use(express.json());
-app.use(cors());
 
 // ==========================================
 // 2. RASP (Runtime Application Self-Protection)
@@ -180,5 +180,10 @@ const iniciarServidor = async () => {
   await conectarDB();
   app.listen(port, () => console.log(`Servidor corriendo en http://localhost:${port}`));
 };
+
+// API errors must remain JSON, including probes for nonexistent routes.
+// Explicit HTML endpoints (PayPal return pages) retain their declared type.
+app.use("/api", apiNotFound);
+app.use(apiErrorHandler);
 
 iniciarServidor();
