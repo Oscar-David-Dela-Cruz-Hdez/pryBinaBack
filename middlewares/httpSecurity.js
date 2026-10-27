@@ -21,6 +21,10 @@ function configureHttpSecurity(app, env = process.env) {
   app.set("trust proxy", 1);
   app.use((req, res, next) => {
     res.setHeader("X-Content-Type-Options", "nosniff");
+    // JSON is not an embeddable public resource. Explicit assets are shared
+    // with the frontend/APL; normal CORS fetches still use the origin allowlist.
+    res.setHeader("Cross-Origin-Resource-Policy",
+      req.path === "/assets" || req.path.startsWith("/assets/") ? "cross-origin" : "same-origin");
     if (req.secure) {
       res.setHeader("Strict-Transport-Security", "max-age=31536000");
     }
@@ -45,7 +49,7 @@ function apiNotFound(_req, res) {
 }
 
 function apiErrorHandler(error, req, res, next) {
-  if (res.headersSent || !(req.path === "/api" || req.path.startsWith("/api/"))) {
+  if (res.headersSent) {
     return next(error);
   }
   const candidate = error.statusCode ?? error.status;

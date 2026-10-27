@@ -18,7 +18,8 @@ before(async () => {
   app.get("/api/fallo", () => { throw new Error("private-internal-detail"); });
   app.get("/api/recurso/:id", (req, res) => res.json({ id: req.params.id }));
   app.get("/api/pagos/paypal/retorno", (_req, res) => res.type("html").send("<!doctype html><title>Retorno</title>"));
-  app.use("/api", apiNotFound);
+  app.get("/assets/test.svg", (_req, res) => res.type("svg").send("<svg></svg>"));
+  app.use(apiNotFound);
   app.use(apiErrorHandler);
   server = await new Promise(resolve => { const listener = app.listen(0, "127.0.0.1", () => resolve(listener)); });
   base = `http://127.0.0.1:${server.address().port}`;
@@ -32,6 +33,7 @@ function securityHeaders(response) {
   assert.equal(response.headers.get("x-powered-by"), null);
   assert.equal(response.headers.get("x-content-type-options"), "nosniff");
   assert.equal(response.headers.get("strict-transport-security"), "max-age=31536000");
+  assert.equal(response.headers.get("cross-origin-resource-policy"), "same-origin");
 }
 test("respuestas JSON exitosas y 401 mantienen cabeceras sin revelar Express", async () => {
   for (const path of ["/api/productos", "/api/usuarios/perfil"]) {
@@ -67,7 +69,7 @@ test("cliente móvil sin Origin conserva acceso y no obtiene wildcard CORS", asy
   assert.equal(response.headers.get("access-control-allow-origin"), null);
 });
 test("rutas inexistentes y métodos no soportados responden JSON 404", async () => {
-  for (const [path, method] of [["/api/desconocida", "GET"], ["/api/usuarios/perfil", "POST"]]) {
+  for (const [path, method] of [["/", "GET"], ["/fuera-api", "GET"], ["/api/desconocida", "GET"], ["/api/usuarios/perfil", "POST"]]) {
     const response = await request(path, { method });
     assert.equal(response.status, 404);
     assert.deepEqual(await response.json(), { error: "Ruta API no encontrada" });
@@ -101,4 +103,14 @@ test("configuración vacía deniega CORS y no permite comodines o URLs con rutas
   for (const origin of ["*", "null", "https://*.example.test", "https://web.example.test/ruta", "https://web.example.test/", "ftp://example.test"]) {
     assert.throws(() => allowedOrigins(origin));
   }
+});
+
+test("recursos visuales conservan su tipo y permiten carga desde el frontend", async () => {
+  const response = await request("/assets/test.svg");
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("cross-origin-resource-policy"), "cross-origin");
+  assert.match(response.headers.get("content-type"), /^image\/svg\+xml/);
+  const missing = await request("/assets/missing.svg");
+  assert.equal(missing.status, 404);
+  assert.match(missing.headers.get("content-type"), /^application\/json/);
 });

@@ -183,7 +183,7 @@ const iniciarServidor = async () => {
 
 // API errors must remain JSON, including probes for nonexistent routes.
 // Explicit HTML endpoints (PayPal return pages) retain their declared type.
-app.use("/api", apiNotFound);
+app.use(apiNotFound);
 app.use(apiErrorHandler);
 
 iniciarServidor();
